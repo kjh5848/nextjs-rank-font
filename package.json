@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev"
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "repository": {
     "type": "git",
@@ -18,13 +21,17 @@
   "homepage": "https://github.com/kjh5848/nextjs-rank-font#readme",
   "description": "",
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
     "next": "^15.3.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "typography": "^0.16.24"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.10",
     "@types/node": "22.14.1",
     "@types/react": "19.1.1",
+    "autoprefixer": "^10.4.21",
     "tailwindcss": "^3.4.1",
     "typescript": "5.8.3"
   }
