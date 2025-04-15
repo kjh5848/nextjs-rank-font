@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-target-blank */
 import React from "react";
 import Link from "next/link";
-import IndexNavbar from "../../components/Navbar/IndexNavbar"
+import IndexNavbar from "@/components/Navbars/IndexNavbar"
 
 
 export default function Home() {

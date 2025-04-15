@@ -9,7 +9,6 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // 기존 jaylog 테마 색상
         rank: {
           light: "#f8f9fa", // 배경색
           lightAccent: "#e9ecef", // 약간 강조된 배경

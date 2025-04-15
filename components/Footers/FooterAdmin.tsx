@@ -1,9 +1,8 @@
 "use client";
-import { useState } from "react";
+import React from "react";
 import Link from "next/link";
 
 export default function FooterAdmin() {
-  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   return (
     <>
       <footer className="block py-4">
@@ -12,7 +11,7 @@ export default function FooterAdmin() {
           <div className="flex flex-wrap items-center md:justify-between justify-center">
             <div className="w-full md:w-4/12 px-4">
               <div className="text-sm text-blueGray-500 font-semibold py-1 text-center md:text-left">
-                Copyright © {currentYear}{" "}
+                Copyright © {new Date().getFullYear()}{" "}
                 <Link
                   href="https://www.creative-tim.com?ref=nnjs-footer-admin"
                   className="text-blueGray-500 hover:text-blueGray-700 text-sm font-semibold py-1"
@@ -24,23 +23,35 @@ export default function FooterAdmin() {
             <div className="w-full md:w-8/12 px-4">
               <ul className="flex flex-wrap list-none md:justify-end  justify-center">
                 <li>
-                  <Link href="https://www.creative-tim.com?ref=nnjs-footer-admin"  className="text-blueGray-600 hover:text-blueGray-800 text-sm font-semibold block py-1 px-3">
-                      Creative Tim
+                  <Link
+                    href="https://www.creative-tim.com?ref=nnjs-footer-admin"
+                    className="text-blueGray-600 hover:text-blueGray-800 text-sm font-semibold block py-1 px-3"
+                  >
+                    Creative Tim
                   </Link>
                 </li>
                 <li>
-                  <Link href="https://www.creative-tim.com/presentation?ref=nnjs-footer-admin"  className="text-blueGray-600 hover:text-blueGray-800 text-sm font-semibold block py-1 px-3">
-                      About Us
+                  <Link
+                    href="https://www.creative-tim.com/presentation?ref=nnjs-footer-admin"
+                    className="text-blueGray-600 hover:text-blueGray-800 text-sm font-semibold block py-1 px-3"
+                  >
+                    About Us
                   </Link>
                 </li>
                 <li>
-                  <Link href="http://blog.creative-tim.com?ref=nnjs-footer-admin"  className="text-blueGray-600 hover:text-blueGray-800 text-sm font-semibold block py-1 px-3">
-                      Blog
+                  <Link
+                    href="http://blog.creative-tim.com?ref=nnjs-footer-admin"
+                    className="text-blueGray-600 hover:text-blueGray-800 text-sm font-semibold block py-1 px-3"
+                  >
+                    Blog
                   </Link>
                 </li>
                 <li>
-                  <Link href="https://github.com/creativetimofficial/notus-nextjs/blob/main/LICENSE.md?ref=nnjs-footer-admin"  className="text-blueGray-600 hover:text-blueGray-800 text-sm font-semibold block py-1 px-3">
-                      MIT License
+                  <Link
+                    href="https://github.com/creativetimofficial/notus-nextjs/blob/main/LICENSE.md?ref=nnjs-footer-admin"
+                    className="text-blueGray-600 hover:text-blueGray-800 text-sm font-semibold block py-1 px-3"
+                  >
+                    MIT License
                   </Link>
                 </li>
               </ul>
