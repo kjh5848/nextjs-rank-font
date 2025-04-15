@@ -1,20 +1,19 @@
 /* eslint-disable react/jsx-no-target-blank */
 import React from "react";
 import Link from "next/link";
-import IndexNavbar from "@/components/Navbars/IndexNavbar"
-
+import IndexNavbar from "@/components/Navbars/IndexNavbar";
 
 export default function Home() {
   return (
     <>
-      <section className="header relative pt-16 items-center flex h-screen max-h-860-px">
-        <div className="container mx-auto items-center flex flex-wrap">
-          <div className="w-full md:w-8/12 lg:w-6/12 xl:w-6/12 px-4">
-            <div className="pt-32 sm:pt-0">
-              <h2 className="font-semibold text-4xl text-blueGray-600">
+      <section className="header max-h-860-px items-center h-screen pt-16 relative flex">
+        <div className="flex-wrap items-center mx-auto container flex">
+          <div className="md:w-8/12 lg:w-6/12 w-full px-4 xl:w-6/12 ">
+            <div className="sm:pt-0 pt-32">
+              <h2 className="text-blueGray-600 text-4xl font-semibold">
                 Notus NextJS - A beautiful extension for Tailwind CSS.
               </h2>
-              <p className="mt-4 text-lg leading-relaxed text-blueGray-500">
+              <p className="text-blueGray-500 mt-4 text-lg leading-relaxed">
                 Notus NextJS is Free and Open Source. It does not change any of
                 the CSS from{" "}
                 <a
@@ -32,13 +31,13 @@ export default function Home() {
                 <a
                   href="https://www.creative-tim.com/learning-lab/tailwind/nextjs/overview/notus?ref=nnjs-index"
                   target="_blank"
-                  className="get-started text-white font-bold px-6 py-4 rounded outline-none focus:outline-none mr-1 mb-1 bg-blueGray-400 active:bg-blueGray-500 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"
+                  className="get-started focus:outline-none bg-blueGray-400 active:bg-blueGray-500 hover:shadow-lg px-6 py-4 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear outline-none rounded shadow"
                 >
                   Get started
                 </a>
                 <a
                   href="https://github.com/creativetimofficial/notus-nextjs?ref=nnjs-index"
-                  className="github-star ml-1 text-white font-bold px-6 py-4 rounded outline-none focus:outline-none mr-1 mb-1 bg-blueGray-700 active:bg-blueGray-600 uppercase text-sm shadow hover:shadow-lg"
+                  className="github-star focus:outline-none bg-blueGray-700 active:bg-blueGray-600 hover:shadow-lg px-6 py-4 mb-1 ml-1 mr-1 text-sm font-bold text-white uppercase outline-none rounded shadow"
                   target="_blank"
                 >
                   Github Star
@@ -48,19 +47,19 @@ export default function Home() {
           </div>
         </div>
         <img
-          className="absolute top-0 b-auto right-0 pt-16 sm:w-6/12 -mt-48 sm:mt-0 w-10/12 max-h-860-px"
+          className="b-auto sm:w-6/12 sm:mt-0 max-h-860-px top-0 right-0 w-10/12 pt-16 -mt-48 absolute"
           src="/img/pattern_nextjs.png"
           alt="..."
         />
       </section>
 
-      <section className="mt-48 md:mt-40 pb-40 relative bg-blueGray-100">
+      <section className="md:mt-40 bg-blueGray-100 pb-40 mt-48 relative">
         <div
-          className="-mt-20 top-0 bottom-auto left-0 right-0 w-full absolute h-20"
+          className="top-0 left-0 right-0 bottom-auto w-full h-20 -mt-20 absolute"
           style={{ transform: "translateZ(0)" }}
         >
           <svg
-            className="absolute bottom-0 overflow-hidden"
+            className="bottom-0 overflow-hidden absolute"
             xmlns="http://www.w3.org/2000/svg"
             preserveAspectRatio="none"
             version="1.1"
@@ -74,21 +73,21 @@ export default function Home() {
             ></polygon>
           </svg>
         </div>
-        <div className="container mx-auto">
-          <div className="flex flex-wrap items-center">
-            <div className="w-10/12 md:w-6/12 lg:w-4/12 px-12 md:px-4 mr-auto ml-auto -mt-32">
-              <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg bg-blueGray-700">
+        <div className="mx-auto container">
+          <div className="flex-wrap items-center flex">
+            <div className="md:w-6/12 lg:w-4/12 md:px-4 w-10/12 px-12 ml-auto mr-auto -mt-32">
+              <div className="bg-blueGray-700 flex-col w-full min-w-0 mb-6 break-words bg-white rounded-lg shadow-lg relative flex">
                 <img
                   alt="..."
                   src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80"
                   className="w-full align-middle rounded-t-lg"
                 />
-                <blockquote className="relative p-8 mb-4">
+                <blockquote className="p-8 mb-4 relative">
                   <svg
                     preserveAspectRatio="none"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 583 95"
-                    className="absolute left-0 w-full block h-95-px -top-94-px"
+                    className="h-95-px -top-94-px left-0 block w-full absolute"
                   >
                     <polygon
                       points="-30,95 583,95 583,65"
@@ -98,7 +97,7 @@ export default function Home() {
                   <h4 className="text-xl font-bold text-white">
                     Great for your awesome project
                   </h4>
-                  <p className="text-md font-light mt-2 text-white">
+                  <p className="text-md mt-2 font-light text-white">
                     Putting together a page has never been easier than matching
                     together pre-made components. From landing pages
                     presentation to login areas, you can easily customise and
@@ -108,60 +107,60 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="w-full md:w-6/12 px-4">
-              <div className="flex flex-wrap">
-                <div className="w-full md:w-6/12 px-4">
-                  <div className="relative flex flex-col mt-4">
-                    <div className="px-4 py-5 flex-auto">
-                      <div className="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
+            <div className="md:w-6/12 w-full px-4">
+              <div className="flex-wrap flex">
+                <div className="md:w-6/12 w-full px-4">
+                  <div className="flex-col mt-4 relative flex">
+                    <div className="flex-auto px-4 py-5">
+                      <div className="text-blueGray-500 inline-flex items-center justify-center w-12 h-12 p-3 mb-5 text-center bg-white rounded-full shadow-lg">
                         <i className="fas fa-sitemap"></i>
                       </div>
-                      <h6 className="text-xl mb-1 font-semibold">
+                      <h6 className="mb-1 text-xl font-semibold">
                         CSS Components
                       </h6>
-                      <p className="mb-4 text-blueGray-500">
+                      <p className="text-blueGray-500 mb-4">
                         Notus NextJS comes with a huge number of Fully Coded CSS
                         components.
                       </p>
                     </div>
                   </div>
-                  <div className="relative flex flex-col min-w-0">
-                    <div className="px-4 py-5 flex-auto">
-                      <div className="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
+                  <div className="flex-col min-w-0 relative flex">
+                    <div className="flex-auto px-4 py-5">
+                      <div className="text-blueGray-500 inline-flex items-center justify-center w-12 h-12 p-3 mb-5 text-center bg-white rounded-full shadow-lg">
                         <i className="fas fa-drafting-compass"></i>
                       </div>
-                      <h6 className="text-xl mb-1 font-semibold">
+                      <h6 className="mb-1 text-xl font-semibold">
                         JavaScript Components
                       </h6>
-                      <p className="mb-4 text-blueGray-500">
+                      <p className="text-blueGray-500 mb-4">
                         We also feature many dynamic components for React,
                         NextJS, Vue and Angular.
                       </p>
                     </div>
                   </div>
                 </div>
-                <div className="w-full md:w-6/12 px-4">
-                  <div className="relative flex flex-col min-w-0 mt-4">
-                    <div className="px-4 py-5 flex-auto">
-                      <div className="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
+                <div className="md:w-6/12 w-full px-4">
+                  <div className="flex-col min-w-0 mt-4 relative flex">
+                    <div className="flex-auto px-4 py-5">
+                      <div className="text-blueGray-500 inline-flex items-center justify-center w-12 h-12 p-3 mb-5 text-center bg-white rounded-full shadow-lg">
                         <i className="fas fa-newspaper"></i>
                       </div>
-                      <h6 className="text-xl mb-1 font-semibold">Pages</h6>
-                      <p className="mb-4 text-blueGray-500">
+                      <h6 className="mb-1 text-xl font-semibold">Pages</h6>
+                      <p className="text-blueGray-500 mb-4">
                         This extension also comes with 3 sample pages. They are
                         fully coded so you can start working instantly.
                       </p>
                     </div>
                   </div>
-                  <div className="relative flex flex-col min-w-0">
-                    <div className="px-4 py-5 flex-auto">
-                      <div className="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
+                  <div className="flex-col min-w-0 relative flex">
+                    <div className="flex-auto px-4 py-5">
+                      <div className="text-blueGray-500 inline-flex items-center justify-center w-12 h-12 p-3 mb-5 text-center bg-white rounded-full shadow-lg">
                         <i className="fas fa-file-alt"></i>
                       </div>
-                      <h6 className="text-xl mb-1 font-semibold">
+                      <h6 className="mb-1 text-xl font-semibold">
                         Documentation
                       </h6>
-                      <p className="mb-4 text-blueGray-500">
+                      <p className="text-blueGray-500 mb-4">
                         Built by developers for developers. You will love how
                         easy is to to work with Notus NextJS.
                       </p>
@@ -173,107 +172,107 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="container mx-auto overflow-hidden pb-20">
-          <div className="flex flex-wrap items-center">
-            <div className="w-full md:w-4/12 px-12 md:px-4 ml-auto mr-auto mt-48">
-              <div className="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-16 h-16 mb-6 shadow-lg rounded-full bg-white">
+        <div className="pb-20 mx-auto overflow-hidden container">
+          <div className="flex-wrap items-center flex">
+            <div className="md:w-4/12 md:px-4 w-full px-12 mt-48 ml-auto mr-auto">
+              <div className="text-blueGray-500 inline-flex items-center justify-center w-16 h-16 p-3 mb-6 text-center bg-white rounded-full shadow-lg">
                 <i className="fas fa-sitemap text-xl"></i>
               </div>
-              <h3 className="text-3xl mb-2 font-semibold leading-normal">
+              <h3 className="mb-2 text-3xl font-semibold leading-normal">
                 CSS Components
               </h3>
-              <p className="text-lg font-light leading-relaxed mt-4 mb-4 text-blueGray-600">
+              <p className="text-blueGray-600 mt-4 mb-4 text-lg font-light leading-relaxed">
                 Every element that you need in a product comes built in as a
                 component. All components fit perfectly with each other and can
                 have different colours.
               </p>
               <div className="block pb-6">
-                <span className="text-xs font-semibold inline-block py-1 px-2  rounded-full text-blueGray-500 bg-white uppercase last:mr-0 mr-2 mt-2">
+                <span className="text-blueGray-500 last:mr-0 inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full">
                   Buttons
                 </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2  rounded-full text-blueGray-500 bg-white uppercase last:mr-0 mr-2 mt-2">
+                <span className="text-blueGray-500 last:mr-0 inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full">
                   Inputs
                 </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2  rounded-full text-blueGray-500 bg-white uppercase last:mr-0 mr-2 mt-2">
+                <span className="text-blueGray-500 last:mr-0 inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full">
                   Labels
                 </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2  rounded-full text-blueGray-500 bg-white uppercase last:mr-0 mr-2 mt-2">
+                <span className="text-blueGray-500 last:mr-0 inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full">
                   Menus
                 </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2  rounded-full text-blueGray-500 bg-white uppercase last:mr-0 mr-2 mt-2">
+                <span className="text-blueGray-500 last:mr-0 inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full">
                   Navbars
                 </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2  rounded-full text-blueGray-500 bg-white uppercase last:mr-0 mr-2 mt-2">
+                <span className="text-blueGray-500 last:mr-0 inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full">
                   Pagination
                 </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2  rounded-full text-blueGray-500 bg-white uppercase last:mr-0 mr-2 mt-2">
+                <span className="text-blueGray-500 last:mr-0 inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full">
                   Progressbars
                 </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2  rounded-full text-blueGray-500 bg-white uppercase last:mr-0 mr-2 mt-2">
+                <span className="text-blueGray-500 last:mr-0 inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full">
                   Typography
                 </span>
               </div>
               <a
                 href="https://www.creative-tim.com/learning-lab/tailwind/nextjs/alerts/notus?ref=nnjs-index"
                 target="_blank"
-                className="font-bold text-blueGray-700 hover:text-blueGray-500 ease-linear transition-all duration-150"
+                className="text-blueGray-700 hover:text-blueGray-500 font-bold transition-all duration-150 ease-linear"
               >
                 View All{" "}
                 <i className="fa fa-angle-double-right ml-1 leading-relaxed"></i>
               </a>
             </div>
 
-            <div className="w-full md:w-5/12 px-4 mr-auto ml-auto mt-32">
-              <div className="relative flex flex-col min-w-0 w-full mb-6 mt-48 md:mt-0">
+            <div className="md:w-5/12 w-full px-4 mt-32 ml-auto mr-auto">
+              <div className="md:mt-0 flex-col w-full min-w-0 mt-48 mb-6 relative flex">
                 <img
                   alt="..."
                   src="/img/component-btn.png"
-                  className="w-full align-middle rounded absolute shadow-lg max-w-100-px left-145-px -top-29-px z-3"
+                  className="max-w-100-px left-145-px -top-29-px z-3 w-full align-middle shadow-lg absolute rounded"
                 />
                 <img
                   alt="..."
                   src="/img/component-profile-card.png"
-                  className="w-full align-middle rounded-lg absolute shadow-lg max-w-210-px left-260-px -top-160-px"
+                  className="max-w-210-px left-260-px -top-160-px w-full align-middle rounded-lg shadow-lg absolute"
                 />
                 <img
                   alt="..."
                   src="/img/component-info-card.png"
-                  className="w-full align-middle rounded-lg absolute shadow-lg max-w-180-px left-40-px -top-225-px z-2"
+                  className="max-w-180-px left-40-px -top-225-px z-2 w-full align-middle rounded-lg shadow-lg absolute"
                 />
                 <img
                   alt="..."
                   src="/img/component-info-2.png"
-                  className="w-full align-middle rounded-lg absolute shadow-2xl max-w-200-px -left-50-px top-25-px"
+                  className="max-w-200-px -left-50-px top-25-px w-full align-middle rounded-lg shadow-2xl absolute"
                 />
                 <img
                   alt="..."
                   src="/img/component-menu.png"
-                  className="w-full align-middle rounded absolute shadow-lg max-w-580-px -left-20-px top-210-px"
+                  className="max-w-580-px -left-20-px top-210-px w-full align-middle shadow-lg absolute rounded"
                 />
                 <img
                   alt="..."
                   src="/img/component-btn-pink.png"
-                  className="w-full align-middle rounded absolute shadow-xl max-w-120-px left-195-px top-95-px"
+                  className="max-w-120-px left-195-px top-95-px w-full align-middle shadow-xl absolute rounded"
                 />
               </div>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center pt-32">
-            <div className="w-full md:w-6/12 px-4 mr-auto ml-auto mt-32">
-              <div className="justify-center flex flex-wrap relative">
-                <div className="my-4 w-full lg:w-6/12 px-4">
+          <div className="flex-wrap items-center pt-32 flex">
+            <div className="md:w-6/12 w-full px-4 mt-32 ml-auto mr-auto">
+              <div className="flex-wrap justify-center relative flex">
+                <div className="lg:w-6/12 w-full px-4 my-4">
                   <a
                     href="https://www.creative-tim.com/learning-lab/tailwind/svelte/alerts/notus?ref=vtw-index"
                     target="_blank"
                   >
-                    <div className="bg-red-600 shadow-lg rounded-lg text-center p-8">
+                    <div className="p-8 text-center bg-red-600 rounded-lg shadow-lg">
                       <img
                         alt="..."
-                        className="shadow-md rounded-full max-w-full w-16 mx-auto p-2 bg-white"
+                        className="w-16 max-w-full p-2 mx-auto bg-white rounded-full shadow-md"
                         src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/logos/svelte.jpg"
                       />
-                      <p className="text-lg text-white mt-4 font-semibold">
+                      <p className="mt-4 text-lg font-semibold text-white">
                         Svelte
                       </p>
                     </div>
@@ -282,13 +281,13 @@ export default function Home() {
                     href="https://www.creative-tim.com/learning-lab/tailwind/react/alerts/notus?ref=vtw-index"
                     target="_blank"
                   >
-                    <div className="bg-sky-500 shadow-lg rounded-lg text-center p-8 mt-8">
+                    <div className="bg-sky-500 p-8 mt-8 text-center rounded-lg shadow-lg">
                       <img
                         alt="..."
-                        className="shadow-md rounded-full max-w-full w-16 mx-auto p-2 bg-white"
+                        className="w-16 max-w-full p-2 mx-auto bg-white rounded-full shadow-md"
                         src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/logos/react.jpg"
                       />
-                      <p className="text-lg text-white mt-4 font-semibold">
+                      <p className="mt-4 text-lg font-semibold text-white">
                         ReactJS
                       </p>
                     </div>
@@ -297,30 +296,30 @@ export default function Home() {
                     href="https://www.creative-tim.com/learning-lab/tailwind/nextjs/alerts/notus?ref=vtw-index"
                     target="_blank"
                   >
-                    <div className="bg-blueGray-700 shadow-lg rounded-lg text-center p-8 mt-8">
+                    <div className="bg-blueGray-700 p-8 mt-8 text-center rounded-lg shadow-lg">
                       <img
                         alt="..."
-                        className="shadow-md rounded-full max-w-full w-16 mx-auto p-2 bg-white"
+                        className="w-16 max-w-full p-2 mx-auto bg-white rounded-full shadow-md"
                         src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/logos/nextjs.jpg"
                       />
-                      <p className="text-lg text-white mt-4 font-semibold">
+                      <p className="mt-4 text-lg font-semibold text-white">
                         NextJS
                       </p>
                     </div>
                   </a>
                 </div>
-                <div className="my-4 w-full lg:w-6/12 px-4 lg:mt-16">
+                <div className="lg:w-6/12 lg:mt-16 w-full px-4 my-4">
                   <a
                     href="https://www.creative-tim.com/learning-lab/tailwind/js/alerts/notus?ref=vtw-index"
                     target="_blank"
                   >
-                    <div className="bg-yellow-500 shadow-lg rounded-lg text-center p-8">
+                    <div className="p-8 text-center bg-yellow-500 rounded-lg shadow-lg">
                       <img
                         alt="..."
-                        className="shadow-md rounded-full max-w-full w-16 mx-auto p-2 bg-white"
+                        className="w-16 max-w-full p-2 mx-auto bg-white rounded-full shadow-md"
                         src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/logos/js.png"
                       />
-                      <p className="text-lg text-white mt-4 font-semibold">
+                      <p className="mt-4 text-lg font-semibold text-white">
                         JavaScript
                       </p>
                     </div>
@@ -329,13 +328,13 @@ export default function Home() {
                     href="https://www.creative-tim.com/learning-lab/tailwind/angular/alerts/notus?ref=vtw-index"
                     target="_blank"
                   >
-                    <div className="bg-red-700 shadow-lg rounded-lg text-center p-8 mt-8">
+                    <div className="p-8 mt-8 text-center bg-red-700 rounded-lg shadow-lg">
                       <img
                         alt="..."
-                        className="shadow-md rounded-full max-w-full w-16 mx-auto p-2 bg-white"
+                        className="w-16 max-w-full p-2 mx-auto bg-white rounded-full shadow-md"
                         src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/logos/angular.jpg"
                       />
-                      <p className="text-lg text-white mt-4 font-semibold">
+                      <p className="mt-4 text-lg font-semibold text-white">
                         Angular
                       </p>
                     </div>
@@ -344,13 +343,13 @@ export default function Home() {
                     href="https://www.creative-tim.com/learning-lab/tailwind/vue/alerts/notus?ref=vtw-index"
                     target="_blank"
                   >
-                    <div className="bg-emerald-500 shadow-lg rounded-lg text-center p-8 mt-8">
+                    <div className="bg-emerald-500 p-8 mt-8 text-center rounded-lg shadow-lg">
                       <img
                         alt="..."
-                        className="shadow-md rounded-full max-w-full w-16 mx-auto p-2 bg-white"
+                        className="w-16 max-w-full p-2 mx-auto bg-white rounded-full shadow-md"
                         src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/logos/vue.jpg"
                       />
-                      <p className="text-lg text-white mt-4 font-semibold">
+                      <p className="mt-4 text-lg font-semibold text-white">
                         Vue.js
                       </p>
                     </div>
@@ -359,52 +358,52 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="w-full md:w-4/12 px-12 md:px-4 ml-auto mr-auto mt-48">
-              <div className="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-16 h-16 mb-6 shadow-lg rounded-full bg-white">
+            <div className="md:w-4/12 md:px-4 w-full px-12 mt-48 ml-auto mr-auto">
+              <div className="text-blueGray-500 inline-flex items-center justify-center w-16 h-16 p-3 mb-6 text-center bg-white rounded-full shadow-lg">
                 <i className="fas fa-drafting-compass text-xl"></i>
               </div>
-              <h3 className="text-3xl mb-2 font-semibold leading-normal">
+              <h3 className="mb-2 text-3xl font-semibold leading-normal">
                 Javascript Components
               </h3>
-              <p className="text-lg font-light leading-relaxed mt-4 mb-4 text-blueGray-600">
+              <p className="text-blueGray-600 mt-4 mb-4 text-lg font-light leading-relaxed">
                 In order to create a great User Experience some components
                 require JavaScript. In this way you can manipulate the elements
                 on the page and give more options to your users.
               </p>
-              <p className="text-lg font-light leading-relaxed mt-4 mb-4 text-blueGray-600">
+              <p className="text-blueGray-600 mt-4 mb-4 text-lg font-light leading-relaxed">
                 We created a set of Components that are dynamic and come to help
                 you.
               </p>
               <div className="block pb-6">
-                <span className="text-xs font-semibold inline-block py-1 px-2  rounded-full text-blueGray-500 bg-white last:mr-0 mr-2 mt-2">
+                <span className="text-blueGray-500 last:mr-0 inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold bg-white rounded-full">
                   Alerts
                 </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2  rounded-full text-blueGray-500 bg-white uppercase last:mr-0 mr-2 mt-2">
+                <span className="text-blueGray-500 last:mr-0 inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full">
                   Dropdowns
                 </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2  rounded-full text-blueGray-500 bg-white uppercase last:mr-0 mr-2 mt-2">
+                <span className="text-blueGray-500 last:mr-0 inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full">
                   Menus
                 </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2  rounded-full text-blueGray-500 bg-white uppercase last:mr-0 mr-2 mt-2">
+                <span className="text-blueGray-500 last:mr-0 inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full">
                   Modals
                 </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2  rounded-full text-blueGray-500 bg-white uppercase last:mr-0 mr-2 mt-2">
+                <span className="text-blueGray-500 last:mr-0 inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full">
                   Navbars
                 </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2  rounded-full text-blueGray-500 bg-white uppercase last:mr-0 mr-2 mt-2">
+                <span className="text-blueGray-500 last:mr-0 inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full">
                   Popovers
                 </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2  rounded-full text-blueGray-500 bg-white uppercase last:mr-0 mr-2 mt-2">
+                <span className="text-blueGray-500 last:mr-0 inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full">
                   Tabs
                 </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2  rounded-full text-blueGray-500 bg-white uppercase last:mr-0 mr-2 mt-2">
+                <span className="text-blueGray-500 last:mr-0 inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full">
                   Tooltips
                 </span>
               </div>
               <a
                 href="https://www.creative-tim.com/learning-lab/tailwind/nextjs/alerts/notus?ref=nnjs-index"
                 target="_blank"
-                className="font-bold text-blueGray-700 hover:text-blueGray-500 ease-linear transition-all duration-150"
+                className="text-blueGray-700 hover:text-blueGray-500 font-bold transition-all duration-150 ease-linear"
               >
                 View all{" "}
                 <i className="fa fa-angle-double-right ml-1 leading-relaxed"></i>
@@ -413,27 +412,27 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="container mx-auto px-4 pb-32 pt-48">
-          <div className="items-center flex flex-wrap">
-            <div className="w-full md:w-5/12 ml-auto px-12 md:px-4">
+        <div className="px-4 pt-48 pb-32 mx-auto container">
+          <div className="flex-wrap items-center flex">
+            <div className="md:w-5/12 md:px-4 w-full px-12 ml-auto">
               <div className="md:pr-12">
-                <div className="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-16 h-16 mb-6 shadow-lg rounded-full bg-white">
+                <div className="text-blueGray-500 inline-flex items-center justify-center w-16 h-16 p-3 mb-6 text-center bg-white rounded-full shadow-lg">
                   <i className="fas fa-file-alt text-xl"></i>
                 </div>
                 <h3 className="text-3xl font-semibold">
                   Complex Documentation
                 </h3>
-                <p className="mt-4 text-lg leading-relaxed text-blueGray-500">
+                <p className="text-blueGray-500 mt-4 text-lg leading-relaxed">
                   This extension comes a lot of fully coded examples that help
                   you get started faster. You can adjust the colors and also the
                   programming language. You can change the text and images and
                   you're good to go.
                 </p>
-                <ul className="list-none mt-6">
+                <ul className="mt-6 list-none">
                   <li className="py-2">
-                    <div className="flex items-center">
+                    <div className="items-center flex">
                       <div>
-                        <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blueGray-500 bg-blueGray-50 mr-3">
+                        <span className="text-blueGray-500 bg-blueGray-50 inline-block px-2 py-1 mr-3 text-xs font-semibold uppercase rounded-full">
                           <i className="fas fa-fingerprint"></i>
                         </span>
                       </div>
@@ -445,9 +444,9 @@ export default function Home() {
                     </div>
                   </li>
                   <li className="py-2">
-                    <div className="flex items-center">
+                    <div className="items-center flex">
                       <div>
-                        <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blueGray-500 bg-blueGray-50 mr-3">
+                        <span className="text-blueGray-500 bg-blueGray-50 inline-block px-2 py-1 mr-3 text-xs font-semibold uppercase rounded-full">
                           <i className="fab fa-html5"></i>
                         </span>
                       </div>
@@ -459,9 +458,9 @@ export default function Home() {
                     </div>
                   </li>
                   <li className="py-2">
-                    <div className="flex items-center">
+                    <div className="items-center flex">
                       <div>
-                        <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blueGray-500 bg-blueGray-50 mr-3">
+                        <span className="text-blueGray-500 bg-blueGray-50 inline-block px-2 py-1 mr-3 text-xs font-semibold uppercase rounded-full">
                           <i className="far fa-paper-plane"></i>
                         </span>
                       </div>
@@ -476,7 +475,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="w-full md:w-6/12 mr-auto px-4 pt-24 md:pt-0">
+            <div className="md:w-6/12 md:pt-0 w-full px-4 pt-24 mr-auto">
               <img
                 alt="..."
                 className="max-w-full rounded-lg shadow-xl"
@@ -490,10 +489,10 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="justify-center text-center flex flex-wrap mt-24">
-          <div className="w-full md:w-6/12 px-12 md:px-4">
-            <h2 className="font-semibold text-4xl">Beautiful Example Pages</h2>
-            <p className="text-lg leading-relaxed mt-4 mb-4 text-blueGray-500">
+        <div className="flex-wrap justify-center mt-24 text-center flex">
+          <div className="md:w-6/12 md:px-4 w-full px-12">
+            <h2 className="text-4xl font-semibold">Beautiful Example Pages</h2>
+            <p className="text-blueGray-500 mt-4 mb-4 text-lg leading-relaxed">
               Notus NextJS is a completly new product built using our past
               experience in web templates. Take the examples we made for you and
               start playing with them.
@@ -502,50 +501,50 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="block relative z-1 bg-blueGray-600">
-        <div className="container mx-auto">
-          <div className="justify-center flex flex-wrap">
-            <div className="w-full lg:w-12/12 px-4  -mt-24">
-              <div className="flex flex-wrap">
-                <div className="w-full lg:w-4/12 px-4">
-                  <h5 className="text-xl font-semibold pb-4 text-center">
+      <section className="z-1 bg-blueGray-600 block relative">
+        <div className="mx-auto container">
+          <div className="flex-wrap justify-center flex">
+            <div className="lg:w-12/12 w-full px-4 -mt-24">
+              <div className="flex-wrap flex">
+                <div className="lg:w-4/12 w-full px-4">
+                  <h5 className="pb-4 text-xl font-semibold text-center">
                     Login Page
                   </h5>
                   <Link href="/auth/login">
-                    <div className="hover:-mt-4 relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg ease-linear transition-all duration-150">
+                    <div className="hover:-mt-4 flex-col w-full min-w-0 mb-6 break-words transition-all duration-150 ease-linear bg-white rounded-lg shadow-lg relative flex">
                       <img
                         alt="..."
-                        className="align-middle border-none max-w-full h-auto rounded-lg"
+                        className="h-auto max-w-full align-middle border-none rounded-lg"
                         src="/img/login.jpg"
                       />
                     </div>
                   </Link>
                 </div>
 
-                <div className="w-full lg:w-4/12 px-4">
-                  <h5 className="text-xl font-semibold pb-4 text-center">
+                <div className="lg:w-4/12 w-full px-4">
+                  <h5 className="pb-4 text-xl font-semibold text-center">
                     Profile Page
                   </h5>
                   <Link href="/profile">
-                    <div className="hover:-mt-4 relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg ease-linear transition-all duration-150">
+                    <div className="hover:-mt-4 flex-col w-full min-w-0 mb-6 break-words transition-all duration-150 ease-linear bg-white rounded-lg shadow-lg relative flex">
                       <img
                         alt="..."
-                        className="align-middle border-none max-w-full h-auto rounded-lg"
+                        className="h-auto max-w-full align-middle border-none rounded-lg"
                         src="/img/profile.jpg"
                       />
                     </div>
                   </Link>
                 </div>
 
-                <div className="w-full lg:w-4/12 px-4">
-                  <h5 className="text-xl font-semibold pb-4 text-center">
+                <div className="lg:w-4/12 w-full px-4">
+                  <h5 className="pb-4 text-xl font-semibold text-center">
                     Landing Page
                   </h5>
                   <Link href="/landing">
-                    <div className="hover:-mt-4 relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg ease-linear transition-all duration-150">
+                    <div className="hover:-mt-4 flex-col w-full min-w-0 mb-6 break-words transition-all duration-150 ease-linear bg-white rounded-lg shadow-lg relative flex">
                       <img
                         alt="..."
-                        className="align-middle border-none max-w-full h-auto rounded-lg"
+                        className="h-auto max-w-full align-middle border-none rounded-lg"
                         src="/img/landing.jpg"
                       />
                     </div>
@@ -557,17 +556,17 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-20 bg-blueGray-600 overflow-hidden">
-        <div className="container mx-auto pb-64">
-          <div className="flex flex-wrap justify-center">
-            <div className="w-full md:w-5/12 px-12 md:px-4 ml-auto mr-auto md:mt-64">
-              <div className="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-16 h-16 mb-6 shadow-lg rounded-full bg-white">
+      <section className="bg-blueGray-600 py-20 overflow-hidden">
+        <div className="pb-64 mx-auto container">
+          <div className="flex-wrap justify-center flex">
+            <div className="md:w-5/12 md:px-4 md:mt-64 w-full px-12 ml-auto mr-auto">
+              <div className="text-blueGray-500 inline-flex items-center justify-center w-16 h-16 p-3 mb-6 text-center bg-white rounded-full shadow-lg">
                 <i className="fas fa-code-branch text-xl"></i>
               </div>
-              <h3 className="text-3xl mb-2 font-semibold leading-normal text-white">
+              <h3 className="mb-2 text-3xl font-semibold leading-normal text-white">
                 Open Source
               </h3>
-              <p className="text-lg font-light leading-relaxed mt-4 mb-4 text-blueGray-400">
+              <p className="text-blueGray-400 mt-4 mb-4 text-lg font-light leading-relaxed">
                 Since{" "}
                 <a
                   href="https://tailwindcss.com/?ref=creative"
@@ -580,33 +579,33 @@ export default function Home() {
                 too. You can give this version a try to feel the design and also
                 test the quality of the code!
               </p>
-              <p className="text-lg font-light leading-relaxed mt-0 mb-4 text-blueGray-400">
+              <p className="text-blueGray-400 mt-0 mb-4 text-lg font-light leading-relaxed">
                 Get it free on Github and please help us spread the news with a
                 Star!
               </p>
               <a
                 href="https://github.com/creativetimofficial/notus-nextjs?ref=nnjs-index"
                 target="_blank"
-                className="github-star mt-4 inline-block text-white font-bold px-6 py-4 rounded outline-none focus:outline-none mr-1 mb-1 bg-blueGray-700 active:bg-blueGray-600 uppercase text-sm shadow hover:shadow-lg"
+                className="github-star focus:outline-none bg-blueGray-700 active:bg-blueGray-600 hover:shadow-lg inline-block px-6 py-4 mt-4 mb-1 mr-1 text-sm font-bold text-white uppercase outline-none rounded shadow"
               >
                 Github Star
               </a>
             </div>
 
-            <div className="w-full md:w-4/12 px-4 mr-auto ml-auto mt-32 relative">
-              <i className="fab fa-github text-blueGray-700 absolute text-55 -top-150-px -right-100 left-auto opacity-80"></i>
+            <div className="md:w-4/12 w-full px-4 mt-32 ml-auto mr-auto relative">
+              <i className="fab fa-github text-blueGray-700 text-55 -top-150-px -right-100 opacity-80 left-auto absolute"></i>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="pb-16 bg-blueGray-200 relative pt-32">
+      <section className="bg-blueGray-200 pt-32 pb-16 relative">
         <div
-          className="-mt-20 top-0 bottom-auto left-0 right-0 w-full absolute h-20"
+          className="top-0 left-0 right-0 bottom-auto w-full h-20 -mt-20 absolute"
           style={{ transform: "translateZ(0)" }}
         >
           <svg
-            className="absolute bottom-0 overflow-hidden"
+            className="bottom-0 overflow-hidden absolute"
             xmlns="http://www.w3.org/2000/svg"
             preserveAspectRatio="none"
             version="1.1"
@@ -621,40 +620,40 @@ export default function Home() {
           </svg>
         </div>
 
-        <div className="container mx-auto">
-          <div className="flex flex-wrap justify-center bg-white shadow-xl rounded-lg -mt-64 py-16 px-12 relative z-10">
-            <div className="w-full text-center lg:w-8/12">
+        <div className="mx-auto container">
+          <div className="z-10 flex-wrap justify-center px-12 py-16 -mt-64 bg-white rounded-lg shadow-xl relative flex">
+            <div className="lg:w-8/12 w-full text-center">
               <p className="text-4xl text-center">
                 <span role="img" aria-label="love">
                   😍
                 </span>
               </p>
-              <h3 className="font-semibold text-3xl">
+              <h3 className="text-3xl font-semibold">
                 Do you love this Starter Kit?
               </h3>
-              <p className="text-blueGray-500 text-lg leading-relaxed mt-4 mb-4">
+              <p className="text-blueGray-500 mt-4 mb-4 text-lg leading-relaxed">
                 Cause if you do, it can be yours now. Hit the buttons below to
                 navigate to get the Free version for your next project. Build a
                 new web app or give an old project a new look!
               </p>
-              <div className="sm:block flex flex-col mt-10">
+              <div className="sm:block flex-col mt-10 flex">
                 <a
                   href="https://www.creative-tim.com/learning-lab/tailwind/nextjs/overview/notus?ref=nnjs-index"
                   target="_blank"
-                  className="get-started text-white font-bold px-6 py-4 rounded outline-none focus:outline-none mr-1 mb-2 bg-blueGray-400 active:bg-blueGray-500 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"
+                  className="get-started focus:outline-none bg-blueGray-400 active:bg-blueGray-500 hover:shadow-lg px-6 py-4 mb-2 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear outline-none rounded shadow"
                 >
                   Get started
                 </a>
                 <a
                   href="https://github.com/creativetimofficial/notus-nextjs?ref=nnjs-index"
                   target="_blank"
-                  className="github-star sm:ml-1 text-white font-bold px-6 py-4 rounded outline-none focus:outline-none mr-1 mb-1 bg-blueGray-700 active:bg-blueGray-600 uppercase text-sm shadow hover:shadow-lg"
+                  className="github-star sm:ml-1 focus:outline-none bg-blueGray-700 active:bg-blueGray-600 hover:shadow-lg px-6 py-4 mb-1 mr-1 text-sm font-bold text-white uppercase outline-none rounded shadow"
                 >
-                  <i className="fab fa-github text-lg mr-1"></i>
+                  <i className="fab fa-github mr-1 text-lg"></i>
                   <span>Help With a Star</span>
                 </a>
               </div>
-              <div className="text-center mt-16"></div>
+              <div className="mt-16 text-center"></div>
             </div>
           </div>
         </div>

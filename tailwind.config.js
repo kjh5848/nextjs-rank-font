@@ -73,15 +73,24 @@ module.exports = {
         },
       },
       boxShadow: {
-        card: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-        "card-hover":
-          "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+        'btn': '0 2px 4px rgba(0, 0, 0, 0.05)',
+        'btn-hover': '0 4px 6px rgba(0, 0, 0, 0.1)',
+        'btn-active': '0 1px 2px rgba(0, 0, 0, 0.05)',
+        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
       },
       transitionProperty: {
         height: "height",
         spacing: "margin, padding",
       },
       keyframes: {
+        'btn-bounce': {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(0.95)' },
+        },
+        'btn-spin': {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
         fadeIn: {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
@@ -92,6 +101,8 @@ module.exports = {
         },
       },
       animation: {
+        'btn-bounce': 'btn-bounce 0.2s ease-in-out',
+        'btn-spin': 'btn-spin 1s linear infinite',
         fadeIn: "fadeIn 0.2s ease-in-out",
         fadeOut: "fadeOut 0.2s ease-in-out",
       },

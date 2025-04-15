@@ -27,6 +27,7 @@
     "next": "^15.3.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-hook-form": "^7.55.0",
     "typography": "^0.16.24"
   },
   "devDependencies": {
@@ -34,6 +35,8 @@
     "@types/node": "22.14.1",
     "@types/react": "19.1.1",
     "autoprefixer": "^10.4.21",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^3.4.1",
     "typescript": "5.8.3"
   }

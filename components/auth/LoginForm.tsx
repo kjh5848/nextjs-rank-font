@@ -1,39 +1,45 @@
 "use client";
 
-import Image from "next/image";
+import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
-  const router = useRouter();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const [copied, setCopied] = useState(false);
+  const email = "help@nesoone.com";
+  const kakaoLink = "https://open.kakao.com/o/sPN16smh";
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(email).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
-    try {
-      const response = await fetch("http://localhost:8081/v1/auth/login", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
+  const onSubmit = async (data: any) => {
+    const dto = await fetch(`/v1/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        user: data
+      })
+    }).then((response) => response.json());
 
-      if (!response.ok) throw new Error("로그인 실패");
-
-      const data = await response.json();
-      console.log("로그인 성공:", data);
-      alert("로그인 성공!");
-      router.push("/");
-    } catch (err) {
-      console.error(err);
-      setError("아이디 또는 비밀번호가 올바르지 않습니다.");
+    if (dto.code === -3) {
+      alert(Object.keys(dto.data).map((key) => dto.data[key]).join("\n"));
+      return;
+    } else if (dto.code !== 0) {
+      alert(dto.message);
+      return;
+    } else {
+      window.location.reload();
     }
   };
 
@@ -48,12 +54,10 @@ export default function LoginForm() {
             href="/"
             className="w-full bg-[#FEE500] text-[#3C1E1E] px-4 py-3 rounded outline-none focus:outline-none mb-3 font-bold text-sm shadow hover:shadow-md flex items-center justify-center transition-all duration-150"
           >
-            <Image
+            <img
               src="/img/auth/kakao_login.png"
               alt="Kakao"
               className="w-5 h-5 mr-2"
-              width={20}
-              height={20}
             />
             3초 로그인/회원가입
           </Link>
@@ -66,22 +70,20 @@ export default function LoginForm() {
           <small>로그인 하기</small>
         </div>
 
-        {error && (
-          <p className="text-red-500 text-center text-sm mb-4">{error}</p>
-        )}
-
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="relative w-full mb-3">
             <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
               아이디
             </label>
             <input
+              {...register("username", { required: "계정을 입력하세요." })}
               type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
               className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
               placeholder="아이디"
             />
+            {errors.username && (
+              <p className="text-red-500 text-xs mt-1">{errors.username.message as string}</p>
+            )}
           </div>
 
           <div className="relative w-full mb-3">
@@ -89,24 +91,14 @@ export default function LoginForm() {
               비밀번호
             </label>
             <input
+              {...register("password", { required: "비밀번호를 입력하세요." })}
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
               className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
               placeholder="비밀번호"
             />
-          </div>
-
-          <div>
-            <label className="inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                className="form-checkbox border-0 rounded text-blueGray-700 ml-1 w-5 h-5 ease-linear transition-all duration-150"
-              />
-              <span className="ml-2 text-sm font-semibold text-blueGray-600">
-                기억하기
-              </span>
-            </label>
+            {errors.password && (
+              <p className="text-red-500 text-xs mt-1">{errors.password.message as string}</p>
+            )}
           </div>
 
           <div className="text-center mt-6">
