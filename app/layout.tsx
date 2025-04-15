@@ -1,4 +1,4 @@
-import IndexNavbar from "@/components/Navbar/IndexNavbar";
+import { StoreProvider } from "@/store/provider/StoreProvider";
 import "@/styles/global.css"
 
 export const metadata = {
@@ -12,9 +12,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen">
-      <IndexNavbar />
-      {children}
-    </div>
+    <html lang="ko">
+      <body className="">{children}</body>
+    </html>
   );
 }
