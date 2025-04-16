@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import usePendingFunction from "@/store/usePendingFunction";
+import usePendingFunction from "@/use/usePendingFunction";
 import UtilFunction from "@/util/UtilFunction";
 import AuthRepository from "@/model/AuthRepository";
 
@@ -21,6 +21,7 @@ function useAuthStoreLocal() {
   const [checkAuthTrigger, isAuthPending] = usePendingFunction(async () => {
     try {
       const response = await AuthRepository.checkAuth();
+      
       if (response.ok) {
         const data = await response.json();
         if (data.user) {

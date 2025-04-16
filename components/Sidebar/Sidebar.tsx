@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import NotificationDropdown from "@/components/Dropdowns/NotificationDropdown";
 import UserDropdown from "@/components/Dropdowns/UserDropdown";
 import { useState } from "react";
+import { Menu, X } from 'lucide-react';
 
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = useState("hidden");
@@ -12,23 +13,26 @@ export default function Sidebar() {
 
   return (
     <>
-      <nav className="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex-wrap items-center justify-between md:w-64 z-10 py-4 px-6 relative flex">
+      <nav className="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-rank-dark flex-wrap items-center justify-between md:w-64 z-10 py-4 px-6 relative flex">
         <div className="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex-wrap items-center justify-between w-full mx-auto flex">
-          {/* Toggler */}
+          {/* Toggler - 개선된 토글 버튼 */}
           <button
-            className="cursor-pointer text-black opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent border-solid border-transparent border rounded"
+            className="cursor-pointer md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-rank-primary to-rank-secondary text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
             type="button"
             onClick={() => setCollapseShow("bg-white m-2 py-3 px-6")}
+            aria-label="Toggle navigation"
           >
-            <i className="fas fa-bars"></i>
+            <Menu size={24} />
           </button>
+          
           {/* Brand */}
           <Link
             href="/"
-            className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
+            className="md:block text-left md:pb-2 text-white mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0 bg-clip-text bg-gradient-to-r from-rank-primary to-rank-secondary"
           >
             RANK
           </Link>
+          
           {/* User */}
           <ul className="md:hidden items-center flex-wrap list-none flex">
             <li className="inline-block relative">
@@ -38,6 +42,7 @@ export default function Sidebar() {
               <UserDropdown />
             </li>
           </ul>
+          
           {/* Collapse */}
           <div
             className={
@@ -45,13 +50,13 @@ export default function Sidebar() {
               collapseShow
             }
           >
-            {/* Collapse header */}
+            {/* Collapse header - 개선된 닫기 버튼 */}
             <div className="md:min-w-full md:hidden block pb-4 mb-4 border-b border-solid border-blueGray-200">
               <div className="flex-wrap flex">
                 <div className="w-6/12">
                   <Link
                     href="/"
-                    className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
+                    className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0 bg-clip-text bg-gradient-to-r from-rank-primary to-rank-secondary"
                   >
                     RANK
                   </Link>
@@ -59,14 +64,16 @@ export default function Sidebar() {
                 <div className="w-6/12 justify-end flex">
                   <button
                     type="button"
-                    className="cursor-pointer text-black opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent border-solid border-transparent border rounded"
+                    className="cursor-pointer flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-rank-primary to-rank-secondary text-white shadow-md hover:shadow-lg transition-all duration-200"
                     onClick={() => setCollapseShow("hidden")}
+                    aria-label="Close menu"
                   >
-                    <i className="fas fa-times"></i>
+                    <X size={24} />
                   </button>
                 </div>
               </div>
             </div>
+            
             {/* Form */}
             <form className="mt-6 mb-4 md:hidden">
               <div className="mb-3 pt-0">
@@ -80,21 +87,22 @@ export default function Sidebar() {
 
             {/* Divider */}
             <hr className="my-4 md:min-w-full" />
+            
             {/* Heading */}
-            <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+            <h6 className="md:min-w-full text-transparent bg-clip-text bg-gradient-to-r from-rank-primary to-rank-secondary text-xs uppercase font-bold block pt-1 pb-4 no-underline">
               Admin Layout Pages
             </h6>
+            
             {/* Navigation */}
-
             <ul className="md:flex-col md:min-w-full flex-col list-none flex">
               <li className="items-center">
                 <Link
-                  href="/admin/dashboard"
+                  href="/dashboard"
                   className={
-                    "text-xs uppercase py-3 font-bold block " +
+                    "text-xs uppercase py-3 font-bold block text-transparent bg-clip-text bg-gradient-to-r from-rank-primary to-rank-secondary " +
                     (pathname.includes("/admin/dashboard")
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                      ? "opacity-100"
+                      : "opacity-75 hover:opacity-100")
                   }
                 >
                   <i
@@ -109,16 +117,14 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              
-
               <li className="items-center">
                 <Link
                   href="/admin/tables"
                   className={
-                    "text-xs uppercase py-3 font-bold block " +
+                    "text-xs uppercase py-3 font-bold block text-transparent bg-clip-text bg-gradient-to-r from-rank-primary to-rank-secondary " +
                     (pathname.includes("/admin/tables")
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                      ? "opacity-100"
+                      : "opacity-75 hover:opacity-100")
                   }
                 >
                   <i
@@ -137,10 +143,10 @@ export default function Sidebar() {
                 <Link
                   href="/admin/maps"
                   className={
-                    "text-xs uppercase py-3 font-bold block " +
+                    "text-xs uppercase py-3 font-bold block text-transparent bg-clip-text bg-gradient-to-r from-rank-primary to-rank-secondary " +
                     (pathname.includes("/admin/maps")
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                      ? "opacity-100"
+                      : "opacity-75 hover:opacity-100")
                   }
                 >
                   <i
@@ -158,17 +164,18 @@ export default function Sidebar() {
 
             {/* Divider */}
             <hr className="my-4 md:min-w-full" />
+            
             {/* Heading */}
-            <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+            <h6 className="md:min-w-full text-transparent bg-clip-text bg-gradient-to-r from-rank-primary to-rank-secondary text-xs uppercase font-bold block pt-1 pb-4 no-underline">
               Auth Layout Pages
             </h6>
+            
             {/* Navigation */}
-
             <ul className="md:flex-col md:min-w-full flex-col list-none md:mb-4 flex">
               <li className="items-center">
                 <Link
-                  href="/auth/login"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
+                  href="/login"
+                  className="text-transparent bg-clip-text bg-gradient-to-r from-rank-primary to-rank-secondary opacity-75 hover:opacity-100 text-xs uppercase py-3 font-bold block"
                 >
                   <i className="fas fa-fingerprint text-blueGray-400 mr-2 text-sm"></i>{" "}
                   Login
@@ -177,8 +184,8 @@ export default function Sidebar() {
 
               <li className="items-center">
                 <Link
-                  href="/auth/register"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
+                  href="/join"
+                  className="text-transparent bg-clip-text bg-gradient-to-r from-rank-primary to-rank-secondary opacity-75 hover:opacity-100 text-xs uppercase py-3 font-bold block"
                 >
                   <i className="fas fa-clipboard-list text-blueGray-300 mr-2 text-sm"></i>{" "}
                   Register
@@ -188,17 +195,18 @@ export default function Sidebar() {
 
             {/* Divider */}
             <hr className="my-4 md:min-w-full" />
+            
             {/* Heading */}
-            <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+            <h6 className="md:min-w-full text-transparent bg-clip-text bg-gradient-to-r from-rank-primary to-rank-secondary text-xs uppercase font-bold block pt-1 pb-4 no-underline">
               No Layout Pages
             </h6>
+            
             {/* Navigation */}
-
             <ul className="md:flex-col md:min-w-full flex-col list-none md:mb-4 flex">
               <li className="items-center">
                 <Link
                   href="/landing"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
+                  className="text-transparent bg-clip-text bg-gradient-to-r from-rank-primary to-rank-secondary opacity-75 hover:opacity-100 text-xs uppercase py-3 font-bold block"
                 >
                   <i className="fas fa-newspaper text-blueGray-400 mr-2 text-sm"></i>{" "}
                   Landing Page
@@ -208,108 +216,11 @@ export default function Sidebar() {
               <li className="items-center">
                 <Link
                   href="/profile"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
+                  className="text-transparent bg-clip-text bg-gradient-to-r from-rank-primary to-rank-secondary opacity-75 hover:opacity-100 text-xs uppercase py-3 font-bold block"
                 >
                   <i className="fas fa-user-circle text-blueGray-400 mr-2 text-sm"></i>{" "}
                   Profile Page
                 </Link>
-              </li>
-            </ul>
-
-            {/* Divider */}
-            <hr className="my-4 md:min-w-full" />
-            {/* Heading */}
-            <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Documentation
-            </h6>
-            {/* Navigation */}
-            <ul className="md:flex-col md:min-w-full flex-col list-none md:mb-4 flex">
-              <li className="inline-flex">
-                <a
-                  href="https://www.creative-tim.com/learning-lab/tailwind/nextjs/colors/notus"
-                  target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-                >
-                  <i className="fas fa-paint-brush mr-2 text-blueGray-300 text-base"></i>
-                  Styles
-                </a>
-              </li>
-
-              <li className="inline-flex">
-                <a
-                  href="https://www.creative-tim.com/learning-lab/tailwind/nextjs/alerts/notus"
-                  target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-                >
-                  <i className="fab fa-css3-alt mr-2 text-blueGray-300 text-base"></i>
-                  CSS Components
-                </a>
-              </li>
-
-              <li className="inline-flex">
-                <a
-                  href="https://www.creative-tim.com/learning-lab/tailwind/angular/overview/notus"
-                  target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-                >
-                  <i className="fab fa-angular mr-2 text-blueGray-300 text-base"></i>
-                  Angular
-                </a>
-              </li>
-
-              <li className="inline-flex">
-                <a
-                  href="https://www.creative-tim.com/learning-lab/tailwind/js/overview/notus"
-                  target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-                >
-                  <i className="fab fa-js-square mr-2 text-blueGray-300 text-base"></i>
-                  Javascript
-                </a>
-              </li>
-
-              <li className="inline-flex">
-                <a
-                  href="https://www.creative-tim.com/learning-lab/tailwind/nextjs/overview/notus"
-                  target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-                >
-                  <i className="fab fa-react mr-2 text-blueGray-300 text-base"></i>
-                  NextJS
-                </a>
-              </li>
-
-              <li className="inline-flex">
-                <a
-                  href="https://www.creative-tim.com/learning-lab/tailwind/react/overview/notus"
-                  target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-                >
-                  <i className="fab fa-react mr-2 text-blueGray-300 text-base"></i>
-                  React
-                </a>
-              </li>
-
-              <li className="inline-flex">
-                <a
-                  href="https://www.creative-tim.com/learning-lab/tailwind/svelte/overview/notus"
-                  target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-                >
-                  <i className="fas fa-link mr-2 text-blueGray-300 text-base"></i>
-                  Svelte
-                </a>
-              </li>
-
-              <li className="inline-flex">
-                <a
-                  href="https://www.creative-tim.com/learning-lab/tailwind/vue/overview/notus"
-                  target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-                >
-                  <i className="fab fa-vuejs mr-2 text-blueGray-300 text-base"></i>
-                  VueJS
-                </a>
               </li>
             </ul>
           </div>
@@ -317,4 +228,4 @@ export default function Sidebar() {
       </nav>
     </>
   );
-} 
+}

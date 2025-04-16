@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-target-blank */
 import React from "react";
 import Link from "next/link";
-import IndexNavbar from "@/components/Navbars/IndexNavbar";
+import IndexNavbar from "@/components/Navbars/Navbar";
 
 export default function Home() {
   return (
@@ -510,7 +510,7 @@ export default function Home() {
                   <h5 className="pb-4 text-xl font-semibold text-center">
                     Login Page
                   </h5>
-                  <Link href="/auth/login">
+                  <Link href="/login">
                     <div className="hover:-mt-4 flex-col w-full min-w-0 mb-6 break-words transition-all duration-150 ease-linear bg-white rounded-lg shadow-lg relative flex">
                       <img
                         alt="..."

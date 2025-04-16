@@ -1,4 +1,4 @@
-import IndexNavbar from "@/components/Navbars/IndexNavbar";
+import IndexNavbar from "@/components/Navbars/Navbar";
 
 export default function AuthLayout({
   children,

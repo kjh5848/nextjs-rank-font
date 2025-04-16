@@ -42,7 +42,7 @@ class AuthRepository {
 
   // 인증 상태 확인 (세션 쿠키를 사용한 인증 확인)
   static async checkAuth(): Promise<Response> {
-    return await fetch(`${this.apiBaseUrl}${this.url}/me`, {
+    return await fetch(`${this.apiBaseUrl}${this.url}/info`, {
       method: "GET",
       credentials: "include", // 세션 쿠키를 포함하기 위해 필요
     });

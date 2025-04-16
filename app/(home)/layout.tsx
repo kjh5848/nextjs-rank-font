@@ -1,4 +1,4 @@
-import IndexNavbar from "@/components/Navbars/IndexNavbar";
+import Navbar from "@/components/Navbars/Navbar";
 import "@/styles/global.css"
 
 export const metadata = {
@@ -13,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <div className="min-h-screen">
-      <IndexNavbar />
+      <Navbar />
       {children}
     </div>
   );

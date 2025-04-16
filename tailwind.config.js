@@ -18,6 +18,7 @@ module.exports = {
           success: "#40c057", // 성공 메시지
           warning: "#fd7e14", // 경고 메시지
           danger: "#fa5252", // 위험/오류 메시지
+          sidebar:"#212529",
         },
       },
       fontFamily: {
