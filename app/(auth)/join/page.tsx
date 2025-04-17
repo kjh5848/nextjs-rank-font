@@ -1,9 +1,27 @@
+"use client";
 
-
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/provider/StoreProvider";
 import JoinForm from "@/components/auth/JoinForm";
 import Link from "next/link";
 
 export default function JoinPage() {
+  const { user, isAuthLoading } = useAuthStore();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthLoading && user) {
+      router.replace('/dashboard');
+    }
+  }, [isAuthLoading, user, router]);
+
+  // 로딩 중이면 null 반환 (loading.tsx가 표시됨)
+  if (isAuthLoading) return null;
+  
+  // 로그인된 사용자도 null 반환 (곧 리다이렉트됨)
+  if (user) return null;
+
   return (
     <div className="container mx-auto px-4 h-full">
       <div className="flex content-center items-center justify-center h-full">

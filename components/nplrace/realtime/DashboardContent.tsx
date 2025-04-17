@@ -1,3 +1,4 @@
+"use Client"
 import ModernSearchForm from "@/components/nplrace/realtime/ModernSearchForm"
 
 export default function DashboardContent({ user }) {

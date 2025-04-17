@@ -12,8 +12,35 @@ export default function ModernSearchForm() {
   const [keyword, setKeyword] = useState('');
   const [searchType, setSearchType] = useState('업체명');
   
-  const handleSearch = () => {
-    console.log('검색 실행:', { location, keyword, searchType });
+const async handleSearch = async () => { 
+    try { // 에러 핸들링 추가
+      const response = await fetch(`/v1/nstore/rank/realtime?keyword=${keywordInputRef.current.value}&filterType=${filterType}&filterValue=${filterValueInputRef.current.value}&compare=${compareCheckBoxRef.current.checked}`, {
+        method: "GET"
+      });
+      
+      if (!response.ok) { // 응답 상태 확인
+        // 서버 오류 메시지를 사용하거나 기본 메시지 제공
+        const errorData = await response.json().catch(() => ({ message: "서버 응답 처리 중 오류 발생" })); 
+        alert(`오류: ${errorData.message || response.statusText}`);
+        return;
+      }
+
+      const dto = await response.json(); // await 사용하여 json 파싱
+
+      if (dto.code !== 0) {
+        alert(dto.message || "데이터 처리 중 오류 발생"); // 기본 메시지 추가
+        return;
+      }
+      
+      // 외부 변수 location, keyword, searchType 가 정의되어 있다고 가정
+      console.log('검색 실행:', { location, keyword, searchType }); 
+      // TODO: 검색 결과를 상태에 저장하거나 다른 처리 수행
+      // 예: setSearchResults(dto.data);
+
+    } catch (error) {
+      console.error("Search error:", error);
+      alert("검색 중 오류가 발생했습니다.");
+    }
   };
 
   const locations = ['서울시', '경기도', '인천시', '부산시', '대구시', '대전시'];

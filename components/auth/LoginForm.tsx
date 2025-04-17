@@ -31,28 +31,21 @@ export default function LoginForm() {
 
     return true;
   };
-
-  const requestLogin = () => {
-    if (!validateFields()) {
-      return;
-    }
-
+  const requestLogin = async () => {
+    if (!validateFields()) return;
     const { idElement, pwElement, rememberMeElement } = refs.current;
-    
-    if (idElement && pwElement && rememberMeElement) {
-      const reqDto = {
-        user: {
-          username: idElement.value,
-          password: pwElement.value,
-        }
-      };
+    const dto = {
+      user: { username: idElement.value, password: pwElement.value },
+    };
 
-      login(reqDto, rememberMeElement.checked);
+    const result = await login(dto, rememberMeElement.checked);
+    if (result.ok && result.user) {
+      setLoginUser(result.user);
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       requestLogin();
     }
   };
@@ -60,10 +53,14 @@ export default function LoginForm() {
   useEffect(() => {
     // 아이디 입력 필드에 포커스
     refs.current.idElement?.focus();
-    
+
     // 저장된 아이디가 있으면 설정
     const rememberId = JSON.parse(localStorage.getItem("rememberId") || "null");
-    if (rememberId && refs.current.idElement && refs.current.rememberMeElement) {
+    if (
+      rememberId &&
+      refs.current.idElement &&
+      refs.current.rememberMeElement
+    ) {
       refs.current.idElement.value = rememberId;
       refs.current.rememberMeElement.checked = true;
     }
@@ -73,82 +70,90 @@ export default function LoginForm() {
   }, [setLoginUser]);
 
   return (
-    <div className="bg-rank-light relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-200 border-0">
-      <div className="rounded-t mb-0 px-10 py-10">
-        <div className="text-center mb-3">
+    <div className="bg-blueGray-200 relative mb-6 flex w-full min-w-0 flex-col break-words rounded-lg border-0 bg-rank-light shadow-lg">
+      <div className="mb-0 rounded-t px-10 py-10">
+        <div className="mb-3 text-center">
           <h6 className="text-blueGray-500 text-sm font-bold">로그인</h6>
         </div>
         <div className="btn-wrapper">
           <Link
             href="/"
-            className="w-full bg-[#FEE500] text-[#3C1E1E] px-4 py-3 rounded outline-none focus:outline-none mb-3 font-bold text-sm shadow hover:shadow-md flex items-center justify-center transition-all duration-150"
+            className="mb-3 flex w-full items-center justify-center rounded bg-[#FEE500] px-4 py-3 text-sm font-bold text-[#3C1E1E] shadow outline-none transition-all duration-150 hover:shadow-md focus:outline-none"
           >
             <Image
               src="/img/auth/kakao_login.png"
               alt="Kakao"
-              className="w-5 h-5 mr-2"
+              className="mr-2 h-5 w-5"
               width={20}
               height={20}
             />
             3초 로그인/회원가입
           </Link>
         </div>
-        <hr className="mt-6 border-b-1 border-blueGray-300" />
+        <hr className="border-b-1 border-blueGray-300 mt-6" />
       </div>
 
-      <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
-        <div className="text-blueGray-400 text-center mb-3 font-bold">
+      <div className="flex-auto px-4 py-10 pt-0 lg:px-10">
+        <div className="text-blueGray-400 mb-3 text-center font-bold">
           <small>로그인 하기</small>
         </div>
 
-        <form onSubmit={(e) => {
-          e.preventDefault();
-          requestLogin();
-        }}>
-          <div className="relative w-full mb-3">
-            <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            requestLogin();
+          }}
+        >
+          <div className="relative mb-3 w-full">
+            <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
               아이디
             </label>
             <input
               type="text"
-              ref={(el) => { refs.current.idElement = el; }}
-              className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+              ref={(el) => {
+                refs.current.idElement = el;
+              }}
+              className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
               placeholder="아이디"
               onKeyDown={handleKeyDown}
             />
           </div>
 
-          <div className="relative w-full mb-3">
-            <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+          <div className="relative mb-3 w-full">
+            <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
               비밀번호
             </label>
             <input
               type="password"
-              ref={(el) => { refs.current.pwElement = el; }}
-              className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+              ref={(el) => {
+                refs.current.pwElement = el;
+              }}
+              className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
               placeholder="비밀번호"
               onKeyDown={handleKeyDown}
             />
           </div>
 
           <div>
-            <label className="inline-flex items-center cursor-pointer">
+            <label className="inline-flex cursor-pointer items-center">
               <input
                 type="checkbox"
-                ref={(el) => { refs.current.rememberMeElement = el; }}
-                className="form-checkbox border-0 rounded text-blueGray-700 ml-1 w-5 h-5 ease-linear transition-all duration-150"
+                ref={(el) => {
+                  refs.current.rememberMeElement = el;
+                }}
+                className="form-checkbox text-blueGray-700 ml-1 h-5 w-5 rounded border-0 transition-all duration-150 ease-linear"
               />
-              <span className="ml-2 text-sm font-semibold text-blueGray-600">
+              <span className="text-blueGray-600 ml-2 text-sm font-semibold">
                 기억하기
               </span>
             </label>
           </div>
 
-          <div className="text-center mt-6">
+          <div className="mt-6 text-center">
             <button
-              type="submit"
+              
               disabled={isPendingLogin}
-              className="bg-gradient-to-r from-rank-primary to-rank-secondary text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none w-full ease-linear transition-all duration-150"
+              className="active:bg-blueGray-600 w-full rounded bg-gradient-to-r from-rank-primary to-rank-secondary px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
             >
               {isPendingLogin ? "로그인 중..." : "로그인"}
             </button>

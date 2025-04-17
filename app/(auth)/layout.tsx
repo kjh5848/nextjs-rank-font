@@ -6,14 +6,14 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-gradient-to-r from-rank-primary to-rank-secondary flex flex-col items-center">
+    <div className="flex min-h-screen flex-col items-center bg-gradient-to-r from-[#9BE15D] to-[#00E3AE]">
       {/* 상단 네비게이션 */}
       <div className="w-full">
         <IndexNavbar />
       </div>
 
       {/* 가운데 폼 정렬 */}
-      <main className="flex flex-1 items-center justify-center w-full px-4">
+      <main className="my-[100px] flex w-full flex-1 items-center justify-center px-4">
         {children}
       </main>
     </div>
