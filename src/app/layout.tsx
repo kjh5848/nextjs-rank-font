@@ -1,6 +1,6 @@
 import '@/styles/global.css';
 import { StoreProvider } from '@/src/store/provider/StoreProvider';
-import { getUserFromSession } from '@/src/util/auth';
+import { getUserFromSession } from '@/src/util/auth/auth';
 import { Inter } from "next/font/google";
 import Providers from "./providers";
 

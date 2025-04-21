@@ -1,5 +1,5 @@
 
-import LoginForm from "@/src/components/auth/LoginForm";
+import LoginForm from "@/src/components/common/auth/LoginForm";
 import LoadingFallback from "@/src/components/common/LoadingFallback";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -10,7 +10,9 @@ export default function LoginPage() {
     <div className="container mx-auto h-full px-4">
       <div className="flex h-full content-center items-center justify-center">
         <div className="w-full px-4 lg:w-6/12">
-          <LoginForm />
+          <Suspense fallback={<LoadingFallback message="로딩 중..." />}>
+            <LoginForm />
+          </Suspense>
 
           <div className="relative mt-6 flex flex-wrap">
             <div className="w-1/2">

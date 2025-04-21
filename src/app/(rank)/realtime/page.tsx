@@ -1,6 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import DashboardContent from "@/src/components/nplrace/realtime/DashboardContent";
+import DashboardContent from "@/src/components/nplrace/rank/realtime/SearchContent";
 import LoadingFallback from "@/src/components/common/LoadingFallback";
 
 export default function Dashboard() {

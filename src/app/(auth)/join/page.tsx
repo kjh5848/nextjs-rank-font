@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/src/store/provider/StoreProvider";
-import JoinForm from "@/src/components/auth/JoinForm";
+import JoinForm from "@/src/components/common/auth/JoinForm";
 import Link from "next/link";
 
 export default function JoinPage() {

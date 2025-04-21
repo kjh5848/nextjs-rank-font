@@ -1,11 +1,10 @@
 "use client"
-import ModernSearchForm from "@/src/components/nplrace/realtime/nplaceRankSearchForm"
+import SearchForm from "@/src/components/nplrace/rank/realtime/SearchForm";
 import { useAuthStore } from "@/src/store/provider/StoreProvider";
-import useRequireAuth from "@/src/use/useRequireAuth";
 
 // 인증 상태를 확인하기 위한 Promise 캐시
 
-export default function DashboardContent() {
+export default function SearchContent() {
   const { user } = useAuthStore();
   if (!user) return null; // 리디렉션 중일 때 화면 깜빡임 방지
 
@@ -13,12 +12,15 @@ export default function DashboardContent() {
     <div className="container mx-auto p-4">
       <div className="mb-8 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white shadow-lg">
         <h1 className="text-3xl font-bold">
-          <strong className="font-bold bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text p-6 text-transparent ">
+          <strong className="bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text p-6 font-bold text-transparent">
             네이버 플레이스
           </strong>
           실시간 순위 추적
         </h1>
       </div>
+
+      {/* 검색 폼 통합 */}
+      <SearchForm />
 
       {/* 추가 대시보드 내용
       <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -68,9 +70,6 @@ export default function DashboardContent() {
           </div>
         </div>
       </div> */}
-
-      {/* 검색 폼 통합 */}
-      <ModernSearchForm />
     </div>
   );
 }

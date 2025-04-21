@@ -1,6 +1,6 @@
 'use clent'
 
-import UserDropdown from "@/src/components/Dropdowns/UserDropdown";
+import UserDropdown from "@/src/components/common/Dropdowns/UserDropdown";
 
 export default function AdminNavbar() {
   return (

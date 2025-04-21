@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import UserDropdown from "@/src/components/Dropdowns/UserDropdown";
+import UserDropdown from "@/src/components/common/Dropdowns/UserDropdown";
 import { useState } from "react";
 import { Menu, X } from 'lucide-react';
 
@@ -89,7 +89,7 @@ export default function Sidebar() {
             <hr className="my-4 md:min-w-full" />
 
             {/* Heading */}
-            <h6 className="text-lg block bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text pb-4 pt-1 font-bold uppercase text-rank-dark text-transparent no-underline md:min-w-full">
+            <h6 className="block bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text pb-4 pt-1 text-lg font-bold uppercase text-rank-dark text-transparent no-underline md:min-w-full">
               N-PLRACE 도구
             </h6>
 
@@ -97,10 +97,10 @@ export default function Sidebar() {
             <ul className="flex list-none flex-col md:min-w-full md:flex-col">
               <li className="items-center">
                 <Link
-                  href="/dashboard"
+                  href="/realtime"
                   className={
                     "text-md block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text py-3 font-bold uppercase text-transparent " +
-                    (pathname.includes("/dashboard")
+                    (pathname.includes("/realtime")
                       ? "opacity-100"
                       : "opacity-75 hover:opacity-100")
                   }
@@ -108,7 +108,7 @@ export default function Sidebar() {
                   <i
                     className={
                       "fas fa-tv mr-2 text-sm " +
-                      (pathname.includes("/dashboard")
+                      (pathname.includes("/realtime")
                         ? "opacity-75"
                         : "text-blueGray-300")
                     }
@@ -121,7 +121,7 @@ export default function Sidebar() {
                 <Link
                   href="/admin/tables"
                   className={
-                    "block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text py-3 text-md font-bold uppercase text-transparent " +
+                    "text-md block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text py-3 font-bold uppercase text-transparent " +
                     (pathname.includes("/tables")
                       ? "opacity-100"
                       : "opacity-75 hover:opacity-100")

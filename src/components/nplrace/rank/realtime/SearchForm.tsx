@@ -3,8 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useAuthStore } from "@/src/store/provider/StoreProvider";
 import { Search, MapPin, ChevronDown, History, X, Clock } from "lucide-react";
-import useRequireAuth from "@/src/use/useRequireAuth";
-import SearchResultItem from "./nplaceRankSearchResultItem";
+import SearchResultItem from "./SearchResultItem";
 import {
   useExecuteSearch,
   useNplaceSearch,
@@ -15,7 +14,7 @@ import {
 } from "@/src/viewModel/nplace/nplaceRankSearchShopViewModel";
 import { useClickAway } from "react-use";
 
-export default function ModernSearchForm() {
+export default function SearchForm() {
   const { user } = useAuthStore();
 
   const [location, setLocation] = useState("서울시");
@@ -25,7 +24,13 @@ export default function ModernSearchForm() {
   const [searchType, setSearchType] = useState<"업체명" | "SHOP_ID">("업체명");
   const [recentSearches, setRecentSearches] = useState<SearchParams[]>([]);
   const [showRecentSearches, setShowRecentSearches] = useState(false);
-  const [recentSearchResults, setRecentSearchResults] = useState<{params: SearchParams, results: nplaceRankSearchShop[], timestamp: number}[]>([]);
+  const [recentSearchResults, setRecentSearchResults] = useState<
+    {
+      params: SearchParams;
+      results: nplaceRankSearchShop[];
+      timestamp: number;
+    }[]
+  >([]);
 
   // 현재 검색 파라미터
   const searchParams: SearchParams = {
@@ -53,7 +58,6 @@ export default function ModernSearchForm() {
   // 최종 로딩 상태 및 에러
   const isLoading = isQueryLoading || isMutationLoading;
   const error = queryError || mutationError;
-
 
   //박스이외 클릭시 닫음
   const recentBoxRef = useRef(null);
@@ -112,7 +116,7 @@ export default function ModernSearchForm() {
     setKeyword(params.keyword);
     setSearchType(params.filterType === "SHOP_ID" ? "SHOP_ID" : "업체명");
     setShowRecentSearches(false);
-    
+
     // 즉시 검색 실행
     executeSearch(params);
   };
@@ -120,7 +124,7 @@ export default function ModernSearchForm() {
   // 시간 포맷팅 함수
   const formatTime = (timestamp: number) => {
     const date = new Date(timestamp);
-    return `${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+    return `${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, "0")}`;
   };
 
   const locations = [
