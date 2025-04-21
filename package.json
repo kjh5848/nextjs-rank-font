@@ -22,6 +22,7 @@
   "description": "",
   "dependencies": {
     "@popperjs/core": "^2.11.8",
+    "@tanstack/react-query": "^5.74.4",
     "chart": "^0.1.2",
     "chart.js": "^4.4.8",
     "lucide-react": "^0.488.0",
@@ -29,6 +30,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.55.0",
+    "react-use": "^17.6.0",
     "typography": "^0.16.24"
   },
   "devDependencies": {
