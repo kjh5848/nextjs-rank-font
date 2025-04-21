@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import UserDropdown from "@/src/components/common/Dropdowns/UserDropdown";
 import { useState } from "react";
@@ -11,16 +12,16 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   const toggleSidebar = () => {
-    setCollapseShow(collapseShow === "hidden" ? "bg-white m-2 py-3 px-6 " : "hidden");
+    setCollapseShow(collapseShow === "hidden" ? "block" : "hidden");
   };
 
   return (
     <>
-      <nav className="relative z-10 flex flex-wrap items-center justify-between bg-rank-dark px-6 py-4 shadow-xl md:fixed md:bottom-0 md:left-0 md:top-0 md:block md:w-64 md:flex-row md:flex-nowrap md:overflow-hidden md:overflow-y-auto">
-        <div className="mx-auto flex w-full flex-wrap items-center justify-between px-0 md:min-h-full md:flex-col md:flex-nowrap md:items-stretch">
-          {/* Toggler - 개선된 토글 버튼 */}
+      <nav className="relative z-10 flex flex-wrap items-center justify-between bg-rank-sidebar px-6 py-4 shadow-xl lg:fixed lg:bottom-0 lg:left-0 lg:top-0 lg:block lg:w-56 lg:flex-row lg:flex-nowrap lg:overflow-hidden lg:overflow-y-auto">
+        <div className="mx-auto flex w-full flex-wrap items-center justify-between px-0 lg:flex-col lg:flex-nowrap lg:items-stretch">
+          {/* Toggler */}
           <button
-            className="flex h-10 w-10 transform cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-rank-primary to-rank-secondary text-white shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl md:hidden"
+            className="flex h-10 w-10 transform cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-rank-primary to-rank-secondary text-white shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl lg:hidden"
             type="button"
             onClick={toggleSidebar}
             aria-label="Toggle navigation"
@@ -31,75 +32,71 @@ export default function Sidebar() {
           {/* Brand */}
           <Link
             href="/"
-            className="mr-0 inline-block whitespace-nowrap bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text p-4 px-0 text-left text-sm font-bold uppercase text-white md:block md:pb-2"
+            className="flex items-center text-left text-white lg:pb-2 lg:text-left"
           >
-            RANK
+            <Image
+              alt="logo"
+              className="h-20 w-auto lg:h-20"
+              src="/img/brand/rank_rogo.png"
+              width={150}
+              height={28}
+              priority
+            />
           </Link>
 
           {/* User */}
-          <ul className="flex list-none flex-wrap items-center md:hidden">
+          <ul className="flex list-none flex-wrap items-center lg:hidden">
             <li className="relative inline-block">
               <UserDropdown />
             </li>
           </ul>
 
-          {/* Collapse - 모바일 토글 배경은 여기서 수정 (bg-white 클래스) */}
+          {/* Collapse */}
           <div
             className={
-              "absolute left-0 right-0 top-0 z-40 h-auto flex-1 items-center overflow-y-auto overflow-x-hidden rounded bg-rank-dark shadow md:relative md:mt-4 md:flex md:flex-col md:items-stretch md:opacity-100 md:shadow-none " +
-              collapseShow
+              "fixed inset-0 z-40 h-screen transform bg-rank-sidebar transition-transform duration-300 ease-in-out lg:relative lg:mt-4 lg:flex lg:h-auto lg:transform-none lg:flex-col lg:items-stretch lg:opacity-100 lg:shadow-none " +
+              (collapseShow === "hidden"
+                ? "-translate-x-full"
+                : "translate-x-100")
             }
           >
-            {/* Collapse header - 개선된 닫기 버튼 */}
-            <div className="border-blueGray-200 mb-4 block md:hidden md:min-w-full">
-              <div className="flex flex-wrap">
-                <div className="w-6/12">
-                  <Link
-                    href="/"
-                    className="text-blueGray-600 mr-0 inline-block whitespace-nowrap bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text p-4 px-0 text-left text-sm font-bold uppercase md:block md:pb-2"
-                  >
-                    RANK
-                  </Link>
-                </div>
-                <div className="flex w-6/12 justify-end">
-                  <button
-                    type="button"
-                    className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-rank-primary to-rank-secondary text-white shadow-md transition-all duration-200 hover:shadow-lg"
-                    onClick={toggleSidebar}
-                    aria-label="Close menu"
-                  >
-                    <X size={24} />
-                  </button>
-                </div>
-              </div>
+            {/* Collapse header */}
+            <div className="flex items-center justify-between p-4 lg:hidden">
+              <Link href="/" className="flex items-center">
+                <Image
+                  src="/img/brand/rank_rogo.png"
+                  alt="내순위"
+                  width={150}
+                  height={28}
+                  className="h-10 w-auto object-contain"
+                  priority
+                />
+              </Link>
+              <button
+                type="button"
+                className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-rank-primary to-rank-secondary text-white shadow-md transition-all duration-200 hover:shadow-lg"
+                onClick={toggleSidebar}
+                aria-label="Close menu"
+              >
+                <X size={24} />
+              </button>
             </div>
 
-            {/* Form */}
-            {/* <form className="mt-6 mb-4 md:hidden">
-              <div className="mb-3 pt-0">
-                <input
-                  type="text"
-                  placeholder="Search"
-                  className="px-3 py-2 h-12 border-solid border-blueGray-500 placeholder-blueGray-300 text-blueGray-600 bg-white text-base leading-snug shadow-none outline-none focus:outline-none w-full font-normal border rounded"
-                />
-              </div>
-            </form> */}
-
             {/* Divider */}
-            <hr className="my-4 md:min-w-full" />
+            <hr className="my-4 lg:min-w-full" />
 
             {/* Heading */}
-            <h6 className="block bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text pb-4 pt-1 text-lg font-bold uppercase text-rank-dark text-transparent no-underline md:min-w-full">
+            <h6 className="text-md block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text px-6 pb-4 pt-1 font-bold uppercase text-transparent no-underline lg:min-w-full lg:px-0">
               N-PLRACE 도구
             </h6>
 
             {/* Navigation */}
-            <ul className="flex list-none flex-col md:min-w-full md:flex-col">
+            <ul className="flex list-none flex-col px-6 lg:min-w-full lg:flex-col lg:px-0">
               <li className="items-center">
                 <Link
                   href="/realtime"
                   className={
-                    "text-md block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text py-3 font-bold uppercase text-transparent " +
+                    "block bg-clip-text py-3 text-sm font-bold uppercase text-transparent text-white " +
                     (pathname.includes("/realtime")
                       ? "opacity-100"
                       : "opacity-75 hover:opacity-100")
@@ -113,16 +110,16 @@ export default function Sidebar() {
                         : "text-blueGray-300")
                     }
                   ></i>{" "}
-                  실시간 순위추적
+                  실시간 순위조회
                 </Link>
               </li>
 
               <li className="items-center">
                 <Link
-                  href="/admin/tables"
+                  href="/track"
                   className={
                     "text-md block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text py-3 font-bold uppercase text-transparent " +
-                    (pathname.includes("/tables")
+                    (pathname.includes("/track")
                       ? "opacity-100"
                       : "opacity-75 hover:opacity-100")
                   }
@@ -130,7 +127,7 @@ export default function Sidebar() {
                   <i
                     className={
                       "fas fa-table mr-2 text-sm " +
-                      (pathname.includes("/admin/tables")
+                      (pathname.includes("/track")
                         ? "opacity-75"
                         : "text-blueGray-300")
                     }
@@ -163,15 +160,15 @@ export default function Sidebar() {
             </ul>
 
             {/* Divider */}
-            <hr className="my-4 md:min-w-full" />
+            <hr className="my-4 lg:min-w-full" />
 
             {/* Heading */}
-            <h6 className="block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text pb-4 pt-1 text-xs font-bold uppercase text-transparent no-underline md:min-w-full">
+            <h6 className="block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text px-6 pb-4 pt-1 text-xs font-bold uppercase text-transparent no-underline lg:min-w-full lg:px-0">
               Auth Layout Pages
             </h6>
 
             {/* Navigation */}
-            <ul className="flex list-none flex-col md:mb-4 md:min-w-full md:flex-col">
+            <ul className="flex list-none flex-col px-6 lg:mb-4 lg:min-w-full lg:flex-col lg:px-0">
               <li className="items-center">
                 <Link
                   href="/login"
@@ -194,15 +191,15 @@ export default function Sidebar() {
             </ul>
 
             {/* Divider */}
-            <hr className="my-4 md:min-w-full" />
+            <hr className="my-4 lg:min-w-full" />
 
             {/* Heading */}
-            <h6 className="block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text pb-4 pt-1 text-xs font-bold uppercase text-transparent no-underline md:min-w-full">
+            <h6 className="block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text px-6 pb-4 pt-1 text-xs font-bold uppercase text-transparent no-underline lg:min-w-full lg:px-0">
               No Layout Pages
             </h6>
 
             {/* Navigation */}
-            <ul className="flex list-none flex-col md:mb-4 md:min-w-full md:flex-col">
+            <ul className="flex list-none flex-col px-6 pb-6 lg:mb-4 lg:min-w-full lg:flex-col lg:px-0">
               <li className="items-center">
                 <Link
                   href="/landing"
@@ -226,6 +223,14 @@ export default function Sidebar() {
           </div>
         </div>
       </nav>
+
+      {/* 배경 오버레이 - 모바일에서 사이드바가 열릴 때 배경을 어둡게 처리 */}
+      {collapseShow !== "hidden" && (
+        <div
+          className="fixed inset-0 bg-black lg:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
     </>
   );
 }

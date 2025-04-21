@@ -2,7 +2,7 @@ import '@/styles/global.css';
 import { StoreProvider } from '@/src/store/provider/StoreProvider';
 import { getUserFromSession } from '@/src/util/auth/auth';
 import { Inter } from "next/font/google";
-import Providers from "./providers";
+import QueryProviders from "../store/provider/QueryProviders";
 
 const inter = Inter({ subsets: ["latin"], display: 'swap' });
 
@@ -19,11 +19,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="ko">
       <body className={inter.className}>
-        <Providers>
+        <QueryProviders>
           <StoreProvider initialUser={initialUser}>
             <main className="">{children}</main>
           </StoreProvider>
-        </Providers>
+        </QueryProviders>
       </body>
     </html>
   );

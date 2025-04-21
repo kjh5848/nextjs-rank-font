@@ -3,7 +3,7 @@
 import { useAuthStore } from '@/src/store/provider/StoreProvider';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import AuthRepository from '@/src/model/AuthRepository';
+import AuthRepository from '@/model/AuthRepository';
 
 export default function useAuthLoginViewModelLocal() {
   const { setLoginUser } = useAuthStore();
@@ -43,7 +43,7 @@ export default function useAuthLoginViewModelLocal() {
       setLoginUser(data.data.user);
 
       // 대시보드로 이동
-      router.replace('/dashboard');
+      router.replace('/');
       return { ok: true, user: data.data.user };
     } catch (err: any) {
       console.error('Login error:', err);
@@ -59,3 +59,7 @@ export default function useAuthLoginViewModelLocal() {
     isPendingLogin,
   };
 }
+function postLogin(reqDto: any) {
+  throw new Error('Function not implemented.');
+}
+

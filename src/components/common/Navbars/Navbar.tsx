@@ -54,9 +54,9 @@ export default function Navbar() {
               {isClient && user ? (
                 /* 로그인 상태: 대시보드와 로그아웃 버튼만 표시 */
                 <>
-                  <Link href="/dashboard">
+                  <Link href="/realtime">
                     <span className="text-rank-dark px-4 py-2 rounded-full text-sm font-medium hover:text-rank-primary transition-colors">
-                      대시보드
+                      순위추적하기
                     </span>
                   </Link>
                   <button 

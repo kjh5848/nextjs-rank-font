@@ -2,20 +2,17 @@
 import SearchForm from "@/src/components/nplrace/rank/realtime/SearchForm";
 import { useAuthStore } from "@/src/store/provider/StoreProvider";
 
-// 인증 상태를 확인하기 위한 Promise 캐시
-
 export default function SearchContent() {
   const { user } = useAuthStore();
-  if (!user) return null; // 리디렉션 중일 때 화면 깜빡임 방지
+  if (!user) return null;
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto">
       <div className="mb-8 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white shadow-lg">
-        <h1 className="text-3xl font-bold">
-          <strong className="bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text p-6 font-bold text-transparent">
-            네이버 플레이스
-          </strong>
-          실시간 순위 추적
+        <h1 className="text-3xl font-bold leading-tight">
+          <span className="bg-clip-text text-white">N-PLACE</span>
+          <br className="block md:hidden" />
+          <span className="md:ml-2">실시간 순위조회</span>
         </h1>
       </div>
 

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import usePendingFunction from "@/src/use/usePendingFunction";
 import UtilFunction from "@/src/util/UtilFunction";
-import AuthRepository from "@/src/model/AuthRepository";
+import AuthRepository from "@/model/AuthRepository";
 
 interface LoginUser {
   username: string;

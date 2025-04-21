@@ -152,7 +152,7 @@ export default function SearchForm() {
       {/* 최근 검색 결과 카드 표시 (검색 결과가 없을 때만) */}
       {(!searchResult || searchResult.length === 0) &&
         recentSearchResults.length > 0 && (
-          <div className="mx-auto mb-8 w-full max-w-7xl">
+          <div className="mx-auto mb-8 w-full max-w-7xl ">
             <div className="mb-4 flex items-center">
               <Clock size={18} className="mr-2 text-blue-500" />
               <h3 className="text-lg font-bold text-gray-700">
@@ -160,11 +160,11 @@ export default function SearchForm() {
               </h3>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3 ">
               {recentSearchResults.map((item, index) => (
                 <div
                   key={index}
-                  className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
+                  className="rounded-lg border border-gray-200 bg-gradient-to-r from-white to-blue-50 p-4 shadow-sm"
                 >
                   <div className="mb-2 flex items-center justify-between">
                     <div className="flex items-center">
@@ -222,7 +222,7 @@ export default function SearchForm() {
       <div className="mx-auto w-full max-w-7xl rounded-xl border border-blue-100 bg-gradient-to-r from-white to-blue-50 p-6 shadow-lg">
         <div className="mb-6">
           <h2 className="mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-xl font-bold text-transparent">
-            Nplace 실시간 순위 조회
+            N-PLACE 실시간 순위 조회
           </h2>
           <p className="text-sm text-gray-500">
             지역 + 키워드로 원하는 업체를 검색해보세요
@@ -372,7 +372,7 @@ export default function SearchForm() {
           {/* 검색 버튼 */}
           <div className="relative md:col-span-2">
             <button
-              className={`flex w-full items-center justify-center rounded-lg bg-blue-500 px-10 py-3 font-medium text-white shadow-md transition-all hover:bg-blue-600 hover:shadow-lg md:w-auto ${isLoading ? "cursor-not-allowed opacity-70" : ""}`}
+              className={`flex w-full items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-3 font-medium text-white shadow-md transition-all hover:shadow-lg md:w-auto ${isLoading ? "cursor-not-allowed opacity-70" : ""}`}
               onClick={handleSearch}
               disabled={isLoading}
             >

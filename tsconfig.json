@@ -21,12 +21,12 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@/store/*": ["src/store/*"],
-      "@/components/*": ["src/components/*"],
-      "@/styles/*": ["src/styles/*"],
-      "@/model/*": ["src/model/*"],
-      "@/util/*": ["src/util/*"],
-      "@/viewModel/*": ["src/viewModel/*"]
+      "@/store/*": ["./src/store/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/styles/*": ["./src/styles/*"],
+      "@/model/*": ["./src/model/*"],
+      "@/util/*": ["./src/util/*"],
+      "@/viewModel/*": ["./src/viewModel/*"]
 
     }
   },

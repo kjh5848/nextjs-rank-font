@@ -18,7 +18,7 @@ module.exports = {
           success: "#40c057", // 성공 메시지
           warning: "#fd7e14", // 경고 메시지
           danger: "#fa5252", // 위험/오류 메시지
-          sidebar:"#212529",
+          sidebar: "#2c2c2c",
         },
       },
       fontFamily: {
@@ -74,23 +74,23 @@ module.exports = {
         },
       },
       boxShadow: {
-        'btn': '0 2px 4px rgba(0, 0, 0, 0.05)',
-        'btn-hover': '0 4px 6px rgba(0, 0, 0, 0.1)',
-        'btn-active': '0 1px 2px rgba(0, 0, 0, 0.05)',
-        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        btn: "0 2px 4px rgba(0, 0, 0, 0.05)",
+        "btn-hover": "0 4px 6px rgba(0, 0, 0, 0.1)",
+        "btn-active": "0 1px 2px rgba(0, 0, 0, 0.05)",
+        card: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
       },
       transitionProperty: {
         height: "height",
         spacing: "margin, padding",
       },
       keyframes: {
-        'btn-bounce': {
-          '0%, 100%': { transform: 'scale(1)' },
-          '50%': { transform: 'scale(0.95)' },
+        "btn-bounce": {
+          "0%, 100%": { transform: "scale(1)" },
+          "50%": { transform: "scale(0.95)" },
         },
-        'btn-spin': {
-          '0%': { transform: 'rotate(0deg)' },
-          '100%': { transform: 'rotate(360deg)' },
+        "btn-spin": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
         },
         fadeIn: {
           "0%": { opacity: "0" },
@@ -102,8 +102,8 @@ module.exports = {
         },
       },
       animation: {
-        'btn-bounce': 'btn-bounce 0.2s ease-in-out',
-        'btn-spin': 'btn-spin 1s linear infinite',
+        "btn-bounce": "btn-bounce 0.2s ease-in-out",
+        "btn-spin": "btn-spin 1s linear infinite",
         fadeIn: "fadeIn 0.2s ease-in-out",
         fadeOut: "fadeOut 0.2s ease-in-out",
       },
