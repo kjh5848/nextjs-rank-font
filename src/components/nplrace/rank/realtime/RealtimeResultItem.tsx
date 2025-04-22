@@ -1,12 +1,16 @@
 "use client";
 
-import { nplaceRankSearchShop } from "@/src/viewModel/nplace/nplaceRankSearchShopViewModel";
+import {
+  nplaceRankSearchShop,
+} from "@/src/viewModel/nplace/nplaceRankSearchShopViewModel";
 
 interface SearchResultItemProps {
   item: nplaceRankSearchShop;
 }
 
 export default function SearchResultItem({ item }: SearchResultItemProps) {
+  
+
   const openNewTabWithUrl = () => {
     window.open(
       `https://m.place.naver.com/place/${item.trackInfo.shopId}`,
@@ -20,7 +24,7 @@ export default function SearchResultItem({ item }: SearchResultItemProps) {
   };
 
   return (
-    <div className=" rounded-lg border border-gray-200 bg-gradient-to-r from-white to-blue-50 p-6 shadow-sm transition-all hover:shadow-md">
+    <div className="rounded-lg border border-gray-200 bg-gradient-to-r from-white to-blue-50 p-6 shadow-sm transition-all hover:shadow-md">
       <div className="flex items-start">
         {/* 이미지 */}
         <div className="mr-4 h-24 w-28 overflow-hidden rounded">

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useAuthStore } from "@/src/store/provider/StoreProvider";
 import { Search, MapPin, ChevronDown, History, X, Clock } from "lucide-react";
-import SearchResultItem from "./SearchResultItem";
+import RealtimeResultItem from "./RealtimeResultItem";
 import {
   useExecuteSearch,
   useNplaceSearch,
@@ -14,7 +14,7 @@ import {
 } from "@/src/viewModel/nplace/nplaceRankSearchShopViewModel";
 import { useClickAway } from "react-use";
 
-export default function SearchForm() {
+export default function RealtimeForm() {
   const { user } = useAuthStore();
 
   const [location, setLocation] = useState("서울시");
@@ -147,77 +147,79 @@ export default function SearchForm() {
     "제주도",
   ];
 
+  console.log(`searchResult: ${searchResult}`);
+  console.log(`searchResult.length: ${searchResult?.length}`);
+
   return (
     <>
-      {/* 최근 검색 결과 카드 표시 (검색 결과가 없을 때만) */}
-      {(!searchResult || searchResult.length === 0) &&
-        recentSearchResults.length > 0 && (
-          <div className="mx-auto mb-8 w-full max-w-7xl ">
-            <div className="mb-4 flex items-center">
-              <Clock size={18} className="mr-2 text-blue-500" />
-              <h3 className="text-lg font-bold text-gray-700">
-                최근 검색 결과
-              </h3>
-            </div>
-
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3 ">
-              {recentSearchResults.map((item, index) => (
-                <div
-                  key={index}
-                  className="rounded-lg border border-gray-200 bg-gradient-to-r from-white to-blue-50 p-4 shadow-sm"
-                >
-                  <div className="mb-2 flex items-center justify-between">
-                    <div className="flex items-center">
-                      <History size={14} className="mr-2 text-blue-500" />
-                      <span className="text-sm font-medium">
-                        {item.params.filterType === "SHOP_ID"
-                          ? "SHOP_ID: "
-                          : "업체명: "}
-                        {item.params.filterValue}
-                      </span>
-                    </div>
-                    <span className="text-xs text-gray-500">
-                      {item.timestamp ? formatTime(item.timestamp) : ""}
-                    </span>
-                  </div>
-
-                  <div className="mb-2 flex flex-wrap gap-1">
-                    <span className="rounded-full bg-blue-100 px-2 py-1 text-xs text-blue-800">
-                      {item.params.province}
-                    </span>
-                    <span className="rounded-full bg-purple-100 px-2 py-1 text-xs text-purple-800">
-                      {item.params.keyword}
-                    </span>
-                    <span className="rounded-md bg-blue-500 px-2 py-1 text-xs text-white hover:bg-blue-600">
-                      바로가기
-                    </span>
-                  </div>
-
-                  {item.results && item.results.length > 0 ? (
-                    <div className="border-t border-gray-100 pt-2">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="font-medium text-gray-700">
-                          "{item.results[0].trackInfo.shopName}"{" "}
-                          {item.results[0].rankInfo.rank}위
-                        </span>
-                        <button
-                          className="rounded-md bg-blue-500 px-2 py-1 text-xs text-white hover:bg-blue-600"
-                          onClick={() => handleRecentSearchClick(item.params)}
-                        >
-                          다시 검색
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="text-center text-sm text-gray-500">
-                      결과 없음
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+      {/* 최근 검색 결과 카드 표시 */}
+      {/* 구독자마다 검색 저장수를 상이하게 하여 요금 업셀링 유도 
+      1. 무료는 3개 */}
+      {recentSearchResults.length > 0 && (
+        <div className="mx-auto mb-8 w-full max-w-7xl">
+          <div className="mb-4 flex items-center">
+            <Clock size={18} className="mr-2 text-blue-500" />
+            <h3 className="text-lg font-bold text-gray-700">최근 검색 결과</h3>
           </div>
-        )}
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {recentSearchResults.map((item, index) => (
+              <div
+                key={index}
+                className="rounded-lg border border-gray-200 bg-gradient-to-r from-white to-blue-50 p-4 shadow-sm"
+              >
+                <div className="mb-2 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <History size={14} className="mr-2 text-blue-500" />
+                    <span className="text-sm font-medium">
+                      {item.params.filterType === "SHOP_ID"
+                        ? "SHOP_ID: "
+                        : "업체명: "}
+                      {item.params.filterValue}
+                    </span>
+                  </div>
+                  <span className="text-xs text-gray-500">
+                    {item.timestamp ? formatTime(item.timestamp) : ""}
+                  </span>
+                </div>
+
+                <div className="mb-2 flex flex-wrap gap-1">
+                  <span className="rounded-full bg-blue-100 px-2 py-1 text-xs text-blue-800">
+                    {item.params.province}
+                  </span>
+                  <span className="rounded-full bg-purple-100 px-2 py-1 text-xs text-purple-800">
+                    {item.params.keyword}
+                  </span>
+                  <span className="rounded-md bg-blue-500 px-2 py-1 text-xs text-white hover:bg-blue-600">
+                    바로가기
+                  </span>
+                </div>
+
+                {item.results && item.results.length > 0 ? (
+                  <div className="border-t border-gray-100 pt-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="font-medium text-gray-700">
+                        "{item.results[0].trackInfo.shopName}"{" "}
+                        {item.results[0].rankInfo.rank}위
+                      </span>
+                      <button
+                        className="rounded-md bg-blue-500 px-2 py-1 text-xs text-white hover:bg-blue-600"
+                        onClick={() => handleRecentSearchClick(item.params)}
+                      >
+                        다시 검색
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center text-sm text-gray-500">
+                    결과 없음
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="mx-auto w-full max-w-7xl rounded-xl border border-blue-100 bg-gradient-to-r from-white to-blue-50 p-6 shadow-lg">
         <div className="mb-6">
@@ -423,7 +425,7 @@ export default function SearchForm() {
         {searchResult && searchResult.length > 0 ? (
           <div className="mt-6 space-y-4">
             {searchResult.map((item, index) => (
-              <SearchResultItem key={index} item={item} />
+              <RealtimeResultItem key={index} item={item} />
             ))}
           </div>
         ) : searchResult && searchResult.length === 0 ? (
