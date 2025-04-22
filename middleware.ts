@@ -11,10 +11,10 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // API 경로는 처리하지 않음 (API 라우트에서 인증 처리)
-  if (path.startsWith('/api/')) {
-    return NextResponse.next();
-  }
+  // // API 경로는 처리하지 않음 (API 라우트에서 인증 처리)
+  // if (path.startsWith('/api/')) {
+  //   return NextResponse.next();
+  // }
 
   // 보호된 경로: JSESSIONID 쿠키 없으면 "/"로 리디렉트
   const sessionCookie = request.cookies.get('JSESSIONID');

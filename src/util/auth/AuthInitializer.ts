@@ -3,10 +3,7 @@
 import { useEffect } from 'react';
 import { useAuthStore } from '@/src/store/provider/StoreProvider';
 
-
-
-export default function AuthInitializer() { // Prop 이름을 serverUser로 변경하여 스토어의 user와 구분
-  // Zustand 스토어에서 상태와 액션을 가져옵니다.
+export default function AuthInitializer() { 
   const { user: storeUser, setLoginUser } = useAuthStore(); // 스토어의 user 상태를 storeUser로 받음
 
   useEffect(() => {
@@ -27,12 +24,6 @@ export default function AuthInitializer() { // Prop 이름을 serverUser로 변�
         }
       }
     }
-    // 3. 서버 정보 없고 스토어에 정보가 있는 경우: 현재 상태 유지 (별도 처리 불필요)
-
-    // 4. 로그아웃된 상태 처리: 서버에서 user가 없고 sessionStorage에도 없다면
-    //    StoreProvider의 checkSession 또는 useAuthStoreLocal의 checkAuth가 null로 설정하거나,
-    //    여기서 명시적으로 null 처리할 수도 있습니다. (현재는 다른 곳에 위임)
-
   }, [storeUser, setLoginUser]); // 의존성 배열 업데이트
 
   return null; // UI 렌더링 없음

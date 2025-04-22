@@ -123,13 +123,16 @@ export default function Navbar() {
               {isClient && user ? (
                 /* 로그인 상태: 대시보드와 로그아웃 옵션 */
                 <>
-                  <Link href="/dashboard" className="block">
+                  <Link href="/realtime" onClick={() => setIsOpen(false)}>
                     <span className="block px-3 py-2 text-gray-900 hover:bg-rank-secondary text-sm font-medium rounded-md transition-colors">
-                      대시보드
+                      순위추적하기
                     </span>
                   </Link>
                   <button 
-                    onClick={handleLogout}
+                    onClick={() => {
+                      handleLogout();
+                      setIsOpen(false);
+                    }}
                     className="w-full text-left px-3 py-2 text-gray-900 hover:bg-rank-secondary text-sm font-medium rounded-md transition-colors"
                   >
                     로그아웃
@@ -137,11 +140,18 @@ export default function Navbar() {
                 </>
               ) : (
                 /* 비로그인 상태: 회원가입 옵션 */
-                <Link href="/join" className="block">
-                  <span className="block px-3 py-2 text-gray-900 hover:bg-rank-secondary text-sm font-medium rounded-md transition-colors">
-                    회원가입
-                  </span>
-                </Link>
+                <>
+                  <Link href="/login" onClick={() => setIsOpen(false)}>
+                    <span className="block px-3 py-2 text-gray-900 hover:bg-rank-secondary text-sm font-medium rounded-md transition-colors">
+                      로그인
+                    </span>
+                  </Link>
+                  <Link href="/join" onClick={() => setIsOpen(false)}>
+                    <span className="block px-3 py-2 text-gray-900 hover:bg-rank-secondary text-sm font-medium rounded-md transition-colors">
+                      회원가입
+                    </span>
+                  </Link>
+                </>
               )}
             </div>
           </div>

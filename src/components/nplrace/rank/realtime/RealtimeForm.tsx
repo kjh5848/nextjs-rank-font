@@ -10,8 +10,9 @@ import {
   getRecentSearches,
   getRecentSearchResults,
   SearchParams,
-  nplaceRankSearchShop
-} from "@/src/viewModel/nplace/nplaceRankSearchShopViewModel";
+  nplaceRankSearchShop,
+} from "@/src/viewModel/nplace/nplaceRankReailTimeViewModel";
+
 import { useClickAway } from "react-use";
 
 export default function RealtimeForm() {
@@ -116,7 +117,7 @@ export default function RealtimeForm() {
     setKeyword(params.keyword);
     setSearchType(params.filterType === "SHOP_ID" ? "SHOP_ID" : "업체명");
     setShowRecentSearches(false);
-
+      
     // 즉시 검색 실행
     executeSearch(params);
   };
@@ -146,9 +147,6 @@ export default function RealtimeForm() {
     "경상남도",
     "제주도",
   ];
-
-  console.log(`searchResult: ${searchResult}`);
-  console.log(`searchResult.length: ${searchResult?.length}`);
 
   return (
     <>

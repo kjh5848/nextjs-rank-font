@@ -1,6 +1,6 @@
 import '@/styles/global.css';
 import { StoreProvider } from '@/src/store/provider/StoreProvider';
-import { getUserFromSession } from '@/src/util/auth/auth';
+import { getUserFromSession } from '@/src/util/auth/Auth';
 import { Inter } from "next/font/google";
 import QueryProviders from "../store/provider/QueryProviders";
 
@@ -14,13 +14,13 @@ export const metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   // 서버에서 사용자 정보 가져오기 시도
-  const initialUser = await getUserFromSession();
+  // const initialUser = await getUserFromSession();
 
   return (
     <html lang="ko">
       <body className={inter.className}>
         <QueryProviders>
-          <StoreProvider initialUser={initialUser}>
+          <StoreProvider initialUser={null}>
             <main className="">{children}</main>
           </StoreProvider>
         </QueryProviders>

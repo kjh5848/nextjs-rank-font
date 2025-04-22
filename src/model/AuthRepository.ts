@@ -17,7 +17,7 @@ interface AuthRequestDto {
 
 class AuthRepository {
   static url = "/v1/auth";
-  static apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8081";
+  static apiBaseUrl = process.env.NEXT_PUBLIC_API_URL
 
   // 회원가입 요청
   static async postJoin(reqDto: AuthRequestDto): Promise<Response> {

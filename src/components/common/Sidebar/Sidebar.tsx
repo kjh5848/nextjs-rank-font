@@ -95,6 +95,7 @@ export default function Sidebar() {
               <li className="items-center">
                 <Link
                   href="/realtime"
+                  onClick={() => setCollapseShow("hidden")}
                   className={
                     "block bg-clip-text py-3 text-sm font-bold uppercase text-transparent text-white " +
                     (pathname.includes("/realtime")
@@ -117,6 +118,7 @@ export default function Sidebar() {
               <li className="items-center">
                 <Link
                   href="/track"
+                  onClick={() => setCollapseShow("hidden")}
                   className={
                     "text-md block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text py-3 font-bold uppercase text-transparent " +
                     (pathname.includes("/track")
@@ -139,6 +141,7 @@ export default function Sidebar() {
               <li className="items-center">
                 <Link
                   href="/admin/maps"
+                  onClick={() => setCollapseShow("hidden")}
                   className={
                     "block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text py-3 text-xs font-bold uppercase text-transparent " +
                     (pathname.includes("/admin/maps")
@@ -172,6 +175,7 @@ export default function Sidebar() {
               <li className="items-center">
                 <Link
                   href="/login"
+                  onClick={() => setCollapseShow("hidden")}
                   className="block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text py-3 text-xs font-bold uppercase text-transparent opacity-75 hover:opacity-100"
                 >
                   <i className="fas fa-fingerprint text-blueGray-400 mr-2 text-sm"></i>{" "}
@@ -182,6 +186,7 @@ export default function Sidebar() {
               <li className="items-center">
                 <Link
                   href="/join"
+                  onClick={() => setCollapseShow("hidden")}
                   className="block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text py-3 text-xs font-bold uppercase text-transparent opacity-75 hover:opacity-100"
                 >
                   <i className="fas fa-clipboard-list text-blueGray-300 mr-2 text-sm"></i>{" "}
@@ -203,6 +208,7 @@ export default function Sidebar() {
               <li className="items-center">
                 <Link
                   href="/landing"
+                  onClick={() => setCollapseShow("hidden")}
                   className="block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text py-3 text-xs font-bold uppercase text-transparent opacity-75 hover:opacity-100"
                 >
                   <i className="fas fa-newspaper text-blueGray-400 mr-2 text-sm"></i>{" "}
@@ -213,6 +219,7 @@ export default function Sidebar() {
               <li className="items-center">
                 <Link
                   href="/profile"
+                  onClick={() => setCollapseShow("hidden")}
                   className="block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text py-3 text-xs font-bold uppercase text-transparent opacity-75 hover:opacity-100"
                 >
                   <i className="fas fa-user-circle text-blueGray-400 mr-2 text-sm"></i>{" "}

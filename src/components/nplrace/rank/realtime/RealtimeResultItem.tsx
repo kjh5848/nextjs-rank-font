@@ -2,7 +2,7 @@
 
 import {
   nplaceRankSearchShop,
-} from "@/src/viewModel/nplace/nplaceRankSearchShopViewModel";
+} from "@/src/viewModel/nplace/nplaceRankReailTimeViewModel";
 
 interface SearchResultItemProps {
   item: nplaceRankSearchShop;

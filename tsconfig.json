@@ -26,7 +26,8 @@
       "@/styles/*": ["./src/styles/*"],
       "@/model/*": ["./src/model/*"],
       "@/util/*": ["./src/util/*"],
-      "@/viewModel/*": ["./src/viewModel/*"]
+      "@/viewModel/*": ["./src/viewModel/*"],
+      "@/use/*": ["./src/use/*"]
 
     }
   },
