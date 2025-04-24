@@ -66,7 +66,7 @@ export default function TrackNplaceSearch({
                 type="text"
                 placeholder="URL"
                 onKeyUp={handleTrackableModalUrlInputKeyUp}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-hiddenfocus:ring-2 focus:ring-blue-500"
                 autoFocus
               />
             </div>
@@ -93,7 +93,7 @@ export default function TrackNplaceSearch({
                   <tr className="hover:bg-gray-50">
                     <td className="whitespace-nowrap px-6 py-4">
                       <div
-                        className="h-12 w-12 rounded-lg bg-cover bg-center shadow-sm"
+                        className="h-12 w-12 rounded-lg bg-cover bg-center shadow-xs"
                         style={{
                           backgroundImage: `url('${trackableResult.nplaceRankShop.shopImageUrl}')`,
                         }}

@@ -4,15 +4,19 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import UserDropdown from "@/src/components/common/Dropdowns/UserDropdown";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from 'lucide-react';
 
 export default function Sidebar() {
-  const [collapseShow, setCollapseShow] = useState("hidden");
+  const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
   const toggleSidebar = () => {
-    setCollapseShow(collapseShow === "hidden" ? "block" : "hidden");
+    setIsOpen(!isOpen);
   };
 
   return (
@@ -26,7 +30,7 @@ export default function Sidebar() {
             onClick={toggleSidebar}
             aria-label="Toggle navigation"
           >
-            <Menu size={24} />
+            <Menu size={30} />
           </button>
 
           {/* Brand */}
@@ -55,9 +59,7 @@ export default function Sidebar() {
           <div
             className={
               "fixed inset-0 z-40 h-screen transform bg-rank-sidebar transition-transform duration-300 ease-in-out lg:relative lg:mt-4 lg:flex lg:h-auto lg:transform-none lg:flex-col lg:items-stretch lg:opacity-100 lg:shadow-none " +
-              (collapseShow === "hidden"
-                ? "-translate-x-full"
-                : "translate-x-100")
+              (isOpen ? "translate-x-0" : "-translate-x-0")
             }
           >
             {/* Collapse header */}
@@ -83,7 +85,7 @@ export default function Sidebar() {
             </div>
 
             {/* Divider */}
-            <hr className="my-4 lg:min-w-full" />
+            <hr className="mb-4 lg:min-w-full" />
 
             {/* Heading */}
             <h6 className="text-md block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text px-6 pb-4 pt-1 font-bold uppercase text-transparent no-underline lg:min-w-full lg:px-0">
@@ -95,9 +97,9 @@ export default function Sidebar() {
               <li className="items-center">
                 <Link
                   href="/realtime"
-                  onClick={() => setCollapseShow("hidden")}
+                  onClick={() => setIsOpen(false)}
                   className={
-                    "block bg-clip-text py-3 text-sm font-bold uppercase text-transparent text-white " +
+                    "block bg-clip-text py-3 text-sm font-bold uppercase text-white " +
                     (pathname.includes("/realtime")
                       ? "opacity-100"
                       : "opacity-75 hover:opacity-100")
@@ -118,7 +120,7 @@ export default function Sidebar() {
               <li className="items-center">
                 <Link
                   href="/track"
-                  onClick={() => setCollapseShow("hidden")}
+                  onClick={() => setIsOpen(false)}
                   className={
                     "text-md block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text py-3 font-bold uppercase text-transparent " +
                     (pathname.includes("/track")
@@ -137,107 +139,18 @@ export default function Sidebar() {
                   순위추적
                 </Link>
               </li>
-
-              <li className="items-center">
-                <Link
-                  href="/admin/maps"
-                  onClick={() => setCollapseShow("hidden")}
-                  className={
-                    "block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text py-3 text-xs font-bold uppercase text-transparent " +
-                    (pathname.includes("/admin/maps")
-                      ? "opacity-100"
-                      : "opacity-75 hover:opacity-100")
-                  }
-                >
-                  <i
-                    className={
-                      "fas fa-map-marked mr-2 text-sm " +
-                      (pathname.includes("/admin/maps")
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Maps
-                </Link>
-              </li>
-            </ul>
-
-            {/* Divider */}
-            <hr className="my-4 lg:min-w-full" />
-
-            {/* Heading */}
-            <h6 className="block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text px-6 pb-4 pt-1 text-xs font-bold uppercase text-transparent no-underline lg:min-w-full lg:px-0">
-              Auth Layout Pages
-            </h6>
-
-            {/* Navigation */}
-            <ul className="flex list-none flex-col px-6 lg:mb-4 lg:min-w-full lg:flex-col lg:px-0">
-              <li className="items-center">
-                <Link
-                  href="/login"
-                  onClick={() => setCollapseShow("hidden")}
-                  className="block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text py-3 text-xs font-bold uppercase text-transparent opacity-75 hover:opacity-100"
-                >
-                  <i className="fas fa-fingerprint text-blueGray-400 mr-2 text-sm"></i>{" "}
-                  Login
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  href="/join"
-                  onClick={() => setCollapseShow("hidden")}
-                  className="block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text py-3 text-xs font-bold uppercase text-transparent opacity-75 hover:opacity-100"
-                >
-                  <i className="fas fa-clipboard-list text-blueGray-300 mr-2 text-sm"></i>{" "}
-                  Register
-                </Link>
-              </li>
-            </ul>
-
-            {/* Divider */}
-            <hr className="my-4 lg:min-w-full" />
-
-            {/* Heading */}
-            <h6 className="block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text px-6 pb-4 pt-1 text-xs font-bold uppercase text-transparent no-underline lg:min-w-full lg:px-0">
-              No Layout Pages
-            </h6>
-
-            {/* Navigation */}
-            <ul className="flex list-none flex-col px-6 pb-6 lg:mb-4 lg:min-w-full lg:flex-col lg:px-0">
-              <li className="items-center">
-                <Link
-                  href="/landing"
-                  onClick={() => setCollapseShow("hidden")}
-                  className="block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text py-3 text-xs font-bold uppercase text-transparent opacity-75 hover:opacity-100"
-                >
-                  <i className="fas fa-newspaper text-blueGray-400 mr-2 text-sm"></i>{" "}
-                  Landing Page
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  href="/profile"
-                  onClick={() => setCollapseShow("hidden")}
-                  className="block bg-gradient-to-r from-rank-primary to-rank-secondary bg-clip-text py-3 text-xs font-bold uppercase text-transparent opacity-75 hover:opacity-100"
-                >
-                  <i className="fas fa-user-circle text-blueGray-400 mr-2 text-sm"></i>{" "}
-                  Profile Page
-                </Link>
-              </li>
             </ul>
           </div>
         </div>
       </nav>
 
       {/* 배경 오버레이 - 모바일에서 사이드바가 열릴 때 배경을 어둡게 처리 */}
-      {collapseShow !== "hidden" && (
+      {/* {isOpen && (
         <div
-          className="fixed inset-0 bg-black lg:hidden"
+          className="fixed inset-0 z-30 bg-black0-50 lg:hidden"
           onClick={toggleSidebar}
         />
-      )}
+      )} */}
     </>
   );
 }

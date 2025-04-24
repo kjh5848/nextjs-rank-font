@@ -30,7 +30,7 @@ export default function TrackGroup({ isOpen, onClose, onSubmit, groupList }: Tra
                     <label htmlFor="group" className="block text-sm font-medium text-gray-700 mb-1">그룹</label>
                     <select
                       {...register("id", { required: "그룹을 선택하세요" })}
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     > 
                       {groupList.map((group) => (
                         <option key={group.id} value={group.id}>
@@ -47,14 +47,14 @@ export default function TrackGroup({ isOpen, onClose, onSubmit, groupList }: Tra
                   <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse gap-2">
                     <button
                       type="submit"
-                      className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:w-auto"
+                      className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 sm:w-auto"
                     >
                       변경
                     </button>
                     <button
                       type="button"
                       onClick={onClose}
-                      className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                      className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                     >
                       취소
                     </button>

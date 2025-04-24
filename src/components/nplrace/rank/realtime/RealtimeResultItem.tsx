@@ -24,7 +24,7 @@ export default function SearchResultItem({ item }: SearchResultItemProps) {
   };
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-gradient-to-r from-white to-blue-50 p-6 shadow-sm transition-all hover:shadow-md">
+    <div className="rounded-lg border border-gray-200 bg-gradient-to-r from-white to-blue-50 p-6 shadow-xs transition-all hover:shadow-md">
       <div className="flex items-start">
         {/* 이미지 */}
         <div className="mr-4 h-24 w-28 overflow-hidden rounded">
@@ -80,7 +80,7 @@ export default function SearchResultItem({ item }: SearchResultItemProps) {
               {item.trackInfo.category} {item.trackInfo.scoreInfo}
             </span>
             <button
-              className="inline-block rounded bg-blue-100 px-2 py-1 text-xs text-blue-800"
+              className="inline-block rounded-smbg-blue-100 px-2 py-1 text-xs text-blue-800"
               onClick={copyToClipboard}
             >
               SHOP_ID

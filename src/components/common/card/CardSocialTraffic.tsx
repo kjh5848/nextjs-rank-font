@@ -20,7 +20,7 @@ export default function CardSocialTraffic() {
           </div>
           <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
             <button
-              className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded-smoutline-none focus:outline-hiddenmr-1 mb-1 ease-linear transition-all duration-150"
               type="button"
             >
               See all
@@ -55,7 +55,7 @@ export default function CardSocialTraffic() {
                     <span className="mr-2">{row.percent}%</span>
                     <div className="relative w-full">
                       <div
-                        className={`overflow-hidden h-2 text-xs flex rounded bg-${row.bar}-200`}
+                        className={`overflow-hidden h-2 text-xs flex rounded-smbg-${row.bar}-200`}
                       >
                         <div
                           style={{ width: `${row.percent}%` }}

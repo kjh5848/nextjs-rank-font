@@ -112,7 +112,7 @@ const ExcelUploadModal = ({ show, handleClose }: ExcelUploadModalProps) => {
         <div className="p-6">
           {step === 1 ? (
             <div
-              className="border-2 border-dashed border-gray-300 rounded p-6 text-center cursor-pointer"
+              className="border-2 border-dashed border-gray-300 rounded-smp-6 text-center cursor-pointer"
               onDragOver={handleDragOver}
               onDrop={handleDrop}
             >
@@ -130,7 +130,7 @@ const ExcelUploadModal = ({ show, handleClose }: ExcelUploadModalProps) => {
               />
               <label 
                 htmlFor="fileInput" 
-                className="mt-4 inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer"
+                className="mt-4 inline-block px-4 py-2 bg-blue-500 text-white rounded-smhover:bg-blue-600 cursor-pointer"
               >
                 찾아보기
               </label>
@@ -174,7 +174,7 @@ const ExcelUploadModal = ({ show, handleClose }: ExcelUploadModalProps) => {
           <button
             onClick={handleUpload}
             disabled={!file}
-            className={`px-4 py-2 rounded text-white ${
+            className={`px-4 py-2 rounded-smtext-white ${
               !file ? "bg-blue-300 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
             }`}
           >

@@ -164,7 +164,7 @@ export default function RealtimeForm() {
             {recentSearchResults.map((item, index) => (
               <div
                 key={index}
-                className="rounded-lg border border-gray-200 bg-gradient-to-r from-white to-blue-50 p-4 shadow-sm"
+                className="rounded-lg border border-gray-200 bg-gradient-to-r from-white to-blue-50 p-4 shadow-xs"
               >
                 <div className="mb-2 flex items-center justify-between">
                   <div className="flex items-center">
@@ -252,7 +252,7 @@ export default function RealtimeForm() {
           <div className="relative md:col-span-3">
             <div
               onClick={() => setIsLocationDropdownOpen(!isLocationDropdownOpen)}
-              className="flex w-full cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white p-3 shadow-sm transition-all hover:shadow"
+              className="flex w-full cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white p-3 shadow-xs transition-all hover:shadow"
             >
               <div className="flex items-center">
                 <MapPin size={18} className="mr-2 text-blue-500" />

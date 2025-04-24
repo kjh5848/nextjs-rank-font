@@ -1,14 +1,46 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+/* 색상 팔레트 */
+--color-rank-light: #f8f9fa;
+--color-rank-light-accent: #e9ecef;
+--color-rank-dark: #212529;
+--color-rank-primary: #25e4ff;
+--color-rank-secondary: #d3ffc0;
+--color-rank-success: #40c057;
+--color-rank-warning: #fd7e14;
+--color-rank-danger: #fa5252;
+--color-rank-sidebar: #2c2c2c;
+
+  /* 폰트 패밀리 */
+  --font-sans: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+}
 
 
-/* @layer components {
-    .btn-primary {
-      @apply px-4 py-2 bg-rank-primary text-white rounded transition-colors hover:bg-rank-primary/90;
-    }
-    
-    .btn-secondary {
-      @apply px-4 py-2 bg-white border border-rank-primary text-rank-primary rounded transition-colors hover:bg-rank-primary/10;
-    }
-  } */
+@layer utilities {
+  .container {
+    width: 100%;
+    margin-left: auto;  
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  @media (min-width: 640px) {.container {max-width: 640px}}
+  @media (min-width: 768px) {.container {max-width: 768px}}
+  @media (min-width: 1024px) {.container {max-width: 1024px}}
+  @media (min-width: 1280px) {.container {max-width: 1280px}}
+}
+
+@keyframes btn-bounce {
+  0%,100% {transform:scale(1)}
+  50%     {transform:scale(0.95)}
+}
+@keyframes btn-spin {
+  from {transform:rotate(0deg)}
+  to   {transform:rotate(360deg)}
+}
+
+@layer utilities {
+  .animate-btn-bounce {animation: btn-bounce .2s ease-in-out}
+  .animate-btn-spin   {animation: btn-spin 1s linear infinite}
+}

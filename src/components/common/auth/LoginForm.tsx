@@ -70,7 +70,7 @@ export default function LoginForm() {
   }, [setLoginUser]);
 
   return (
-    <div className="bg-blueGray-200 relative mb-6 flex w-full min-w-0 flex-col break-words rounded-lg border-0 bg-rank-light shadow-lg">
+    <div className="bg-blueGray-200 bg-rank-light relative mb-6 flex w-full min-w-0 flex-col rounded-lg border-0 break-words shadow-lg">
       <div className="mb-0 rounded-t px-10 py-10">
         <div className="mb-3 text-center">
           <h6 className="text-blueGray-500 text-sm font-bold">로그인</h6>
@@ -78,7 +78,7 @@ export default function LoginForm() {
         <div className="btn-wrapper">
           <Link
             href="/"
-            className="mb-3 flex w-full items-center justify-center rounded bg-[#FEE500] px-4 py-3 text-sm font-bold text-[#3C1E1E] shadow outline-none transition-all duration-150 hover:shadow-md focus:outline-none"
+            className="mb-3 flex w-full items-center justify-center rounded-smbg-[#FEE500] px-4 py-3 text-sm font-bold text-[#3C1E1E] shadow-sm transition-all duration-150 outline-hiddenhover:shadow-md focus:outline-none"
           >
             <Image
               src="/img/auth/kakao_login.png"
@@ -90,7 +90,7 @@ export default function LoginForm() {
             3초 로그인/회원가입
           </Link>
         </div>
-        <hr className="border-b-1 border-blueGray-300 mt-6" />
+        <hr className="border-blueGray-300 mt-6 border-b-1" />
       </div>
 
       <div className="flex-auto px-4 py-10 pt-0 lg:px-10">
@@ -113,7 +113,7 @@ export default function LoginForm() {
               ref={(el) => {
                 refs.current.idElement = el;
               }}
-              className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+              className="placeholder-blueGray-300 text-blueGray-600 w-full rounded-smborder-0 bg-white px-3 py-3 text-sm shadow-sm transition-all duration-150 ease-linear focus:ring-3focus:outline-none"
               placeholder="아이디"
               onKeyDown={handleKeyDown}
             />
@@ -128,7 +128,7 @@ export default function LoginForm() {
               ref={(el) => {
                 refs.current.pwElement = el;
               }}
-              className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+              className="placeholder-blueGray-300 text-blueGray-600 w-full rounded-smborder-0 bg-white px-3 py-3 text-sm shadow-sm transition-all duration-150 ease-linear focus:ring-3focus:outline-none"
               placeholder="비밀번호"
               onKeyDown={handleKeyDown}
             />
@@ -141,7 +141,7 @@ export default function LoginForm() {
                 ref={(el) => {
                   refs.current.rememberMeElement = el;
                 }}
-                className="form-checkbox text-blueGray-700 ml-1 h-5 w-5 rounded border-0 transition-all duration-150 ease-linear"
+                className="form-checkbox text-blueGray-700 ml-1 h-5 w-5 rounded-smborder-0 transition-all duration-150 ease-linear"
               />
               <span className="text-blueGray-600 ml-2 text-sm font-semibold">
                 기억하기
@@ -151,9 +151,8 @@ export default function LoginForm() {
 
           <div className="mt-6 text-center">
             <button
-              
               disabled={isPendingLogin}
-              className="active:bg-blueGray-600 w-full rounded bg-gradient-to-r from-rank-primary to-rank-secondary px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
+              className="active:bg-blueGray-600 from-rank-primary to-rank-secondary w-full rounded-smbg-gradient-to-r px-6 py-3 text-sm font-bold text-white uppercase shadow-sm transition-all duration-150 ease-linear outline-hiddenhover:shadow-lg focus:outline-none"
             >
               {isPendingLogin ? "로그인 중..." : "로그인"}
             </button>

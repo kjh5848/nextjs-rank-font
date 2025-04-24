@@ -117,7 +117,7 @@ export default function JoinForm() {
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/[^a-z0-9]/g, '');
-    setValue("userName", value);
+    setValue("username", value);
   };
 
   const handleTelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,158 +125,192 @@ export default function JoinForm() {
   };
 
   return (
-    <div className="bg-rank-light relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-200 border-0">
-      <div className="rounded-t mb-0 px-10 py-10">
-        <div className="text-center mb-3">
+    <div className="background:var(--color-rank-light) bg-blueGray-200 relative mb-6 flex w-full min-w-0 flex-col rounded-lg border-0 break-words shadow-lg">
+      <div className="mb-0 rounded-t px-10 py-10">
+        <div className="mb-3 text-center">
           <h6 className="text-blueGray-500 text-sm font-bold">회원가입</h6>
         </div>
         <div className="btn-wrapper">
           <Link
             href="/"
-            className="w-full bg-[#FEE500] text-[#3C1E1E] px-4 py-3 rounded outline-none focus:outline-none mb-3 font-bold text-sm shadow hover:shadow-md flex items-center justify-center transition-all duration-150"
+            className="mb-3 flex w-full items-center justify-center rounded-sm bg-[#FEE500] px-4 py-3 text-sm font-bold text-[#3C1E1E] shadow-sm transition-all duration-150 outline-hiddenhover:shadow-md focus:outline-none"
           >
             <Image
               src="/img/auth/kakao_login.png"
               alt="Kakao"
-              className="w-5 h-5 mr-2"
+              className="mr-2 h-5 w-5"
               width={20}
               height={20}
             />
             3초 로그인/회원가입
           </Link>
         </div>
-        <hr className="mt-6 border-b-1 border-blueGray-300" />
+        <hr className="border-blueGray-300 mt-6 border-b-1" />
       </div>
 
-      <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
-        <div className="text-blueGray-400 text-center mb-3 font-bold">
+      <div className="flex-auto px-4 py-10 pt-0 lg:px-10">
+        <div className="text-blueGray-400 mb-3 text-center font-bold">
           <small>회원가입 하기</small>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="relative w-full mb-3">
-            <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+          <div className="relative mb-3 w-full">
+            <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
               계정 <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               placeholder="계정"
-              className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-              {...register("userName", { 
+              className="placeholder-blueGray-300 text-blueGray-600 w-full rounded-sm border-0 bg-white px-3 py-3 text-sm shadow-sm transition-all duration-150 ease-linear focus:ring-3focus:outline-none"
+              {...register("username", {
                 required: "계정을 입력하세요.",
-                onChange: handleUsernameChange
+                onChange: handleUsernameChange,
               })}
             />
-            {errors.userName && <p className="text-red-500 text-xs mt-1">{errors.userName.message}</p>}
+            {errors.username && (
+              <p className="mt-1 text-xs text-red-500">
+                {errors.username.message}
+              </p>
+            )}
           </div>
 
-          <div className="relative w-full mb-3">
-            <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+          <div className="relative mb-3 w-full">
+            <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
               비밀번호 <span className="text-red-500">*</span>
             </label>
             <input
               type="password"
               placeholder="비밀번호"
-              className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+              className="placeholder-blueGray-300 text-blueGray-600 w-full rounded-sm border-0 bg-white px-3 py-3 text-sm shadow-sm transition-all duration-150 ease-linear focus:ring-3focus:outline-none"
               {...register("password", { required: "비밀번호를 입력하세요." })}
             />
-            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
+            {errors.password && (
+              <p className="mt-1 text-xs text-red-500">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
-          <div className="relative w-full mb-3">
-            <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+          <div className="relative mb-3 w-full">
+            <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
               비밀번호 재확인 <span className="text-red-500">*</span>
             </label>
             <input
               type="password"
               placeholder="비밀번호 재확인"
-              className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+              className="placeholder-blueGray-300 text-blueGray-600 w-full rounded-sm border-0 bg-white px-3 py-3 text-sm shadow-sm transition-all duration-150 ease-linear focus:ring-3focus:outline-none"
               {...register("passwordConfirm", {
                 required: "비밀번호를 다시 입력하세요.",
-                validate: (value) => value === password || "비밀번호가 일치하지 않습니다."
+                validate: (value) =>
+                  value === password || "비밀번호가 일치하지 않습니다.",
               })}
             />
-            {errors.passwordConfirm && <p className="text-red-500 text-xs mt-1">{errors.passwordConfirm.message}</p>}
+            {errors.passwordConfirm && (
+              <p className="mt-1 text-xs text-red-500">
+                {errors.passwordConfirm.message}
+              </p>
+            )}
           </div>
 
-          <div className="relative w-full mb-3">
-            <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+          <div className="relative mb-3 w-full">
+            <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
               업체명 <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               placeholder="업체명"
-              className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+              className="placeholder-blueGray-300 text-blueGray-600 w-full rounded-sm border-0 bg-white px-3 py-3 text-sm shadow-sm transition-all duration-150 ease-linear focus:ring-3focus:outline-none"
               {...register("companyName", { required: "업체명을 입력하세요." })}
             />
-            {errors.companyName && <p className="text-red-500 text-xs mt-1">{errors.companyName.message}</p>}
+            {errors.companyName && (
+              <p className="mt-1 text-xs text-red-500">
+                {errors.companyName.message}
+              </p>
+            )}
           </div>
 
-          <div className="relative w-full mb-3">
-            <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+          <div className="relative mb-3 w-full">
+            <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
               사업자등록번호 <span className="text-red-500">*</span>
             </label>
             <div className="flex">
               <input
                 type="text"
                 placeholder="000-00-00000"
-                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded-l text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                {...register("companyNumber", { 
+                className="placeholder-blueGray-300 text-blueGray-600 w-full rounded-l border-0 bg-white px-3 py-3 text-sm shadow-sm transition-all duration-150 ease-linear focus:ring-3focus:outline-none"
+                {...register("companyNumber", {
                   required: "사업자등록번호를 입력하세요.",
-                  onChange: handleCompanyNumberChange
+                  onChange: handleCompanyNumberChange,
                 })}
               />
               <button
                 type="button"
                 onClick={checkCompanyNumber}
-                className="bg-rank-primary text-white px-4 py-2 rounded-r text-sm font-bold shadow hover:shadow-lg transition-all duration-150"
+                className="bg-rank-primary rounded-r px-4 py-2 text-sm font-bold text-white shadow-sm transition-all duration-150 hover:shadow-lg"
               >
                 인증
               </button>
             </div>
-            {errors.companyNumber && <p className="text-red-500 text-xs mt-1">{errors.companyNumber.message}</p>}
-            {isVerified && <p className="text-green-500 text-xs mt-1">인증되었습니다</p>}
+            {errors.companyNumber && (
+              <p className="mt-1 text-xs text-red-500">
+                {errors.companyNumber.message}
+              </p>
+            )}
+            {isVerified && (
+              <p className="mt-1 text-xs text-green-500">인증되었습니다</p>
+            )}
           </div>
 
-          <div className="relative w-full mb-3">
-            <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+          <div className="relative mb-3 w-full">
+            <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
               연락처 <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               placeholder="연락처"
-              className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-              {...register("tel", { 
+              className="placeholder-blueGray-300 text-blueGray-600 w-full rounded-sm border-0 bg-white px-3 py-3 text-sm shadow-sm transition-all duration-150 ease-linear focus:ring-3focus:outline-none"
+              {...register("tel", {
                 required: "연락처를 입력하세요.",
-                onChange: handleTelChange
+                onChange: handleTelChange,
               })}
             />
-            {errors.tel && <p className="text-red-500 text-xs mt-1">{errors.tel.message}</p>}
+            {errors.tel && (
+              <p className="mt-1 text-xs text-red-500">{errors.tel.message}</p>
+            )}
           </div>
 
           <div>
-            <label className="inline-flex items-center cursor-pointer">
+            <label className="inline-flex cursor-pointer items-center">
               <input
                 id="privacyPolicy"
                 type="checkbox"
-                className="form-checkbox border-0 rounded text-blueGray-700 ml-1 w-5 h-5 ease-linear transition-all duration-150"
-                {...register("privacyPolicy", { required: "개인정보 보호 정책에 동의해야 합니다." })}
+                className="form-checkbox text-blueGray-700 ml-1 h-5 w-5 rounded-sm border-0 transition-all duration-150 ease-linear"
+                {...register("privacyPolicy", {
+                  required: "개인정보 보호 정책에 동의해야 합니다.",
+                })}
               />
-              <span className="ml-2 text-sm font-semibold text-blueGray-600">
-                개인정보 동의사항{' '}
-                <Link href="/privacy-policy" className="text-rank-primary hover:underline">
+              <span className="text-blueGray-600 ml-2 text-sm font-semibold">
+                개인정보 동의사항{" "}
+                <Link
+                  href="/privacy-policy"
+                  className="text-rank-primary hover:underline"
+                >
                   개인보호 보호 정책
                 </Link>
               </span>
             </label>
-            {errors.privacyPolicy && <p className="text-red-500 text-xs mt-1">{errors.privacyPolicy.message}</p>}
+            {errors.privacyPolicy && (
+              <p className="mt-1 text-xs text-red-500">
+                {errors.privacyPolicy.message}
+              </p>
+            )}
           </div>
 
-          <div className="text-center mt-6">
+          <div className="mt-6 text-center">
             <button
               type="submit"
               disabled={isPendingSubmit}
-              className="bg-gradient-to-r from-rank-primary to-rank-secondary text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none w-full ease-linear transition-all duration-150"
+              className="from-rank-primary to-rank-secondary active:bg-blueGray-600 w-full rounded-sm bg-gradient-to-r px-6 py-3 text-sm font-bold text-white uppercase shadow-sm transition-all duration-150 ease-linear outline-hiddenhover:shadow-lg focus:outline-none"
             >
               {isPendingSubmit ? "처리 중..." : "가입"}
             </button>

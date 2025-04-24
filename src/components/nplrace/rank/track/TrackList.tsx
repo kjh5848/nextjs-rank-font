@@ -29,6 +29,10 @@ export default function TrackList({
   const isAllSelected = filteredShopList.length > 0 && 
     filteredShopList.every(shop => selectedShopList.has(shop.id));
 
+  const handleShopClick = (id: any): void => {
+    router.push(`/track/${id}`);
+  }
+
   return (
     <>
       <div className="overflow-hidden rounded-xl p-1">
@@ -40,7 +44,7 @@ export default function TrackList({
                   type="checkbox"
                   checked={isAllSelected}
                   onChange={(e) => handleSelectAll(e.target.checked)}
-                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="h-4 w-4 rounded-smborder-gray-300 text-blue-600 focus:ring-blue-500"
                 />
               </div>
               <div className="col-span-2 sm:col-span-1 text-xs font-bold uppercase text-gray-500">
@@ -66,9 +70,7 @@ export default function TrackList({
                     ? "bg-blue-50"
                     : "bg-white"
                 }`}
-                onDoubleClick={() => {
-                  router.push(`/nplace/rank/track/${thisShop.id}`);
-                }}
+                onClick={() => handleShopClick(thisShop.id)}
               >
                 <div className="grid grid-cols-12 items-center gap-2 sm:gap-4">
                   <div className="col-span-1 flex items-center justify-center">
@@ -76,7 +78,7 @@ export default function TrackList({
                       type="checkbox"
                       checked={selectedShopList.has(thisShop.id)}
                       onChange={() => handleShopSelect(thisShop.id)}
-                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="h-4 w-4 rounded-smborder-gray-300 text-blue-600 focus:ring-blue-500"
                     />
                   </div>
                   <div className="col-span-2 text-sm font-bold text-blue-900 sm:col-span-1">
@@ -122,10 +124,10 @@ export default function TrackList({
                           key={`${thisShop.id}-${thisInfo.id}`}
                           className="flex flex-wrap gap-1 sm:gap-2"
                         >
-                          <span className="inline-flex items-center rounded-md bg-gradient-to-r from-blue-50 to-blue-100 px-2 py-1 text-xs font-medium text-blue-800 shadow-sm sm:px-3">
+                          <span className="inline-flex items-center rounded-md bg-gradient-to-r from-blue-50 to-blue-100 px-2 py-1 text-xs font-medium text-blue-800 shadow-xs sm:px-3">
                             {`[${thisInfo.province}]${thisInfo.keyword}`}
                           </span>
-                          <span className="inline-flex items-center gap-1 rounded-md bg-gradient-to-r from-green-50 to-green-100 px-2 py-1 text-xs font-medium text-green-800 shadow-sm sm:px-3">
+                          <span className="inline-flex items-center gap-1 rounded-md bg-gradient-to-r from-green-50 to-green-100 px-2 py-1 text-xs font-medium text-green-800 shadow-xs sm:px-3">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"

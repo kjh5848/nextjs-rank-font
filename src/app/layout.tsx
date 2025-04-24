@@ -1,9 +1,7 @@
-import '@/styles/global.css';
 import { StoreProvider } from '@/src/store/provider/StoreProvider';
-import { getUserFromSession } from '@/src/util/auth/Auth';
 import { Inter } from "next/font/google";
 import QueryProviders from "../store/provider/QueryProviders";
-
+import "@/styles/global.css";
 const inter = Inter({ subsets: ["latin"], display: 'swap' });
 
 export const metadata = {
