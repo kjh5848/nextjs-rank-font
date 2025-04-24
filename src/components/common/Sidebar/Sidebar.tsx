@@ -9,6 +9,7 @@ import { Menu, X } from 'lucide-react';
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  console.log("isOpen", isOpen);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -16,6 +17,7 @@ export default function Sidebar() {
   }, [pathname]);
 
   const toggleSidebar = () => {
+    console.log("toggleSidebar", isOpen);
     setIsOpen(!isOpen);
   };
 
@@ -59,7 +61,7 @@ export default function Sidebar() {
           <div
             className={
               "fixed inset-0 z-40 h-screen transform bg-rank-sidebar transition-transform duration-300 ease-in-out lg:relative lg:mt-4 lg:flex lg:h-auto lg:transform-none lg:flex-col lg:items-stretch lg:opacity-100 lg:shadow-none " +
-              (isOpen ? "translate-x-0" : "-translate-x-0")
+              (isOpen ? "translate-x-0" : "-translate-x-full")
             }
           >
             {/* Collapse header */}

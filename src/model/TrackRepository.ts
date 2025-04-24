@@ -124,6 +124,114 @@ class TrackRepository {
     }
     return data;
   }
+
+  // 상점 상세 정보 조회
+  static async getShopDetail(id: string): Promise<any> {
+    const response = await fetch(`${this.apiBaseUrl}${this.url}/shop/${id}`, {
+      credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error('상점 정보를 불러오는데 실패했습니다.');
+    }
+    const data = await response.json();
+    if (data.code !== 0) {
+      throw new Error(data.message || '상점 정보를 불러오는데 실패했습니다.');
+    }
+    return data;
+  }
+
+  // 상점 삭제
+  static async deleteShop(id: string): Promise<any> {
+    const response = await fetch(`${this.apiBaseUrl}${this.url}/shop/${id}`, {
+      method: 'DELETE',
+      credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error('상점 삭제에 실패했습니다.');
+    }
+    const data = await response.json();
+    if (data.code !== 0) {
+      throw new Error(data.message || '상점 삭제에 실패했습니다.');
+    }
+    return data;
+  }
+
+  // 키워드 갱신
+  static async updateKeywords(id: string): Promise<any> {
+    const response = await fetch(`${this.apiBaseUrl}${this.url}/shop/${id}/keyword`, {
+      method: 'POST',
+      credentials: "include",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        nplaceRankShop: {
+          id: id
+        }
+      })
+    });
+    if (!response.ok) {
+      throw new Error('키워드 갱신에 실패했습니다.');
+    }
+    const data = await response.json();
+    if (data.code !== 0) {
+      throw new Error(data.message || '키워드 갱신에 실패했습니다.');
+    }
+    return data;
+  }
+
+  // 키워드 추가
+  static async addTrack(trackInfo: {
+    keyword: string;
+    province: string;
+    shopId: string;
+    businessSector: string;
+  }): Promise<any> {
+    const response = await fetch(`${this.apiBaseUrl}${this.url}/track`, {
+      method: 'POST',
+      credentials: "include",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        nplaceRankTrackInfo: trackInfo
+      })
+    });
+    if (!response.ok) {
+      throw new Error('키워드 추가에 실패했습니다.');
+    }
+    const data = await response.json();
+    if (data.code !== 0) {
+      throw new Error(data.message || '키워드 추가에 실패했습니다.');
+    }
+    return data;
+  }
+
+  // 순위 체크 데이터 조회
+  static async getRankCheckData(keyword: string, province: string, searchDate: string): Promise<any> {
+    const response = await fetch(`${this.apiBaseUrl}${this.url}/realtime/list`, {
+      method: 'POST',
+      credentials: "include",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        nplaceRankCheckData: {
+          keyword,
+          province,
+          searchDate
+        }
+      })
+    });
+    if (!response.ok) {
+      throw new Error('순위 체크 데이터를 불러오는데 실패했습니다.');
+    }
+    const data = await response.json();
+    if (data.code !== 0) {
+      throw new Error(data.message || '순위 체크 데이터를 불러오는데 실패했습니다.');
+    }
+    return data;
+  }
 }
 
 export default TrackRepository; 

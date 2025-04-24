@@ -71,7 +71,7 @@ export default function TrackContent() {
 
   return (
     <div>
-      <TrackHeader />
+      
 
       <div className="mb-6 overflow-hidden rounded-xl border border-blue-100 bg-gradient-to-r from-white to-blue-50 shadow-lg">
         <div className="p-4 sm:p-6">
