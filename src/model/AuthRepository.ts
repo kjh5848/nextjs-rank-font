@@ -6,7 +6,7 @@ interface UserDto {
   name?: string;
   companyName?: string
   companyNumber?: string
-  tel
+  tel?: string
   simpleDescription?: string;
 }
 
@@ -33,22 +33,51 @@ class AuthRepository {
 
   // 로그인 요청 (세션 기반)
   static async postLogin(reqDto: AuthRequestDto): Promise<Response> {
-    return await fetch(`${this.apiBaseUrl}${this.url}/login`, {
+    const response = await fetch(`${this.apiBaseUrl}${this.url}/login`, {
       method: "POST",
-      credentials: "include", // 세션 쿠키를 포함하기 위해 필요
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        // 이미 로그인된 세션이 있다면 전송
+        ...(document.cookie && { "Cookie": document.cookie })
       },
       body: JSON.stringify(reqDto)
     });
+
+    return response;
   }
 
   // 인증 상태 확인 (세션 쿠키를 사용한 인증 확인)
   static async checkAuth(): Promise<Response> {
-    return await fetch(`${this.apiBaseUrl}${this.url}/info`, {
-      method: "GET",
-      credentials: "include", // 세션 쿠키를 포함하기 위해 필요
-    });
+    try {
+      const response = await fetch(`${this.apiBaseUrl}${this.url}/info`, {
+        credentials: "include",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+          // 기존 세션 ID를 쿠키에서 가져와서 명시적으로 전송
+        }
+      });
+      
+      // 응답 헤더 로깅
+      console.log('서버 응답 헤더:', {
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries(response.headers.entries())
+      });
+
+      // 새로운 세션 ID가 발급되면 경고
+      const setCookie = response.headers.get('set-cookie');
+      if (setCookie && setCookie.includes('JSESSIONID')) {
+        console.warn('서버가 새로운 세션 ID를 발급했습니다:', setCookie);
+      }
+
+      return response;
+    } catch (error) {
+      console.error('인증 확인 중 에러 발생:', error);
+      throw error;
+    }
   }
 
   // 로그아웃 요청 (세션 쿠키 제거)

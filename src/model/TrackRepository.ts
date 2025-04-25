@@ -5,7 +5,19 @@ export type Shop = {
   shopName: string;
   shopImageUrl: string;
   groupName: string;
+  address?: string;
+  roadAddress?: string;
+  visitorReviewCount?: number;
+  blogReviewCount?: number;
+  category?: string;
+  scoreInfo?: string;
+  keywordList?: string[];
+  businessSector?: string;
+  createDate?: string;
   nplaceRankTrackInfoList: TrackInfo[];
+  nplaceRankTrackInfoMap?: {
+    [key: string]: TrackInfo;
+  };
 };
 
 export type TrackInfo = {
@@ -14,6 +26,17 @@ export type TrackInfo = {
   province: string;
   rank: number | null;
   rankChange: number;
+  nplaceRankTrackList?: TrackData[];
+};
+
+export type TrackData = {
+  id: string;
+  rank: number;
+  visitorReviewCount: number;
+  blogReviewCount: number;
+  saveCount: number;
+  scoreInfo: string;
+  chartDate: string;
 };
 
 export type Group = {
@@ -21,7 +44,23 @@ export type Group = {
   groupName: string;
 };
 
+export type RankCheckData = {
+  rankInfo: {
+    rank: number;
+  };
+  trackInfo: {
+    shopName: string;
+    category: string;
+    scoreInfo: string;
+    visitorReviewCount: number;
+    blogReviewCount: number;
+    saveCount: number;
+  };
+};
+
 class TrackRepository {
+  
+
   static url = "/v1/nplace/rank";
   static apiBaseUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -126,7 +165,7 @@ class TrackRepository {
   }
 
   // 상점 상세 정보 조회
-  static async getShopDetail(id: string): Promise<any> {
+  static async getShopDetail(id: string): Promise<{ code: number; data: { nplaceRankShop: Shop }; message?: string }> {
     const response = await fetch(`${this.apiBaseUrl}${this.url}/shop/${id}`, {
       credentials: "include",
     });
@@ -141,7 +180,7 @@ class TrackRepository {
   }
 
   // 상점 삭제
-  static async deleteShop(id: string): Promise<any> {
+  static async deleteShop(id: string): Promise<{ code: number; message?: string }> {
     const response = await fetch(`${this.apiBaseUrl}${this.url}/shop/${id}`, {
       method: 'DELETE',
       credentials: "include",
@@ -156,8 +195,34 @@ class TrackRepository {
     return data;
   }
 
-  // 키워드 갱신
-  static async updateKeywords(id: string): Promise<any> {
+  // 키워드 추적 상태 변경
+  static async updateTrackStatus(keywordId: string, status: 'RUNNING' | 'STOP'): Promise<{ code: number; message?: string }> {
+    const response = await fetch(`${this.apiBaseUrl}${this.url}/track/${keywordId}`, {
+      method: 'PATCH',
+      credentials: "include",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        nplaceRankTrackInfoStatus: {
+          status,
+          id: keywordId,
+        }
+      })
+    });
+    if (!response.ok) {
+      throw new Error('키워드 상태 변경에 실패했습니다');
+    }
+    const data = await response.json();
+    if (data.code !== 0) {
+      throw new Error(data.message || '키워드 상태 변경에 실패했습니다');
+    }
+    return data;
+  }
+
+
+  // 키워드 목록 갱신
+  static async updateKeywords(id: string): Promise<{ code: number; message?: string }> {
     const response = await fetch(`${this.apiBaseUrl}${this.url}/shop/${id}/keyword`, {
       method: 'POST',
       credentials: "include",
@@ -165,17 +230,15 @@ class TrackRepository {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        nplaceRankShop: {
-          id: id
-        }
+        nplaceRankShop: { id }
       })
     });
     if (!response.ok) {
-      throw new Error('키워드 갱신에 실패했습니다.');
+      throw new Error('키워드 목록 갱신에 실패했습니다');
     }
     const data = await response.json();
     if (data.code !== 0) {
-      throw new Error(data.message || '키워드 갱신에 실패했습니다.');
+      throw new Error(data.message || '키워드 목록 갱신에 실패했습니다');
     }
     return data;
   }
@@ -206,6 +269,23 @@ class TrackRepository {
     }
     return data;
   }
+
+
+   static async deleteTrack(id: string): Promise<any> {
+    const response = await fetch(`${this.apiBaseUrl}${this.url}/track/${id}`, {
+      method: 'DELETE',
+      credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error('키워드 삭제에 실패했습니다.');
+    }
+    const data = await response.json();
+    if (data.code !== 0) {
+      throw new Error(data.message || '키워드 삭제에 실패했습니다.');
+    }
+    return data;
+  }
+
 
   // 순위 체크 데이터 조회
   static async getRankCheckData(keyword: string, province: string, searchDate: string): Promise<any> {

@@ -51,24 +51,6 @@ export default function TrackContent() {
     handleSelectAll,
   } = useTrackContent();
 
-  
-
-  if (isLoading) {
-    return (
-      <div className="flex h-96 items-center justify-center">
-        <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="my-4 rounded-lg bg-red-100 p-4 text-sm text-red-700">
-        오류가 발생했습니다: {error.message}
-      </div>
-    );
-  }
-
   return (
     <div>
       

@@ -28,7 +28,8 @@
       "@/util/*": ["./src/util/*"],
       "@/viewModel/*": ["./src/viewModel/*"],
       "@/use/*": ["./src/use/*"],
-      "@/lib/*": ["./src/lib/*"]
+      "@/lib/*": ["./src/lib/*"],
+      "@/types/*": ["./src/types/*"]
 
     }
   },

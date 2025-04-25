@@ -5,7 +5,6 @@ import { cookies } from 'next/headers';
 export async function getUserFromSession(): Promise<any | null> {
   const cookieStore = cookies();
   const sessionCookie = (await cookieStore).get('JSESSIONID');
-  console.log(`세션쿠키 : ${sessionCookie.value}`)
   if (!sessionCookie) return null;
 
   try {

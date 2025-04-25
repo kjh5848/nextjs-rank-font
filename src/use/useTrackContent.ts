@@ -4,8 +4,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNplaceRankTrackViewModel } from "@/src/viewModel/nplace/nplaceRankTrackViewModel";
 
 export function useTrackContent() {
-  const router = useRouter();
-  const queryClient = useQueryClient();
   const {
     shopList: nplaceRankShopList,
     isLoading,

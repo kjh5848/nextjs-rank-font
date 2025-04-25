@@ -8,7 +8,7 @@ import { useAuthStore } from "@/src/store/provider/StoreProvider";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const { user, logout,setLoginUser } = useAuthStore(); // 로그인 상태 확인
+  const { user, logout, setLoginUser } = useAuthStore(); // 로그인 상태 확인
 
   // 클라이언트 사이드 렌더링 확인
   useEffect(() => {

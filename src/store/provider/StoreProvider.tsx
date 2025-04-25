@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, {
@@ -42,6 +41,7 @@ interface StoreContextType {
 interface StoreProviderProps {
   children: ReactNode;
   initialUser?: User | null; // ✅ SSR에서 받은 초기 유저 정보
+  initialSessionId?: string | null; // ✅ SSR에서 받은 초기 세션 ID
 }
 // 컨텍스트 생성
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -57,7 +57,6 @@ export function StoreProvider({ children, initialUser = null }: StoreProviderPro
     if (typeof window === "undefined") return;
 
     if (initialUser) {
-      // 초기 유저가 있으면 로딩 완료 상태만 설정
       setIsAuthLoading(false);
       return;
     }
@@ -65,19 +64,26 @@ export function StoreProvider({ children, initialUser = null }: StoreProviderPro
     const checkSession = async () => {
       try {
         const response = await AuthRepository.checkAuth();
-        if (!response.ok) return;
+        const responseText = await response.text();
+        
+        if (!response.ok) {
+          setUser(null);
+          router.push("/login");
+          return;
+        }
 
-        const text = await response.text();
-        const json = JSON.parse(text);
+        const json = JSON.parse(responseText);
 
         if (json.code === 0 && json.data?.user) {
           setUser(json.data.user);
         } else {
-          setUser(null); // 세션 만료 시 명시적으로 null
+          setUser(null);
+          router.push("/login");
         }
       } catch (err) {
         console.error("세션 확인 실패", err);
-        setUser(null); // 네트워크 에러 등
+        setUser(null);
+        router.push("/login");
       } finally {
         setIsAuthLoading(false);
       }

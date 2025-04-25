@@ -4,7 +4,7 @@ import LoadingFallback from "@/src/components/common/LoadingFallback";
 
 export default function RealtimePage() {
   return (
-    <main className="container mx-auto">
+    <main className="lg:container mx-auto">
       <div className="mb-8 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white shadow-lg">
         <h1 className="text-3xl font-bold leading-tight">
           <span className="bg-clip-text text-white">N-PLACE</span>

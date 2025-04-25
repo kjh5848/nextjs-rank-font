@@ -35,10 +35,10 @@ export default function LoginForm() {
     if (!validateFields()) return;
     const { idElement, pwElement, rememberMeElement } = refs.current;
     const dto = {
-      user: { username: idElement.value, password: pwElement.value },
+      user: { username: idElement?.value, password: pwElement?.value },
     };
 
-    const result = await login(dto, rememberMeElement.checked);
+    const result = await login(dto, rememberMeElement?.checked || false);
     if (result.ok && result.user) {
       setLoginUser(result.user);
     }
