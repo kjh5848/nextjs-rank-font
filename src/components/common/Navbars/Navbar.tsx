@@ -33,7 +33,7 @@ export default function Navbar() {
   
   return (
     <div className="w-full flex justify-center px-4 py-3">
-      <nav className="fixed z-50 bg-white shadow-card rounded-full max-w-7xl w-full">
+      <nav className="fixed z-50 bg-white shadow-lg rounded-full max-w-7xl w-full">
         <div className="px-4 sm:px-6">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
