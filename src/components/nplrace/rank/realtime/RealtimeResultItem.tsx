@@ -24,10 +24,10 @@ export default function SearchResultItem({ item }: SearchResultItemProps) {
   };
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-gradient-to-r from-white to-blue-50 p-6 shadow-xs transition-all hover:shadow-md">
-      <div className="flex items-start">
+    <div className="rounded-lg border border-gray-200 bg-gradient-to-r from-white to-blue-50 p-4 md:p-6 shadow-xs transition-all hover:shadow-md">
+      <div className="flex flex-col md:flex-row md:items-start">
         {/* 이미지 */}
-        <div className="mr-4 h-24 w-28 overflow-hidden rounded">
+        <div className="mb-4 md:mb-0 md:mr-4 h-24 w-28 overflow-hidden rounded mx-auto md:mx-0">
           <img
             src={item.trackInfo.shopImageUrl || "/placeholder-shop.png"}
             alt={item.trackInfo.shopName}
@@ -36,10 +36,10 @@ export default function SearchResultItem({ item }: SearchResultItemProps) {
         </div>
 
         <div className="flex-1">
-          <div className="flex items-start justify-between">
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between">
             <div>
               {/* 순위 정보 */}
-              <div className="mb-2 flex items-center">
+              <div className="mb-2 flex items-center justify-center md:justify-start">
                 <span className="text-xl font-bold">
                   {item.rankInfo.rank}위
                 </span>
@@ -49,25 +49,27 @@ export default function SearchResultItem({ item }: SearchResultItemProps) {
               </div>
 
               {/* 업체명 */}
-              <h3 className="mb-1 text-lg font-bold">
+              <h3 className="mb-1 text-lg font-bold text-center md:text-left">
                 {item.trackInfo.shopName}
               </h3>
 
               {/* 주소 */}
-              <p className="mb-1 text-sm text-gray-600">
+              <p className="mb-1 text-sm text-gray-600 text-center md:text-left">
                 {item.trackInfo.roadAddress || item.trackInfo.address}
               </p>
 
               {/* 리뷰 정보 */}
-              <p className="text-sm text-gray-600">
-                방문자 리뷰({item.trackInfo.visitorReviewCount}) 블로그 리뷰(
+              <p className="text-sm text-gray-600 text-center md:text-left">
+                방문자 리뷰({item.trackInfo.visitorReviewCount}) 
+              </p><p className="text-sm text-gray-600 text-center md:text-left">
+                 블로그 리뷰(
                 {item.trackInfo.blogReviewCount})
               </p>
             </div>
 
             {/* 바로가기 버튼 */}
             <button
-              className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-2 text-white transition-colors hover:from-blue-600 hover:to-indigo-700"
+              className="mt-3 md:mt-0 rounded-md bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-2 text-white transition-colors hover:from-blue-600 hover:to-indigo-700 w-full md:w-auto"
               onClick={openNewTabWithUrl}
             >
               바로가기
@@ -75,12 +77,12 @@ export default function SearchResultItem({ item }: SearchResultItemProps) {
           </div>
 
           {/* 카테고리 및 SHOP_ID */}
-          <div className="mt-3 flex items-center">
+          <div className="mt-3 flex items-center justify-center md:justify-start">
             <span className="mr-2 text-sm text-gray-500">
               {item.trackInfo.category} {item.trackInfo.scoreInfo}
             </span>
             <button
-              className="inline-block rounded-smbg-blue-100 px-2 py-1 text-xs text-blue-800"
+              className="inline-block rounded-sm bg-blue-100 px-2 py-1 text-xs text-blue-800"
               onClick={copyToClipboard}
             >
               SHOP_ID

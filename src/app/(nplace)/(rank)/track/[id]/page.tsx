@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import TrackHeader from "./components/TrackHeader";
 import RankCheckModal from "./components/RankCheckModal";
+import TrackDataChart from "./components/TrackDataChart";
 import Image from "next/image";
 import { useNplaceRankTrackWithIdViewModel } from "@/viewModel/nplace/NplaceRankTrackWithIdViewModel";
 import { useParams } from "next/navigation";
@@ -17,7 +18,7 @@ export default function TrackDetailPage() {
   const [showRankCheckModal, setShowRankCheckModal] = useState(false);
   const [selectedTrack, setSelectedTrack] = useState<any>(null);
   const [selectedTrackInfo, setSelectedTrackInfo] = useState<string | null>(null);
-
+  const [viewMode, setViewMode] = useState<"list" | "grid">("list");
 
   const {
     shop,
@@ -71,19 +72,19 @@ export default function TrackDetailPage() {
   if (error) return <div>에러가 발생했습니다: {error.message}</div>;
 
   return (
-    <main className="mx-auto">
+    <main className="container mx-auto">
       <TrackHeader />
 
       <div className="rounded-lg bg-gradient-to-r from-white to-blue-50 p-6 shadow-md">
         <div className="flex flex-col gap-4 lg:flex-row lg:gap-4">
           {/* 상점 이미지 */}
-          <div className="relative lg:w-1/2">
+          <div className="relative lg:w-100">
             <div className="h-48 w-full overflow-hidden rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 p-0.5 shadow-md">
               <Image
                 src={shop?.shopImageUrl || "/img/nplace/shop.png"}
                 alt="상점 이미지"
-                width={1000}
-                height={1000}
+                width={500}
+                height={500}
                 className="h-full w-full rounded-lg bg-cover bg-center"
               />
             </div>
@@ -244,95 +245,114 @@ export default function TrackDetailPage() {
               다운로드
             </button>
             <div className="flex gap-2">
-              <button className="rounded-md bg-gradient-to-r from-gray-50 to-gray-100 px-4 py-2 text-sm font-medium text-gray-700 shadow-xs">
+              <button 
+                className={`rounded-md px-4 py-2 text-sm font-medium shadow-xs ${
+                  viewMode === "list" 
+                    ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-800" 
+                    : "bg-gradient-to-r from-gray-50 to-gray-100 text-gray-700"
+                }`}
+                onClick={() => setViewMode("list")}
+              >
                 리스트 보기
               </button>
-              <button className="rounded-md bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-2 text-sm font-medium text-blue-800 shadow-xs hover:from-blue-100 hover:to-indigo-100">
+              <button 
+                className={`rounded-md px-4 py-2 text-sm font-medium shadow-xs ${
+                  viewMode === "grid" 
+                    ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-800" 
+                    : "bg-gradient-to-r from-gray-50 to-gray-100 text-gray-700"
+                }`}
+                onClick={() => setViewMode("grid")}
+              >
                 그리드 보기
               </button>
             </div>
           </div>
 
-          {/* 리스트 뷰 */}
-          <div className="overflow-hidden rounded-xl">
-            <div className="rounded-lg bg-white">
-              <div className="border-b bg-gradient-to-r from-white to-blue-50 px-3 py-3 sm:px-6">
-                <div className="grid grid-cols-12 gap-2 sm:gap-4">
-                  <div className="col-span-2 text-xs font-bold tracking-wider text-gray-500 uppercase">
-                    순위
-                  </div>
-                  <div className="col-span-2 text-xs font-bold tracking-wider text-gray-500 uppercase">
-                    방문자 리뷰
-                  </div>
-                  <div className="col-span-2 text-xs font-bold tracking-wider text-gray-500 uppercase">
-                    블로그 리뷰
-                  </div>
-                  <div className="col-span-2 text-xs font-bold tracking-wider text-gray-500 uppercase">
-                    저장수
-                  </div>
-                  <div className="col-span-2 text-xs font-bold tracking-wider text-gray-500 uppercase">
-                    평점
-                  </div>
-                  <div className="col-span-1 text-xs font-bold tracking-wider text-gray-500 uppercase">
-                    일자
-                  </div>
-                  <div className="col-span-1 text-xs font-bold tracking-wider text-gray-500 uppercase">
-                    순위비교
+          {/* 그리드 뷰 (차트) */}
+          {viewMode === "grid" ? (
+            <TrackDataChart trackList={trackList} />
+          ) : (
+            /* 리스트 뷰 */
+            <div className="overflow-hidden rounded-xl">
+              <div className="rounded-lg bg-white">
+                <div className="border-b bg-gradient-to-r from-white to-blue-50 px-3 py-3 sm:px-6">
+                  <div className="grid grid-cols-12 gap-2 sm:gap-4">
+                    <div className="col-span-2 text-xs font-bold tracking-wider text-gray-500 uppercase">
+                      순위
+                    </div>
+                    <div className="col-span-2 text-xs font-bold tracking-wider text-gray-500 uppercase">
+                      방문자 리뷰
+                    </div>
+                    <div className="col-span-2 text-xs font-bold tracking-wider text-gray-500 uppercase">
+                      블로그 리뷰
+                    </div>
+                    <div className="col-span-2 text-xs font-bold tracking-wider text-gray-500 uppercase">
+                      저장수
+                    </div>
+                    <div className="col-span-1 text-xs font-bold tracking-wider text-gray-500 uppercase">
+                      평점
+                    </div>
+                    <div className="col-span-2 text-xs font-bold tracking-wider text-gray-500 uppercase">
+                      일자
+                    </div>
+                    <div className="col-span-1 text-xs font-bold tracking-wider text-gray-500 uppercase">
+                      순위비교
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="divide-y divide-gray-100">
-                {trackList.length === 0 ? (
-                  <div className="flex h-32 items-center justify-center rounded-lg bg-gray-50">
-                    <p className="text-gray-500">
-                      추적 중인 키워드가 없습니다.
-                    </p>
-                  </div>
-                ) : (
-                  <div>
-                    {trackList.map((data: TrackData, index: number) => (
-                      <div
-                        key={index}
-                        className="cursor-pointer px-3 py-4 transition-all duration-200 hover:bg-blue-50 sm:px-6"
-                      >
-                        <div className="grid grid-cols-12 items-center gap-2 sm:gap-4">
-                          <div className="col-span-2 text-sm font-bold text-blue-900">
-                            {getRankString(data.rank)}
-                          </div>
-                          <div className="col-span-2 text-sm text-gray-700">
-                            {data.visitorReviewCount}
-                          </div>
-                          <div className="col-span-2 text-sm text-gray-700">
-                            {data.blogReviewCount}
-                          </div>
-                          <div className="col-span-2 text-sm text-gray-700">
-                            {data.saveCount}
-                          </div>
-                          <div className="col-span-2 text-sm text-gray-700">
-                            {data.scoreInfo}
-                          </div>
-                          <div className="col-span-1 text-sm text-gray-700">
-                            {new Date(data.chartDate).toLocaleDateString()}
-                          </div>
-                          <div className="col-span-1">
-                            <button
-                              className="rounded-md bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-1 text-sm font-medium text-blue-800 shadow-xs hover:from-blue-100 hover:to-indigo-100"
-                              onClick={() => {
-                                setSelectedTrack(data);
-                                setShowRankCheckModal(true);
-                              }}
-                            >
-                              비교
-                            </button>
+                <div className="divide-y divide-gray-100">
+                  {trackList.length === 0 ? (
+                    <div className="flex h-32 items-center justify-center rounded-lg bg-gray-50">
+                      <p className="text-gray-500">
+                        추적 중인 키워드가 없습니다.
+                      </p>
+                    </div>
+                  ) : (
+                    <div>
+                      {trackList.map((data: TrackData, index: number) => (
+                        <div
+                          key={index}
+                          className="cursor-pointer px-3 py-4 transition-all duration-200 hover:bg-blue-50 sm:px-6"
+                        >
+                          <div className="grid grid-cols-12 items-center gap-2 sm:gap-4">
+                            <div className="col-span-2 text-sm font-bold text-blue-900">
+                              {getRankString(data.rank)}
+                            </div>
+                            <div className="col-span-2 text-sm text-gray-700">
+                              {data.visitorReviewCount}
+                            </div>
+                            <div className="col-span-2 text-sm text-gray-700">
+                              {data.blogReviewCount}
+                            </div>
+                            <div className="col-span-2 text-sm text-gray-700">
+                              {data.saveCount}
+                            </div>
+                            <div className="col-span-1 text-sm text-gray-700">
+                              {data.scoreInfo}
+                            </div>
+                            <div className="col-span-2 text-sm text-gray-700">
+                              {new Date(data.chartDate).toLocaleDateString()}
+                            </div>
+                            <div className="col-span-1">
+                              <button
+                                className="rounded-md bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-1 text-sm font-medium text-blue-800 shadow-xs hover:from-blue-100 hover:to-indigo-100"
+                                onClick={() => {
+                                  setSelectedTrack(data);
+                                  setShowRankCheckModal(true);
+                                }}
+                              >
+                                비교
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 

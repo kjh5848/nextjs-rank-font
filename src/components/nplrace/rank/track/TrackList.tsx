@@ -33,6 +33,23 @@ export default function TrackList({
     router.push(`/track/${id}`);
   }
 
+  // 체크박스 클릭 시 이벤트 전파 중단을 위한 핸들러
+  const handleCheckboxClick = (e: React.MouseEvent, shopId: string) => {
+    e.stopPropagation(); // 이벤트 전파 중단
+  };
+
+  // "전체 선택" 체크박스의 onChange 핸들러
+  const handleHeaderCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    handleSelectAll(e.target.checked);
+  };
+
+  // 개별 체크박스의 onChange 핸들러
+  const handleItemCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, shopId: string) => {
+    e.stopPropagation();
+    handleShopSelect(shopId);
+  };
+
   console.log('로그인 시도 전 쿠키:', document.cookie);
   console.log('로그인 성공 후 쿠키:', document.cookie);
   console.log('API 요청 시 쿠키:', document.cookie);
@@ -47,7 +64,7 @@ export default function TrackList({
                 <input
                   type="checkbox"
                   checked={isAllSelected}
-                  onChange={(e) => handleSelectAll(e.target.checked)}
+                  onChange={handleHeaderCheckboxChange}
                   className="rounded-smborder-gray-300 h-4 w-4 text-blue-600 focus:ring-blue-500"
                 />
               </div>
@@ -76,11 +93,11 @@ export default function TrackList({
               >
                 
                   <div className="grid grid-cols-12 items-center gap-2 sm:gap-4">
-                    <div className="col-span-1 flex items-center justify-center">
+                    <div className="col-span-1 flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
                       <input
                         type="checkbox"
                         checked={selectedShopList.has(thisShop.id)}
-                        onChange={() => handleShopSelect(thisShop.id)}
+                        onChange={(e) => handleItemCheckboxChange(e, thisShop.id)}
                         className="rounded-smborder-gray-300 h-4 w-4 text-blue-600 focus:ring-blue-500"
                       />
                     </div>
@@ -117,8 +134,11 @@ export default function TrackList({
                       {thisShop.nplaceRankTrackInfoList.length === 0 ? (
                         <div className="text-sm text-gray-500">
                           추적 중인 지역 및 키워드가 없습니다.
-                          <button className="text-sm text-blue-500">
-                          키워드 추가
+                          <button 
+                            className="text-sm text-blue-500"
+                            onClick={(e) => e.stopPropagation()} // 이벤트 전파 중단
+                          >
+                            키워드 추가
                           </button>
                         </div>
                       ) : (

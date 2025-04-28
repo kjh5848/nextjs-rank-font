@@ -62,8 +62,14 @@ export default function RealtimeForm() {
 
   //박스이외 클릭시 닫음
   const recentBoxRef = useRef(null);
+  const locationDropdownRef = useRef(null);
+  
   useClickAway(recentBoxRef, () => {
     setShowRecentSearches(false);
+  });
+  
+  useClickAway(locationDropdownRef, () => {
+    setIsLocationDropdownOpen(false);
   });
 
   // 컴포넌트 마운트 시 최근 검색어와 검색 결과 불러오기
@@ -188,9 +194,7 @@ export default function RealtimeForm() {
                   <span className="rounded-full bg-purple-100 px-2 py-1 text-xs text-purple-800">
                     {item.params.keyword}
                   </span>
-                  <span className="rounded-md bg-blue-500 px-2 py-1 text-xs text-white hover:bg-blue-600">
-                    바로가기
-                  </span>
+                  
                 </div>
 
                 {item.results && item.results.length > 0 ? (
@@ -264,7 +268,10 @@ export default function RealtimeForm() {
               />
             </div>
             {isLocationDropdownOpen && (
-              <div className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg">
+              <div
+                ref={locationDropdownRef}
+                className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg"
+              >
                 {locations.map((loc) => (
                   <div
                     key={loc}

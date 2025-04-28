@@ -125,7 +125,7 @@ export default function JoinForm() {
   };
 
   return (
-    <div className="background:var(--color-rank-light) bg-blueGray-200 relative mb-6 flex w-full min-w-0 flex-col rounded-lg border-0 break-words shadow-lg">
+    <div className="bg-rank-light relative mb-6 flex w-full min-w-0 flex-col rounded-lg border-0 break-words shadow-lg">
       <div className="mb-0 rounded-t px-10 py-10">
         <div className="mb-3 text-center">
           <h6 className="text-blueGray-500 text-sm font-bold">회원가입</h6>
@@ -156,11 +156,11 @@ export default function JoinForm() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="relative mb-3 w-full">
             <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
-              계정 <span className="text-red-500">*</span>
+              아이디 <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
-              placeholder="계정"
+              placeholder="아이디"
               className="placeholder-blueGray-300 text-blueGray-600 w-full rounded-sm border-0 bg-white px-3 py-3 text-sm shadow-sm transition-all duration-150 ease-linear focus:ring-3focus:outline-none"
               {...register("username", {
                 required: "계정을 입력하세요.",
