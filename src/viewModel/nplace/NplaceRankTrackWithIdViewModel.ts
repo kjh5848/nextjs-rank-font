@@ -12,11 +12,11 @@ export const useNplaceRankTrackWithIdViewModel = ({ id, keyword, province }: Npl
   const queryClient = useQueryClient();
 
   // 플레이스 정보 조회
-  const { 
-    data: shopWithIdResult, 
-    error, 
+  const {
+    data: shopWithIdResult,
+    error,
     isLoading,
-    refetch 
+    refetch
   } = useQuery<ApiResponse<{ nplaceRankShop: Shop }>>({
     queryKey: ['nplaceRankShop', id],
     queryFn: async () => {

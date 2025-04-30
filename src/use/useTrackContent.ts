@@ -2,6 +2,8 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNplaceRankTrackViewModel } from "@/src/viewModel/nplace/nplaceRankTrackViewModel";
+import { TrackInfo, TrackData } from "@/model/TrackRepository";
+import TrackRepository from "@/model/TrackRepository";
 
 export function useTrackContent() {
   const {
@@ -18,7 +20,31 @@ export function useTrackContent() {
     isUpdatingGroup,
   } = useNplaceRankTrackViewModel();
 
+  // 선택된 상점의 상세 정보를 관리하는 상태
+  const [selectedShopDetail, setSelectedShopDetail] = useState<{
+    shopId: string;
+    trackInfoList: TrackInfo[];
+    trackDataList: TrackData[];
+  } | null>(null);
 
+  // 선택된 상점의 상세 정보를 가져오는 함수
+  const fetchSelectedShopDetail = async (shopId: string) => {
+    try {
+      const shop = nplaceRankShopList?.find(s => s.id === shopId);
+      if (!shop) return;
+
+      const trackInfoList = shop.nplaceRankTrackInfoList || [];
+      const trackDataList = trackInfoList.flatMap(track => track.nplaceRankTrackList || []);
+      
+      setSelectedShopDetail({
+        shopId,
+        trackInfoList,
+        trackDataList,
+      });
+    } catch (error) {
+      console.error("상점 상세 정보 조회 실패:", error);
+    }
+  };
 
   // Refs
   const trackableModalUrlInputRef = useRef<HTMLInputElement>(null);
@@ -29,10 +55,7 @@ export function useTrackContent() {
   const [selectedShopList, setSelectedShopList] = useState<Set<string>>(new Set());
   const [isTrackableModalShow, setIsTrackableModalShow] = useState(false);
   const [isGroupChangeModalShow, setIsGroupChangeModalShow] = useState(false);
-  const [isExcelUploadModalShow, setIsExcelUploadModalShow] = useState(false);
   const [trackableResult, setTrackableResult] = useState<any>(null);
-  const [nblogSearchInfoResultMap, setNblogSearchInfoResultMap] = useState(new Map());
-  const [selectedTrackable, setSelectedTrackable] = useState<any>(null);
 
   // Filtered shop list
   const filteredShopList = selectedGroup === 'all' 
@@ -43,7 +66,7 @@ export function useTrackContent() {
       return groupNames.some(name => name.trim() === selectedGroup);
     });
 
-    const handleSelectAll = (checked: boolean) => {
+  const handleSelectAll = (checked: boolean) => {
     if (checked) {
       const allShopIds = filteredShopList.map((shop) => shop.id);
       setSelectedShopList(new Set(allShopIds));
@@ -53,13 +76,15 @@ export function useTrackContent() {
   };
 
   // Handlers
-  const handleShopSelect = (shopId: string) => {
+  const handleShopSelect = async (shopId: string) => {
     setSelectedShopList(prev => {
       const newSet = new Set(prev);
       if (newSet.has(shopId)) {
         newSet.delete(shopId);
+        setSelectedShopDetail(null);
       } else {
         newSet.add(shopId);
+        fetchSelectedShopDetail(shopId);
       }
       return newSet;
     });
@@ -150,10 +175,7 @@ export function useTrackContent() {
     isTrackableModalShow,
     setIsTrackableModalShow,
     isGroupChangeModalShow,
-    isExcelUploadModalShow,
     trackableResult,
-    nblogSearchInfoResultMap,
-    selectedTrackable,
     isLoading,
     error,
     groupList,
@@ -162,6 +184,7 @@ export function useTrackContent() {
     groupListError,
     isUpdatingGroup,
     filteredShopList,
+    selectedShopDetail,
 
     // Refs
     trackableModalUrlInputRef,
@@ -177,6 +200,7 @@ export function useTrackContent() {
     handleChangeGroupModalClose,
     onChangeGroupModalSubmit,
     getRankString,
-    handleSelectAll
+    handleSelectAll,
+    fetchSelectedShopDetail,
   };
 } 

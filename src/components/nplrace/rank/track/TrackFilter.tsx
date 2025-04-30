@@ -24,7 +24,7 @@ export default function TrackFilter({
         <select
           value={selectedGroup}
           onChange={(e) => setSelectedGroup(e.target.value)}
-          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-700 focus:outline-hiddenfocus:ring-2 focus:ring-blue-500 sm:w-36"
+          className="focus:outline-hiddenfocus:ring-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-700 focus:ring-blue-500 sm:w-36"
         >
           <option value="all">전체</option>
           <option value="기본">기본</option>
@@ -48,6 +48,7 @@ export default function TrackFilter({
         >
           추적가능 플레이스 검색
         </button>
+      
       </div>
     </div>
   );

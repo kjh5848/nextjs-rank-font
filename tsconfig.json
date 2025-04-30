@@ -33,6 +33,6 @@
 
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "postcss.config.ts","tailwind.config.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "postcss.config.ts","tailwind.config.ts", "src/components/nplrace/rank/track/id/TrackGridView"],
   "exclude": ["node_modules"]
 }
