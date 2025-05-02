@@ -4,11 +4,12 @@ import { useIsMobile } from "@/src/use/useMobile";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
-import { format, isWithinInterval, parseISO, subDays } from "date-fns";
+import { isWithinInterval, parseISO, subDays } from "date-fns";
 
 interface TrackGridViewProps {
   trackList: TrackData[];
   gridColumns?: number; // 4, 5, 6, ..., 12
+  hideControls?: boolean; // 컨트롤 숨김 옵션 추가
 }
 
 // 변화량에 따른 아이콘과 색상 결정 함수
@@ -65,22 +66,14 @@ function getSaveCountChange(current: string | number | null, prev: string | numb
   return { text: "-", color: "text-gray-500", icon: "" };
 }
 
-function processSaveCount(value: string | number | null | undefined) {
-  if (!value) return null;
-  return typeof value === "string" ? value.replace(/\+/g, "") : value;
-}
 
-export default function TrackGridView({ trackList, gridColumns: initialGridColumns = 4 }: TrackGridViewProps) {
+export default function TrackGridView(
+  { trackList, gridColumns: initialGridColumns = 4, hideControls = false }: TrackGridViewProps) {
   const [gridColumns, setGridColumns] = useState(initialGridColumns);
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
   const [startDate, endDate] = dateRange;
   const isMobile = useIsMobile();
 
-  // 날짜 목록 추출 (중복 제거)
-  const availableDates = useMemo(() => {
-    const dates = trackList.map(track => track.chartDate);
-    return [...new Set(dates)].sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
-  }, [trackList]);
 
   // 날짜 범위에 따른 필터링
   const filteredTrackList = useMemo(() => {
@@ -155,33 +148,38 @@ export default function TrackGridView({ trackList, gridColumns: initialGridColum
   if (isMobile) {
     return (
       <div className="space-y-4">
-        <div className="flex flex-col space-y-4">
-          <DatePickerComponent />
-          
-          <div className="flex items-center justify-end space-x-2">
-            <label htmlFor="gridColumns" className="text-sm font-medium text-gray-700">
-              열 수:
-            </label>
-            <select
-              id="gridColumns"
-              value={gridColumns}
-              onChange={(e) => setGridColumns(Number(e.target.value))}
-              className="rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-blue-500 focus:outline-none"
-            >
-              {[2, 3].map((num) => (
-                <option key={num} value={num}>
-                  {num}열
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+        {!hideControls && (
+          <div className="flex flex-col space-y-4">
+            <DatePickerComponent />
 
-        <div className={`grid gap-2 ${
-          gridColumns === 2 
-            ? "grid-cols-2" 
-            : "grid-cols-3"
-        }`}>
+            <div className="flex items-center justify-end space-x-2">
+              <label
+                htmlFor="gridColumns"
+                className="text-sm font-medium text-gray-700"
+              >
+                열 수:
+              </label>
+              <select
+                id="gridColumns"
+                value={gridColumns}
+                onChange={(e) => setGridColumns(Number(e.target.value))}
+                className="rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-blue-500 focus:outline-none"
+              >
+                {[2, 3].map((num) => (
+                  <option key={num} value={num}>
+                    {num}열
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        )}
+
+        <div
+          className={`grid gap-2 ${
+            gridColumns === 2 ? "grid-cols-2" : "grid-cols-3"
+          }`}
+        >
           {filteredTrackList.map((track, index) => {
             const prevTrack = trackList[index + 1] || null;
             const rankChange = getChangeInfo(track.rank, prevTrack?.rank);
@@ -264,44 +262,65 @@ export default function TrackGridView({ trackList, gridColumns: initialGridColum
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col space-y-4 sm:flex-row sm:items-start sm:justify-between sm:space-y-0">
-        <DatePickerComponent />
+      {!hideControls && (
+        <div className="flex flex-col space-y-4 sm:flex-row sm:items-start sm:justify-between sm:space-y-0">
+          <DatePickerComponent />
 
-        <div className="flex items-center space-x-2">
-          <label htmlFor="gridColumns" className="text-sm font-medium text-gray-700">
-            열 수:
-          </label>
-          <select
-            id="gridColumns"
-            value={gridColumns}
-            onChange={(e) => setGridColumns(Number(e.target.value))}
-            className="rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-blue-500 focus:outline-none"
-          >
-            {[4, 5, 6].map((num) => (
-              <option key={num} value={num} className={num === 6 ? 'xl:block hidden' : ''}>
-                {num}열
-              </option>
-            ))}
-          </select>
+          <div className="flex items-center space-x-2">
+            <label
+              htmlFor="gridColumns"
+              className="text-sm font-medium text-gray-700"
+            >
+              열 수:
+            </label>
+            <select
+              id="gridColumns"
+              value={gridColumns}
+              onChange={(e) => setGridColumns(Number(e.target.value))}
+              className="rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-blue-500 focus:outline-none"
+            >
+              {[4, 5, 6].map((num) => (
+                <option
+                  key={num}
+                  value={num}
+                  className={num === 6 ? "hidden xl:block" : ""}
+                >
+                  {num}열
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-      </div>
+      )}
 
       <div
         className={`grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 ${
           gridColumns === 4
             ? "lg:grid-cols-4 xl:grid-cols-4"
             : gridColumns === 5
-            ? "lg:grid-cols-5 lg:gap-1 xl:grid-cols-5 xl:gap-1"
-            : "lg:grid-cols-5 lg:gap-1 xl:grid-cols-6 xl:gap-1"
+              ? "lg:grid-cols-5 lg:gap-1 xl:grid-cols-5 xl:gap-1"
+              : "lg:grid-cols-5 lg:gap-1 xl:grid-cols-6 xl:gap-1"
         }`}
       >
         {filteredTrackList.map((track, index) => {
           const prevTrack = trackList[index + 1] || null;
           const rankChange = getRankChangeStyle(track.rank, prevTrack?.rank);
-          const visitorChange = getChangeStyle(track.visitorReviewCount, prevTrack?.visitorReviewCount);
-          const blogChange = getChangeStyle(track.blogReviewCount, prevTrack?.blogReviewCount);
-          const scoreChange = getChangeStyle(track.scoreInfo, prevTrack?.scoreInfo);
-          const saveCountChange = getSaveCountChange(track.saveCount, prevTrack?.saveCount);
+          const visitorChange = getChangeStyle(
+            track.visitorReviewCount,
+            prevTrack?.visitorReviewCount,
+          );
+          const blogChange = getChangeStyle(
+            track.blogReviewCount,
+            prevTrack?.blogReviewCount,
+          );
+          const scoreChange = getChangeStyle(
+            track.scoreInfo,
+            prevTrack?.scoreInfo,
+          );
+          const saveCountChange = getSaveCountChange(
+            track.saveCount,
+            prevTrack?.saveCount,
+          );
           const dateInfo = formatDate(track.chartDate);
 
           return (

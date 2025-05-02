@@ -25,7 +25,7 @@ interface ChartTooltipContentProps {
   indicator?: "dot" | "line";
 }
 
-// 툴크 컴포넌트
+// 툴팁 컴포넌트
 function ChartTooltipContent({
   active,
   payload,
@@ -103,19 +103,24 @@ interface DownloadOptions {
   visitorReviewChart: boolean;
   blogReviewChart: boolean;
   saveCountChart: boolean;
+  hideGridControls: boolean; // 추가: 그리드 컨트롤 숨김 옵션
 }
 
 export default function TrackReportView({ trackList, shopName, keyword }: TrackDataChartProps) {
   const [timeRange, setTimeRange] = React.useState<"7d" | "30d" | "all">("all");
-  const [downloadOptions, setDownloadOptions] = React.useState<DownloadOptions>({
-    summary: true,
-    grid: true,
-    rankChart: true,
-    visitorReviewChart: true,
-    blogReviewChart: true,
-    saveCountChart: true,
-  });
+  const [downloadOptions, setDownloadOptions] = React.useState<DownloadOptions>(
+    {
+      summary: true,
+      grid: true,
+      rankChart: true,
+      visitorReviewChart: true,
+      blogReviewChart: true,
+      saveCountChart: true,
+      hideGridControls: true, // 기본값으로 그리드 컨트롤 숨김
+    },
+  );
   const [isDownloadModalOpen, setIsDownloadModalOpen] = React.useState(false);
+  const [isDownloading, setIsDownloading] = React.useState(false);
   const reportRef = React.useRef<HTMLDivElement>(null);
 
   // 차트 데이터 필터링: 최신 30일, 7일 또는 모든 데이터
@@ -175,75 +180,117 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
     };
   });
 
-
   // 파일명 생성 함수
   const getFileName = () => {
     const today = new Date();
     const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
     return `${shopName}_${keyword}_${year}${month}${day}`;
   };
-
 
   const handleDownloadImage = async () => {
     if (!reportRef.current) return;
 
-    const canvas = await html2canvas(reportRef.current, {
-      scale: 2,
-      useCORS: true,
-      logging: false,
-      backgroundColor: "#ffffff",
-      onclone: (clonedDoc) => {
-        // 선택되지 않은 섹션 숨기기
-        if (!downloadOptions.summary) {
-          const summarySection = clonedDoc.querySelector('.summary-section') as HTMLElement;
-          if (summarySection) summarySection.style.display = 'none';
-        }
-        if (!downloadOptions.grid) {
-          const gridSection = clonedDoc.querySelector('.grid-section') as HTMLElement;
-          if (gridSection) gridSection.style.display = 'none';
-        }
-        if (!downloadOptions.rankChart) {
-          const rankChart = clonedDoc.querySelector('.rank-chart') as HTMLElement;
-          if (rankChart) rankChart.style.display = 'none';
-        }
-        if (!downloadOptions.visitorReviewChart) {
-          const visitorChart = clonedDoc.querySelector('.visitor-review-chart') as HTMLElement;
-          if (visitorChart) visitorChart.style.display = 'none';
-        }
-        if (!downloadOptions.blogReviewChart) {
-          const blogChart = clonedDoc.querySelector('.blog-review-chart') as HTMLElement;
-          if (blogChart) blogChart.style.display = 'none';
-        }
-        if (!downloadOptions.saveCountChart) {
-          const saveChart = clonedDoc.querySelector('.save-count-chart') as HTMLElement;
-          if (saveChart) saveChart.style.display = 'none';
-        }
+    setIsDownloading(true); // 다운로드 상태를 true로 설정
 
-        // 색상 변환을 위한 스타일 추가
-        const style = clonedDoc.createElement('style');
-        style.textContent = `
-          * {
-            color: rgb(0, 0, 0) !important;
-            background-color: rgb(255, 255, 255) !important;
-            border-color: rgb(0, 0, 0) !important;
+    try {
+      // 잠시 대기하여 React가 hideGridControls 속성을 TrackGridView에 전달할 시간을 줌
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      const canvas = await html2canvas(reportRef.current, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: "#ffffff",
+        onclone: (clonedDoc) => {
+          // 다운로드 및 기간 선택 버튼 제거
+          const buttons = clonedDoc.querySelectorAll(
+            ".flex.justify-end.space-x-2",
+          );
+          buttons.forEach((button) => {
+            (button as HTMLElement).style.display = "none";
+          });
+
+          // 그리드 컨트롤 요소 숨기기
+          const gridControls = clonedDoc.querySelectorAll(
+            ".grid-controls, .filter-section",
+          );
+          gridControls.forEach((control) => {
+            (control as HTMLElement).style.display = "none";
+          });
+
+          // 선택되지 않은 섹션 숨기기
+          if (!downloadOptions.summary) {
+            const summarySection = clonedDoc.querySelector(".summary-section");
+            if (summarySection) (summarySection as HTMLElement).style.display = "none";
           }
-          .bg-blue-50 { background-color: rgb(239, 246, 255) !important; }
-          .text-blue-700 { color: rgb(29, 78, 216) !important; }
-          .bg-gray-50 { background-color: rgb(249, 250, 251) !important; }
-          .text-gray-700 { color: rgb(55, 65, 81) !important; }
-          .border-gray-200 { border-color: rgb(229, 231, 235) !important; }
-        `;
-        clonedDoc.head.appendChild(style);
-      }
-    });
+          if (!downloadOptions.grid) {
+            const gridSection = clonedDoc.querySelector(".grid-section");
+            if (gridSection) (gridSection as HTMLElement).style.display = "none";
+          }
+          if (!downloadOptions.rankChart) {
+            const rankChart = clonedDoc.querySelector(".rank-chart");
+            if (rankChart) (rankChart as HTMLElement).style.display = "none";
+          }
+          if (!downloadOptions.visitorReviewChart) {
+            const visitorChart = clonedDoc.querySelector(".visitor-review-chart");
+            if (visitorChart) (visitorChart as HTMLElement).style.display = "none";
+          }
+          if (!downloadOptions.blogReviewChart) {
+            const blogChart = clonedDoc.querySelector(".blog-review-chart");
+            if (blogChart) (blogChart as HTMLElement).style.display = "none";
+          }
+          if (!downloadOptions.saveCountChart) {
+            const saveChart = clonedDoc.querySelector(".save-count-chart");
+            if (saveChart) (saveChart as HTMLElement).style.display = "none";
+          }
 
-    const link = document.createElement("a");
-    link.download = `${getFileName()}.jpg`;
-    link.href = canvas.toDataURL("image/jpeg", 1.0);
-    link.click();
-    setIsDownloadModalOpen(false);
+          // TrackGridView 내부의 필터 및 열 선택기 숨기기
+          const columnSelector = clonedDoc.querySelector("#gridColumns");
+          const columnSelectorParent = columnSelector?.closest(
+            ".flex.items-center.space-x-2",
+          );
+          if (columnSelectorParent) (columnSelectorParent as HTMLElement).style.display = "none";
+
+          const datePickerComponents = clonedDoc.querySelectorAll(
+            ".flex.flex-col.space-y-3, .flex.flex-col.space-y-4.sm\\:flex-row.sm\\:items-start.sm\\:justify-between.sm\\:space-y-0",
+          );
+          datePickerComponents.forEach((comp) => {
+            (comp as HTMLElement).style.display = "none";
+          });
+
+          // 색상 변환을 위한 스타일 추가
+          const style = clonedDoc.createElement("style");
+          style.textContent = `
+            * {
+              color: rgb(0, 0, 0) !important;
+              background-color: rgb(255, 255, 255) !important;
+              border-color: rgb(0, 0, 0) !important;
+            }
+            .bg-blue-50 { background-color: rgb(239, 246, 255) !important; }
+            .text-blue-700 { color: rgb(29, 78, 216) !important; }
+            .bg-gray-50 { background-color: rgb(249, 250, 251) !important; }
+            .text-gray-700 { color: rgb(55, 65, 81) !important; }
+            .border-gray-200 { border-color: rgb(229, 231, 235) !important; }
+            /* oklch 색상 대체 */
+            .text-\[\#22c55e\] { color: rgb(34, 197, 94) !important; }
+            .text-\[\#ef4444\] { color: rgb(239, 68, 68) !important; }
+          `;
+          clonedDoc.head.appendChild(style);
+        },
+      });
+
+      const link = document.createElement("a");
+      link.download = `${getFileName()}.jpg`;
+      link.href = canvas.toDataURL("image/jpeg", 1.0);
+      link.click();
+    } catch (error) {
+      console.error("이미지 생성 중 오류 발생:", error);
+    } finally {
+      setIsDownloading(false); // 다운로드 상태를 false로 복원
+      setIsDownloadModalOpen(false);
+    }
   };
 
   // 데이터 분석 함수
@@ -265,30 +312,43 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
 
     const first = data[0];
     const last = data[data.length - 1];
-    const ranks = data.map(d => d.rank || 0).filter(r => r > 0);
+    const ranks = data.map((d) => d.rank || 0).filter((r) => r > 0);
 
     const rankChange = (last.rank || 0) - (first.rank || 0);
 
     // 성장률 계산 함수
-    const calculateGrowth = (current: number | null | undefined, previous: number | null | undefined): number => {
+    const calculateGrowth = (
+      current: number | null | undefined,
+      previous: number | null | undefined,
+    ): number => {
       const curr = Number(current) || 0;
       const prev = Number(previous) || 0;
       if (prev === 0) return curr > 0 ? 100 : 0;
       return ((curr - prev) / prev) * 100;
     };
 
-    const visitorReviewGrowth = calculateGrowth(last.visitorReviewCount, first.visitorReviewCount);
-    const blogReviewGrowth = calculateGrowth(last.blogReviewCount, first.blogReviewCount);
+    const visitorReviewGrowth = calculateGrowth(
+      last.visitorReviewCount,
+      first.visitorReviewCount,
+    );
+    const blogReviewGrowth = calculateGrowth(
+      last.blogReviewCount,
+      first.blogReviewCount,
+    );
     const saveCountGrowth = calculateGrowth(last.saveCount, first.saveCount);
 
-    const averageRank = ranks.length > 0 ? ranks.reduce((a, b) => a + b, 0) / ranks.length : 0;
+    const averageRank =
+      ranks.length > 0 ? ranks.reduce((a, b) => a + b, 0) / ranks.length : 0;
     const bestRank = ranks.length > 0 ? Math.min(...ranks) : 0;
     const worstRank = ranks.length > 0 ? Math.max(...ranks) : 0;
 
-    const totalReviews = (last.visitorReviewCount || 0) + (last.blogReviewCount || 0);
+    const totalReviews =
+      (last.visitorReviewCount || 0) + (last.blogReviewCount || 0);
     const reviewGrowth = visitorReviewGrowth + blogReviewGrowth;
-    const reviewTrend = reviewGrowth > 5 ? "증가" : reviewGrowth < -5 ? "감소" : "유지";
-    const rankTrend = rankChange < -2 ? "상승" : rankChange > 2 ? "하락" : "유지";
+    const reviewTrend =
+      reviewGrowth > 5 ? "증가" : reviewGrowth < -5 ? "감소" : "유지";
+    const rankTrend =
+      rankChange < -2 ? "상승" : rankChange > 2 ? "하락" : "유지";
 
     return {
       rankChange,
@@ -306,11 +366,10 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
 
   const analysis = analyzeData(filteredData);
 
-
   return (
     <div className="space-y-6">
       {/* 다운로드 버튼 */}
-      <div className="flex justify-end space-x-2">
+      <div className="download-buttons flex justify-end space-x-2">
         <div className="relative">
           <button
             onClick={() => setIsDownloadModalOpen(!isDownloadModalOpen)}
@@ -321,15 +380,25 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
           </button>
 
           {isDownloadModalOpen && (
-            <div className="absolute right-0 mt-2 w-full min-w-[280px] max-w-[425px] rounded-lg bg-white p-4 shadow-lg sm:p-6">
+            <div className="absolute right-0 mt-2 w-full max-w-[425px] min-w-[280px] rounded-lg bg-white p-4 shadow-lg sm:p-6">
               <div className="flex items-center justify-between">
-                <h3 className="text-base font-semibold sm:text-lg">다운로드 옵션 선택</h3>
+                <h3 className="text-base font-semibold sm:text-lg">
+                  다운로드 옵션 선택
+                </h3>
                 <button
                   onClick={() => setIsDownloadModalOpen(false)}
                   className="text-gray-400 hover:text-gray-500"
                 >
-                  <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                  <svg
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                 </button>
               </div>
@@ -368,6 +437,7 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                     상세 데이터 그리드
                   </label>
                 </div>
+                
                 <div className="flex items-center space-x-3">
                   <input
                     type="checkbox"
@@ -398,7 +468,10 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                     }
                     className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <label htmlFor="visitorReviewChart" className="text-sm sm:text-base">
+                  <label
+                    htmlFor="visitorReviewChart"
+                    className="text-sm sm:text-base"
+                  >
                     방문자 리뷰 추이 차트
                   </label>
                 </div>
@@ -415,7 +488,10 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                     }
                     className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <label htmlFor="blogReviewChart" className="text-sm sm:text-base">
+                  <label
+                    htmlFor="blogReviewChart"
+                    className="text-sm sm:text-base"
+                  >
                     블로그 리뷰 추이 차트
                   </label>
                 </div>
@@ -432,19 +508,22 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                     }
                     className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <label htmlFor="saveCountChart" className="text-sm sm:text-base">
+                  <label
+                    htmlFor="saveCountChart"
+                    className="text-sm sm:text-base"
+                  >
                     저장 수 추이 차트
                   </label>
                 </div>
               </div>
               <div className="mt-6 flex justify-end space-x-2">
-                
                 <button
                   onClick={handleDownloadImage}
-                  className="flex items-center rounded-lg bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100 sm:text-base"
+                  disabled={isDownloading}
+                  className="flex items-center rounded-lg bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100 disabled:opacity-50 sm:text-base"
                 >
                   <Download className="mr-2 h-4 w-4" />
-                  이미지 다운로드
+                  {isDownloading ? "다운로드 중..." : "이미지 다운로드"}
                 </button>
               </div>
             </div>
@@ -453,7 +532,7 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
       </div>
 
       {/* 기간 선택 버튼 */}
-      <div className="flex justify-end space-x-2">
+      <div className="timerange-buttons flex justify-end space-x-2">
         <button
           onClick={() => setTimeRange("7d")}
           className={`rounded-lg px-4 py-2 text-sm font-medium ${
@@ -489,7 +568,7 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
       {/* 리포트 내용 */}
       <div ref={reportRef} className="space-y-8 bg-white">
         {/* 상점 정보 */}
-        <div className="mb-6 border-b border-gray-200 pb-6">
+        <div className="summary-section mb-6 border-b border-gray-200 pb-6">
           <h2 className="text-xl font-bold text-gray-900">{shopName}</h2>
           <p className="mt-1 text-sm text-gray-600">키워드: {keyword}</p>
           <p className="mt-1 text-sm text-gray-600">
@@ -498,9 +577,11 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
         </div>
 
         {/* 마케팅 인사이트 */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="summary-section grid grid-cols-1 gap-6 md:grid-cols-2">
           <div className="rounded-lg border border-gray-200 bg-white p-6">
-            <h3 className="mb-4 text-lg font-semibold text-gray-900">주요 지표 요약</h3>
+            <h3 className="mb-4 text-lg font-semibold text-gray-900">
+              주요 지표 요약
+            </h3>
             <div className="space-y-4">
               <div className="flex justify-between">
                 <span className="text-gray-600">평균 순위</span>
@@ -510,17 +591,23 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">최고 순위</span>
-                <span className="font-medium text-gray-900">{analysis.bestRank}위</span>
+                <span className="font-medium text-gray-900">
+                  {analysis.bestRank}위
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">최저 순위</span>
-                <span className="font-medium text-gray-900">{analysis.worstRank}위</span>
+                <span className="font-medium text-gray-900">
+                  {analysis.worstRank}위
+                </span>
               </div>
             </div>
           </div>
 
           <div className="rounded-lg border border-gray-200 bg-white p-6">
-            <h3 className="mb-4 text-lg font-semibold text-gray-900">성장률 분석</h3>
+            <h3 className="mb-4 text-lg font-semibold text-gray-900">
+              성장률 분석
+            </h3>
             <div className="space-y-4">
               <div className="flex justify-between">
                 <span className="text-gray-600">순위 변동</span>
@@ -529,8 +616,8 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                     analysis.rankChange < 0
                       ? "text-[#22c55e]"
                       : analysis.rankChange > 0
-                      ? "text-[#ef4444]"
-                      : "text-gray-500"
+                        ? "text-[#ef4444]"
+                        : "text-gray-500"
                   }`}
                 >
                   {analysis.rankChange > 0 ? "+" : ""}
@@ -577,10 +664,13 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
           </div>
         </div>
 
-        {/* 그리드 뷰 섹션 */}
-        <div className="mt-8">
+        {/* 그리드 뷰 섹션 - hideGridControls 옵션을 TrackGridView에 전달 */}
+        <div className="grid-section mt-8">
           <h2 className="mb-4 text-lg font-semibold">상세 데이터</h2>
-          <TrackGridView trackList={filteredData} />
+          <TrackGridView
+            trackList={filteredData}
+            hideControls={isDownloading && downloadOptions.hideGridControls} // 다운로드 중일 때 그리드 컨트롤 숨김
+          />
         </div>
         {/* 차트 섹션 */}
         <div className="grid grid-cols-1 gap-6">
@@ -625,8 +715,8 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                               const rank = 100 - value;
                               return `${rank}위`;
                             },
-                            color: "#25E4FF"
-                          }
+                            color: "#25E4FF",
+                          },
                         ]}
                       />
                     }
@@ -638,7 +728,6 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                     stroke="#25E4FF"
                     strokeWidth={2}
                     dot={{ r: 4, fill: "#25E4FF", strokeWidth: 2 }}
-                    activeDot={{ r: 6 }}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -817,4 +906,4 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
       </div>
     </div>
   );
-} 
+}
