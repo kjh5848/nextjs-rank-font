@@ -607,12 +607,22 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                       <ChartTooltipContent
                         labelFormatter={(value) => value}
                         indicator="line"
+                        payload={[
+                          {
+                            name: "순위",
+                            value: (value: any) => {
+                              const rank = 100 - value;
+                              return `${rank}위`;
+                            },
+                            color: "#25E4FF"
+                          }
+                        ]}
                       />
                     }
                   />
                   <Line
                     type="monotone"
-                    dataKey="invertedRank"
+                    dataKey="rank"
                     name="순위"
                     stroke="#25E4FF"
                     strokeWidth={2}
