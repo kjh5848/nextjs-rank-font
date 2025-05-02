@@ -321,10 +321,20 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
           </button>
 
           {isDownloadModalOpen && (
-            <div className="absolute right-0 mt-2 w-[425px] rounded-lg bg-white p-6 shadow-lg">
-              <h3 className="text-lg font-semibold">다운로드 옵션 선택</h3>
-              <div className="mt-4 space-y-4">
-                <div className="flex items-center space-x-2">
+            <div className="absolute right-0 mt-2 w-full min-w-[280px] max-w-[425px] rounded-lg bg-white p-4 shadow-lg sm:p-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-base font-semibold sm:text-lg">다운로드 옵션 선택</h3>
+                <button
+                  onClick={() => setIsDownloadModalOpen(false)}
+                  className="text-gray-400 hover:text-gray-500"
+                >
+                  <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              </div>
+              <div className="mt-4 space-y-3 sm:space-y-4">
+                <div className="flex items-center space-x-3">
                   <input
                     type="checkbox"
                     id="summary"
@@ -337,11 +347,11 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                     }
                     className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <label htmlFor="summary" className="text-sm">
+                  <label htmlFor="summary" className="text-sm sm:text-base">
                     요약 정보
                   </label>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-3">
                   <input
                     type="checkbox"
                     id="grid"
@@ -354,11 +364,11 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                     }
                     className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <label htmlFor="grid" className="text-sm">
+                  <label htmlFor="grid" className="text-sm sm:text-base">
                     상세 데이터 그리드
                   </label>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-3">
                   <input
                     type="checkbox"
                     id="rankChart"
@@ -371,11 +381,11 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                     }
                     className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <label htmlFor="rankChart" className="text-sm">
+                  <label htmlFor="rankChart" className="text-sm sm:text-base">
                     순위 추이 차트
                   </label>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-3">
                   <input
                     type="checkbox"
                     id="visitorReviewChart"
@@ -388,11 +398,11 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                     }
                     className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <label htmlFor="visitorReviewChart" className="text-sm">
+                  <label htmlFor="visitorReviewChart" className="text-sm sm:text-base">
                     방문자 리뷰 추이 차트
                   </label>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-3">
                   <input
                     type="checkbox"
                     id="blogReviewChart"
@@ -405,11 +415,11 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                     }
                     className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <label htmlFor="blogReviewChart" className="text-sm">
+                  <label htmlFor="blogReviewChart" className="text-sm sm:text-base">
                     블로그 리뷰 추이 차트
                   </label>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-3">
                   <input
                     type="checkbox"
                     id="saveCountChart"
@@ -422,15 +432,16 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                     }
                     className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <label htmlFor="saveCountChart" className="text-sm">
+                  <label htmlFor="saveCountChart" className="text-sm sm:text-base">
                     저장 수 추이 차트
                   </label>
                 </div>
               </div>
-              <div className="mt-4 flex justify-end space-x-2">
+              <div className="mt-6 flex justify-end space-x-2">
+                
                 <button
                   onClick={handleDownloadImage}
-                  className="flex items-center rounded-lg bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100"
+                  className="flex items-center rounded-lg bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100 sm:text-base"
                 >
                   <Download className="mr-2 h-4 w-4" />
                   이미지 다운로드
