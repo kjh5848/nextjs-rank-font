@@ -1,5 +1,5 @@
 import { CheckSquare, Square } from "lucide-react";
-import AddKeywordButton from "./TrackAddKeywordButton";
+import AddKeyword from "./TrackAddKeyword";
 
 interface KeywordListProps {
   keywords: { [key: string]: any };
@@ -7,7 +7,7 @@ interface KeywordListProps {
   onSelectKeyword: (key: string) => void;
   onSelectAll: () => void;
   getRankString: (rank: number | null) => string;
-  onAddKeyword: () => void;
+  onAddKeyword: (keyword: string, province: string) => void;
 }
 
 export default function KeywordList({
@@ -28,7 +28,7 @@ export default function KeywordList({
           <h3 className="text-base font-semibold text-gray-900 sm:text-lg lg:text-xl word-break-keep">
             키워드 목록
           </h3>
-          <AddKeywordButton onClick={onAddKeyword} />
+          <AddKeyword onAdd={onAddKeyword} />
         </div>
         
         <div className="flex items-center space-x-2 lg:self-end">
