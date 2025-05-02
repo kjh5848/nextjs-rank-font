@@ -1,14 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { 
-  Area, 
-  AreaChart, 
-  Line, 
+import {
+  Area,
+  AreaChart,
+  Line,
   LineChart,
-  CartesianGrid, 
-  XAxis, 
-  YAxis, 
+  CartesianGrid,
+  XAxis,
+  YAxis,
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
@@ -36,12 +36,12 @@ function ChartTooltipContent({
   if (!active || !payload?.length) return null;
 
   return (
-    <div className="rounded-lg border bg-background p-2 shadow-sm">
+    <div className="bg-background rounded-lg border p-2 shadow-sm">
       <div className="grid grid-cols-[auto_1fr] gap-2">
-        <div className="font-medium text-muted-foreground">
+        <div className="text-muted-foreground font-medium">
           {labelFormatter ? labelFormatter(label) : label}
         </div>
-        <div className="col-span-2 my-1 h-px bg-muted" />
+        <div className="bg-muted col-span-2 my-1 h-px" />
         {payload.map((item: any, index: number) => (
           <React.Fragment key={index}>
             <div
@@ -76,7 +76,6 @@ function ChartTooltipContent({
   );
 }
 
-
 interface TrackDataChartProps {
   trackList: TrackData[];
   shopName: string;
@@ -106,7 +105,11 @@ interface DownloadOptions {
   hideGridControls: boolean; // 추가: 그리드 컨트롤 숨김 옵션
 }
 
-export default function TrackReportView({ trackList, shopName, keyword }: TrackDataChartProps) {
+export default function TrackReportView({
+  trackList,
+  shopName,
+  keyword,
+}: TrackDataChartProps) {
   const [timeRange, setTimeRange] = React.useState<"7d" | "30d" | "all">("all");
   const [downloadOptions, setDownloadOptions] = React.useState<DownloadOptions>(
     {
@@ -223,19 +226,24 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
           // 선택되지 않은 섹션 숨기기
           if (!downloadOptions.summary) {
             const summarySection = clonedDoc.querySelector(".summary-section");
-            if (summarySection) (summarySection as HTMLElement).style.display = "none";
+            if (summarySection)
+              (summarySection as HTMLElement).style.display = "none";
           }
           if (!downloadOptions.grid) {
             const gridSection = clonedDoc.querySelector(".grid-section");
-            if (gridSection) (gridSection as HTMLElement).style.display = "none";
+            if (gridSection)
+              (gridSection as HTMLElement).style.display = "none";
           }
           if (!downloadOptions.rankChart) {
             const rankChart = clonedDoc.querySelector(".rank-chart");
             if (rankChart) (rankChart as HTMLElement).style.display = "none";
           }
           if (!downloadOptions.visitorReviewChart) {
-            const visitorChart = clonedDoc.querySelector(".visitor-review-chart");
-            if (visitorChart) (visitorChart as HTMLElement).style.display = "none";
+            const visitorChart = clonedDoc.querySelector(
+              ".visitor-review-chart",
+            );
+            if (visitorChart)
+              (visitorChart as HTMLElement).style.display = "none";
           }
           if (!downloadOptions.blogReviewChart) {
             const blogChart = clonedDoc.querySelector(".blog-review-chart");
@@ -251,7 +259,8 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
           const columnSelectorParent = columnSelector?.closest(
             ".flex.items-center.space-x-2",
           );
-          if (columnSelectorParent) (columnSelectorParent as HTMLElement).style.display = "none";
+          if (columnSelectorParent)
+            (columnSelectorParent as HTMLElement).style.display = "none";
 
           const datePickerComponents = clonedDoc.querySelectorAll(
             ".flex.flex-col.space-y-3, .flex.flex-col.space-y-4.sm\\:flex-row.sm\\:items-start.sm\\:justify-between.sm\\:space-y-0",
@@ -261,22 +270,34 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
           });
 
           // 색상 변환을 위한 스타일 추가
-          const style = clonedDoc.createElement("style");
-          style.textContent = `
-            * {
-              color: rgb(0, 0, 0) !important;
-              background-color: rgb(255, 255, 255) !important;
-              border-color: rgb(0, 0, 0) !important;
-            }
-            .bg-blue-50 { background-color: rgb(239, 246, 255) !important; }
-            .text-blue-700 { color: rgb(29, 78, 216) !important; }
-            .bg-gray-50 { background-color: rgb(249, 250, 251) !important; }
-            .text-gray-700 { color: rgb(55, 65, 81) !important; }
-            .border-gray-200 { border-color: rgb(229, 231, 235) !important; }
-            /* oklch 색상 대체 */
-            .text-\[\#22c55e\] { color: rgb(34, 197, 94) !important; }
-            .text-\[\#ef4444\] { color: rgb(239, 68, 68) !important; }
-          `;
+         // 색상 변환 스타일 추가 부분 수정
+const style = clonedDoc.createElement("style");
+style.textContent = `
+  * {
+    background-color: rgb(255, 255, 255) !important;
+    border-color: rgb(0, 0, 0) !important;
+    color: rgb(0, 0, 0) !important; /* 전역 초기화 유지 */
+  }
+  
+  /* Tailwind 색상 클래스 재정의 */
+  .text-green-500 { color: rgb(34, 197, 94) !important; }
+  .text-red-500 { color: rgb(239, 68, 68) !important; }
+  
+  /* 화살표 색상도 추가 */
+  .text-green-500 svg { color: rgb(34, 197, 94) !important; }
+  .text-red-500 svg { color: rgb(239, 68, 68) !important; }
+  
+  /* oklch 색상 대체 (이미 있던 부분) */
+  .text-\\[\\#22c55e\\] { color: rgb(34, 197, 94) !important; }
+  .text-\\[\\#ef4444\\] { color: rgb(239, 68, 68) !important; }
+  
+  /* 기타 필요한 클래스 재정의 */
+  .bg-blue-50 { background-color: rgb(239, 246, 255) !important; }
+  .text-blue-700 { color: rgb(29, 78, 216) !important; }
+  .bg-gray-50 { background-color: rgb(249, 250, 251) !important; }
+  .text-gray-700 { color: rgb(55, 65, 81) !important; }
+  .border-gray-200 { border-color: rgb(229, 231, 235) !important; }
+`;
           clonedDoc.head.appendChild(style);
         },
       });
@@ -437,7 +458,7 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                     상세 데이터 그리드
                   </label>
                 </div>
-                
+
                 <div className="flex items-center space-x-3">
                   <input
                     type="checkbox"
