@@ -3,25 +3,34 @@
 import { useState, useEffect } from "react";
 import { useNplaceRankTrackWithIdViewModel } from "@/viewModel/nplace/NplaceRankTrackWithIdViewModel";
 import { useParams } from "next/navigation";
-import { Download, FileText, LayoutGrid, List, CheckSquare, Square } from "lucide-react";
+import {
+  Download,
+  FileText,
+  LayoutGrid,
+  List,
+  CheckSquare,
+  Square,
+} from "lucide-react";
 import Image from "next/image";
 import RankCheckModal from "./components/RankCheckModal";
 import TrackReportView from "@/src/components/nplrace/rank/track/id/TrackReportView";
 import TrackGridView from "@/src/components/nplrace/rank/track/id/TrackGridView";
 import TrackListView from "@/src/components/nplrace/rank/track/id/TrackListView";
-import AddKeywordModal from "@/src/components/nplrace/rank/track/id/AddKeywordModal";
-import KeywordList from "@/src/components/nplrace/rank/track/id/KeywordList";
-import AddKeywordButton from "@/src/components/nplrace/rank/track/id/AddKeywordButton";
+import AddKeywordModal from "@/src/components/nplrace/rank/track/id/TrackAddKeywordModal";
+import KeywordList from "@/src/components/nplrace/rank/track/id/TrackKeywordList";
+import AddKeywordButton from "@/src/components/nplrace/rank/track/id/TrackAddKeywordButton";
 
 export default function TrackDetailPage() {
   const params = useParams();
   const id = params.id as string;
-  
+
   const [selectedProvince, setSelectedProvince] = useState("");
   const [keyword, setKeyword] = useState("");
   const [showRankCheckModal, setShowRankCheckModal] = useState(false);
   const [selectedTrack, setSelectedTrack] = useState<any>(null);
-  const [selectedTrackInfos, setSelectedTrackInfos] = useState<Set<string>>(new Set());
+  const [selectedTrackInfos, setSelectedTrackInfos] = useState<Set<string>>(
+    new Set(),
+  );
   const [viewMode, setViewMode] = useState<"list" | "grid" | "report">("grid");
   const [showAddKeywordModal, setShowAddKeywordModal] = useState(false);
   const {
@@ -35,7 +44,7 @@ export default function TrackDetailPage() {
     getNplaceRankTrackList,
     getRankString,
   } = useNplaceRankTrackWithIdViewModel({ id, keyword: "", province: "" });
-  
+
   // 첫 번째 트랙 정보 키를 선택 (있다면)
   useEffect(() => {
     if (shop && shop.nplaceRankTrackInfoMap) {
@@ -52,13 +61,13 @@ export default function TrackDetailPage() {
       keyword,
       province: selectedProvince,
       shopId: id,
-      businessSector: shop?.businessSector || ""
+      businessSector: shop?.businessSector || "",
     });
     setKeyword("");
   };
 
   const handleTrackInfoSelect = (key: string) => {
-    setSelectedTrackInfos(prev => {
+    setSelectedTrackInfos((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(key)) {
         newSet.delete(key);
@@ -71,22 +80,26 @@ export default function TrackDetailPage() {
 
   const handleSelectAll = () => {
     if (shop && shop.nplaceRankTrackInfoMap) {
-      if (selectedTrackInfos.size === Object.keys(shop.nplaceRankTrackInfoMap).length) {
+      if (
+        selectedTrackInfos.size ===
+        Object.keys(shop.nplaceRankTrackInfoMap).length
+      ) {
         setSelectedTrackInfos(new Set());
       } else {
-        setSelectedTrackInfos(new Set(Object.keys(shop.nplaceRankTrackInfoMap)));
+        setSelectedTrackInfos(
+          new Set(Object.keys(shop.nplaceRankTrackInfoMap)),
+        );
       }
     }
   };
-
 
   if (isLoading) return <div>로딩중...</div>;
   if (error) return <div className="text-red-500">{error.toString()}</div>;
   if (!shop) return <div>상점 정보가 없습니다.</div>;
 
   return (
-    <div className="min-h-screen ">
-      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+    <div className="min-h-screen">
+      <div className="mx-auto px-4 py-6 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
           {/* 왼쪽 사이드바 - 키워드 목록 */}
           <div className="lg:col-span-1">
@@ -101,7 +114,7 @@ export default function TrackDetailPage() {
           </div>
 
           {/* 오른쪽 메인 컨텐츠 */}
-          <div className="lg:col-span-3 space-y-6">
+          <div className="space-y-6 lg:col-span-3">
             {/* 상점 정보 카드 */}
             <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg">
               <div className="p-6">
@@ -163,7 +176,9 @@ export default function TrackDetailPage() {
                 <div className="mt-6 flex flex-wrap gap-3">
                   <button
                     onClick={async () => {
-                      if (window.confirm("정말로 이 플레이스를 삭제하시겠습니까?")) {
+                      if (
+                        window.confirm("정말로 이 플레이스를 삭제하시겠습니까?")
+                      ) {
                         try {
                           await deleteShop();
                           window.location.href = "/nplace/rank/track";
@@ -199,7 +214,7 @@ export default function TrackDetailPage() {
                 {Array.from(selectedTrackInfos).map((trackInfoKey) => (
                   <div
                     key={trackInfoKey}
-                    className="overflow-hidden rounded-xl border border-gray-200 bg-white p-6 shadow-lg"
+                    className="overflow-hidden md:rounded-xl md:border md:border-gray-200 md:bg-white md:p-6 md:shadow-lg"
                   >
                     <div className="mb-6 flex flex-col justify-between space-y-4 sm:flex-row sm:items-center sm:space-y-0">
                       <div>
@@ -207,11 +222,14 @@ export default function TrackDetailPage() {
                           {trackInfoKey}
                         </h4>
                         <p className="mt-1 text-sm text-gray-500">
-                          {shop?.nplaceRankTrackInfoMap?.[trackInfoKey]?.province}{" "}
+                          {
+                            shop?.nplaceRankTrackInfoMap?.[trackInfoKey]
+                              ?.province
+                          }{" "}
                           •{" "}
                           {getRankString(
-                            shop?.nplaceRankTrackInfoMap?.[trackInfoKey]?.rank ??
-                              null
+                            shop?.nplaceRankTrackInfoMap?.[trackInfoKey]
+                              ?.rank ?? null,
                           )}
                         </p>
                       </div>
@@ -226,9 +244,8 @@ export default function TrackDetailPage() {
                           onClick={() => setViewMode("grid")}
                         >
                           <LayoutGrid size={16} className="mr-2" />
-                          
                         </button>
-                        <button
+                        {/* <button
                           className={`flex items-center rounded-lg px-4 py-2 text-sm font-medium ${
                             viewMode === "list"
                               ? "bg-blue-50 text-blue-700"
@@ -237,8 +254,7 @@ export default function TrackDetailPage() {
                           onClick={() => setViewMode("list")}
                         >
                           <List size={16} className="mr-2" />
-                          
-                        </button>
+                        </button> */}
                         <button
                           className={`flex items-center rounded-lg px-4 py-2 text-sm font-medium ${
                             viewMode === "report"
@@ -248,7 +264,6 @@ export default function TrackDetailPage() {
                           onClick={() => setViewMode("report")}
                         >
                           <FileText size={16} className="mr-2" />
-                          
                         </button>
                       </div>
                     </div>
@@ -259,18 +274,20 @@ export default function TrackDetailPage() {
                         shopName={shop?.shopName || ""}
                         keyword={trackInfoKey}
                       />
-                    ) : viewMode === "grid" ? (
+                    ) : (
                       <TrackGridView
                         trackList={getNplaceRankTrackList(trackInfoKey) || []}
                       />
-                    ) : (
-                      <TrackListView
-                        trackList={getNplaceRankTrackList(trackInfoKey) || []}
-                        getRankString={getRankString}
-                        setSelectedTrack={setSelectedTrack}
-                        setShowRankCheckModal={setShowRankCheckModal}
-                      />
-                    )}
+                    ) 
+                    // : (
+                    //   <TrackListView
+                    //     trackList={getNplaceRankTrackList(trackInfoKey) || []}
+                    //     getRankString={getRankString}
+                    //     setSelectedTrack={setSelectedTrack}
+                    //     setShowRankCheckModal={setShowRankCheckModal}
+                    //   />
+                    // )
+                    }
                   </div>
                 ))}
               </div>

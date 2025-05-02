@@ -11,8 +11,8 @@ export default async function AdminLayout({
     <>
       <div className="min-h-screen">
         <Sidebar />
-        <div className="relative lg:ml-60">
-          <div className="relative m-10 mx-auto w-full md:px-10">
+        <div className="relative xl:ml-60">
+          <div className="relative m-10 mx-auto w-full">
             {children}
           </div>
         </div>

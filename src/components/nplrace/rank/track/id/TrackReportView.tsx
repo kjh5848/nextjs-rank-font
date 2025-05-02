@@ -11,15 +11,10 @@ import {
   YAxis, 
   Tooltip,
   ResponsiveContainer,
-  Legend,
-  BarChart,
-  Bar
 } from "recharts";
-import { useIsMobile } from "@/use/use-mobile";
 import { TrackData } from "@/model/TrackRepository";
 import TrackGridView from "./TrackGridView";
 import html2canvas from "html2canvas";
-import { jsPDF } from "jspdf";
 import { Download } from "lucide-react";
 
 interface ChartTooltipContentProps {
@@ -101,25 +96,43 @@ interface AnalysisData {
   rankTrend: "상승" | "하락" | "유지";
 }
 
+interface DownloadOptions {
+  summary: boolean;
+  grid: boolean;
+  rankChart: boolean;
+  visitorReviewChart: boolean;
+  blogReviewChart: boolean;
+  saveCountChart: boolean;
+}
+
 export default function TrackReportView({ trackList, shopName, keyword }: TrackDataChartProps) {
   const [timeRange, setTimeRange] = React.useState<"7d" | "30d" | "all">("all");
+  const [downloadOptions, setDownloadOptions] = React.useState<DownloadOptions>({
+    summary: true,
+    grid: true,
+    rankChart: true,
+    visitorReviewChart: true,
+    blogReviewChart: true,
+    saveCountChart: true,
+  });
+  const [isDownloadModalOpen, setIsDownloadModalOpen] = React.useState(false);
   const reportRef = React.useRef<HTMLDivElement>(null);
 
   // 차트 데이터 필터링: 최신 30일, 7일 또는 모든 데이터
   const getFilteredData = () => {
     if (!trackList || trackList.length === 0) return [];
 
-    // 날짜 기준 정렬
+    // 날짜 기준 정렬 (최신 날짜부터)
     const sortedData = [...trackList].sort(
       (a, b) =>
-        new Date(a.chartDate).getTime() - new Date(b.chartDate).getTime(),
+        new Date(b.chartDate).getTime() - new Date(a.chartDate).getTime(),
     );
 
     // 기간에 따라 필터링
     if (timeRange === "30d") {
-      return sortedData.slice(-30);
+      return sortedData.slice(0, 30);
     } else if (timeRange === "7d") {
-      return sortedData.slice(-7);
+      return sortedData.slice(0, 7);
     }
 
     return sortedData;
@@ -162,10 +175,6 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
     };
   });
 
-  const chartDataForLine =
-    chartData.length === 1
-      ? [chartData[0], { ...chartData[0], date: " " }]
-      : chartData;
 
   // 파일명 생성 함수
   const getFileName = () => {
@@ -176,46 +185,6 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
     return `${shopName}_${keyword}_${year}${month}${day}`;
   };
 
-  const handleDownloadPDF = async () => {
-    if (!reportRef.current) return;
-
-    const canvas = await html2canvas(reportRef.current, {
-      scale: 2,
-      useCORS: true,
-      logging: false,
-      backgroundColor: "#ffffff",
-      onclone: (clonedDoc) => {
-        // 색상 변환을 위한 스타일 추가
-        const style = clonedDoc.createElement('style');
-        style.textContent = `
-          * {
-            color: rgb(0, 0, 0) !important;
-            background-color: rgb(255, 255, 255) !important;
-            border-color: rgb(0, 0, 0) !important;
-          }
-          .bg-blue-50 { background-color: rgb(239, 246, 255) !important; }
-          .text-blue-700 { color: rgb(29, 78, 216) !important; }
-          .bg-gray-50 { background-color: rgb(249, 250, 251) !important; }
-          .text-gray-700 { color: rgb(55, 65, 81) !important; }
-          .border-gray-200 { border-color: rgb(229, 231, 235) !important; }
-        `;
-        clonedDoc.head.appendChild(style);
-      }
-    });
-
-    const imgData = canvas.toDataURL("image/jpeg", 1.0);
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: "a4",
-    });
-
-    const imgWidth = 210; // A4 width in mm
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-    pdf.addImage(imgData, "JPEG", 0, 0, imgWidth, imgHeight);
-    pdf.save(`${getFileName()}.pdf`);
-  };
 
   const handleDownloadImage = async () => {
     if (!reportRef.current) return;
@@ -226,6 +195,32 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
       logging: false,
       backgroundColor: "#ffffff",
       onclone: (clonedDoc) => {
+        // 선택되지 않은 섹션 숨기기
+        if (!downloadOptions.summary) {
+          const summarySection = clonedDoc.querySelector('.summary-section') as HTMLElement;
+          if (summarySection) summarySection.style.display = 'none';
+        }
+        if (!downloadOptions.grid) {
+          const gridSection = clonedDoc.querySelector('.grid-section') as HTMLElement;
+          if (gridSection) gridSection.style.display = 'none';
+        }
+        if (!downloadOptions.rankChart) {
+          const rankChart = clonedDoc.querySelector('.rank-chart') as HTMLElement;
+          if (rankChart) rankChart.style.display = 'none';
+        }
+        if (!downloadOptions.visitorReviewChart) {
+          const visitorChart = clonedDoc.querySelector('.visitor-review-chart') as HTMLElement;
+          if (visitorChart) visitorChart.style.display = 'none';
+        }
+        if (!downloadOptions.blogReviewChart) {
+          const blogChart = clonedDoc.querySelector('.blog-review-chart') as HTMLElement;
+          if (blogChart) blogChart.style.display = 'none';
+        }
+        if (!downloadOptions.saveCountChart) {
+          const saveChart = clonedDoc.querySelector('.save-count-chart') as HTMLElement;
+          if (saveChart) saveChart.style.display = 'none';
+        }
+
         // 색상 변환을 위한 스타일 추가
         const style = clonedDoc.createElement('style');
         style.textContent = `
@@ -248,6 +243,7 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
     link.download = `${getFileName()}.jpg`;
     link.href = canvas.toDataURL("image/jpeg", 1.0);
     link.click();
+    setIsDownloadModalOpen(false);
   };
 
   // 데이터 분석 함수
@@ -310,77 +306,139 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
 
   const analysis = analyzeData(filteredData);
 
-  // AI 분석 생성 함수
-  const generateAIAnalysis = () => {
-    if (filteredData.length < 2) {
-      return {
-        title: "데이터 부족",
-        message: "분석을 위한 충분한 데이터가 없습니다. 더 많은 데이터가 쌓이면 상세한 분석이 가능합니다.",
-        suggestions: [],
-      };
-    }
-
-    const insights = [];
-    const suggestions = [];
-
-    // 순위 분석
-    if (analysis.rankTrend === "상승") {
-      insights.push("순위가 상승 추세를 보이고 있어 긍정적입니다.");
-      if (analysis.visitorReviewGrowth > 0) {
-        suggestions.push("방문자 리뷰 증가가 순위 상승에 기여하고 있습니다. 현재의 고객 서비스 품질을 유지하세요.");
-      }
-    } else if (analysis.rankTrend === "하락") {
-      insights.push("순위가 하락 추세를 보이고 있어 주의가 필요합니다.");
-      suggestions.push("경쟁업체 분석을 통해 차별화 포인트를 발굴하세요.");
-    }
-
-    // 리뷰 분석
-    if (analysis.visitorReviewGrowth > 20) {
-      insights.push("방문자 리뷰가 크게 증가하여 고객 만족도가 높은 것으로 보입니다.");
-      suggestions.push("만족도 높은 고객들을 대상으로 재방문 프로모션을 고려해보세요.");
-    } else if (analysis.visitorReviewGrowth < -10) {
-      insights.push("방문자 리뷰 감소 추세가 우려됩니다.");
-      suggestions.push("고객 피드백을 수집하여 서비스 개선점을 파악하세요.");
-    }
-
-    if (analysis.blogReviewGrowth > 20) {
-      insights.push("블로그 리뷰가 크게 증가하여 온라인 인지도가 상승하고 있습니다.");
-      suggestions.push("인플루언서 마케팅이 효과적일 수 있습니다.");
-    }
-
-    // 저장수 분석
-    if (analysis.saveCountGrowth > 10) {
-      insights.push("저장수가 증가하여 잠재 고객의 관심이 높아지고 있습니다.");
-      suggestions.push("관심 고객을 실제 방문으로 연결하기 위한 프로모션을 기획해보세요.");
-    }
-
-    return {
-      title: insights.length > 0 ? "AI 분석 인사이트" : "기본 분석",
-      message: insights.join(" "),
-      suggestions: suggestions,
-    };
-  };
-
-  const aiAnalysis = generateAIAnalysis();
 
   return (
     <div className="space-y-6">
       {/* 다운로드 버튼 */}
       <div className="flex justify-end space-x-2">
-        <button
-          onClick={handleDownloadPDF}
-          className="flex items-center rounded-lg bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100"
-        >
-          <Download className="mr-2 h-4 w-4" />
-          PDF 다운로드
-        </button>
-        <button
-          onClick={handleDownloadImage}
-          className="flex items-center rounded-lg bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100"
-        >
-          <Download className="mr-2 h-4 w-4" />
-          이미지 다운로드
-        </button>
+        <div className="relative">
+          <button
+            onClick={() => setIsDownloadModalOpen(!isDownloadModalOpen)}
+            className="flex items-center rounded-lg bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100"
+          >
+            <Download className="mr-2 h-4 w-4" />
+            다운로드 옵션
+          </button>
+
+          {isDownloadModalOpen && (
+            <div className="absolute right-0 mt-2 w-[425px] rounded-lg bg-white p-6 shadow-lg">
+              <h3 className="text-lg font-semibold">다운로드 옵션 선택</h3>
+              <div className="mt-4 space-y-4">
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="summary"
+                    checked={downloadOptions.summary}
+                    onChange={(e) =>
+                      setDownloadOptions({
+                        ...downloadOptions,
+                        summary: e.target.checked,
+                      })
+                    }
+                    className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label htmlFor="summary" className="text-sm">
+                    요약 정보
+                  </label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="grid"
+                    checked={downloadOptions.grid}
+                    onChange={(e) =>
+                      setDownloadOptions({
+                        ...downloadOptions,
+                        grid: e.target.checked,
+                      })
+                    }
+                    className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label htmlFor="grid" className="text-sm">
+                    상세 데이터 그리드
+                  </label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="rankChart"
+                    checked={downloadOptions.rankChart}
+                    onChange={(e) =>
+                      setDownloadOptions({
+                        ...downloadOptions,
+                        rankChart: e.target.checked,
+                      })
+                    }
+                    className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label htmlFor="rankChart" className="text-sm">
+                    순위 추이 차트
+                  </label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="visitorReviewChart"
+                    checked={downloadOptions.visitorReviewChart}
+                    onChange={(e) =>
+                      setDownloadOptions({
+                        ...downloadOptions,
+                        visitorReviewChart: e.target.checked,
+                      })
+                    }
+                    className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label htmlFor="visitorReviewChart" className="text-sm">
+                    방문자 리뷰 추이 차트
+                  </label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="blogReviewChart"
+                    checked={downloadOptions.blogReviewChart}
+                    onChange={(e) =>
+                      setDownloadOptions({
+                        ...downloadOptions,
+                        blogReviewChart: e.target.checked,
+                      })
+                    }
+                    className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label htmlFor="blogReviewChart" className="text-sm">
+                    블로그 리뷰 추이 차트
+                  </label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="saveCountChart"
+                    checked={downloadOptions.saveCountChart}
+                    onChange={(e) =>
+                      setDownloadOptions({
+                        ...downloadOptions,
+                        saveCountChart: e.target.checked,
+                      })
+                    }
+                    className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label htmlFor="saveCountChart" className="text-sm">
+                    저장 수 추이 차트
+                  </label>
+                </div>
+              </div>
+              <div className="mt-4 flex justify-end space-x-2">
+                <button
+                  onClick={handleDownloadImage}
+                  className="flex items-center rounded-lg bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100"
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  이미지 다운로드
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* 기간 선택 버튼 */}
@@ -418,7 +476,7 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
       </div>
 
       {/* 리포트 내용 */}
-      <div ref={reportRef} className="space-y-8 bg-white p-6">
+      <div ref={reportRef} className="space-y-8 bg-white">
         {/* 상점 정보 */}
         <div className="mb-6 border-b border-gray-200 pb-6">
           <h2 className="text-xl font-bold text-gray-900">{shopName}</h2>
@@ -430,37 +488,39 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
 
         {/* 마케팅 인사이트 */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div className="rounded-lg border border-gray-200 p-6">
-            <h3 className="mb-4 text-lg font-semibold">주요 지표 요약</h3>
+          <div className="rounded-lg border border-gray-200 bg-white p-6">
+            <h3 className="mb-4 text-lg font-semibold text-gray-900">주요 지표 요약</h3>
             <div className="space-y-4">
               <div className="flex justify-between">
                 <span className="text-gray-600">평균 순위</span>
-                <span className="font-medium">
+                <span className="font-medium text-gray-900">
                   {analysis.averageRank.toFixed(1)}위
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">최고 순위</span>
-                <span className="font-medium">{analysis.bestRank}위</span>
+                <span className="font-medium text-gray-900">{analysis.bestRank}위</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">최저 순위</span>
-                <span className="font-medium">{analysis.worstRank}위</span>
+                <span className="font-medium text-gray-900">{analysis.worstRank}위</span>
               </div>
-              {/* <div className="flex justify-between">
-                <span className="text-gray-600">총 리뷰 수</span>
-                <span className="font-medium">{analysis.totalReviews.toLocaleString()}개</span>
-              </div> */}
             </div>
           </div>
 
-          <div className="rounded-lg border border-gray-200 p-6">
-            <h3 className="mb-4 text-lg font-semibold">성장률 분석</h3>
+          <div className="rounded-lg border border-gray-200 bg-white p-6">
+            <h3 className="mb-4 text-lg font-semibold text-gray-900">성장률 분석</h3>
             <div className="space-y-4">
               <div className="flex justify-between">
                 <span className="text-gray-600">순위 변동</span>
                 <span
-                  className={`font-medium ${analysis.rankChange < 0 ? "text-green-500" : analysis.rankChange > 0 ? "text-red-500" : "text-gray-500"}`}
+                  className={`font-medium ${
+                    analysis.rankChange < 0
+                      ? "text-[#22c55e]"
+                      : analysis.rankChange > 0
+                      ? "text-[#ef4444]"
+                      : "text-gray-500"
+                  }`}
                 >
                   {analysis.rankChange > 0 ? "+" : ""}
                   {analysis.rankChange}위
@@ -469,7 +529,11 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
               <div className="flex justify-between">
                 <span className="text-gray-600">방문자 리뷰 성장률</span>
                 <span
-                  className={`font-medium ${analysis.visitorReviewGrowth > 0 ? "text-green-500" : "text-red-500"}`}
+                  className={`font-medium ${
+                    analysis.visitorReviewGrowth > 0
+                      ? "text-[#22c55e]"
+                      : "text-[#ef4444]"
+                  }`}
                 >
                   {analysis.visitorReviewGrowth.toFixed(1)}%
                 </span>
@@ -477,7 +541,11 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
               <div className="flex justify-between">
                 <span className="text-gray-600">블로그 리뷰 성장률</span>
                 <span
-                  className={`font-medium ${analysis.blogReviewGrowth > 0 ? "text-green-500" : "text-red-500"}`}
+                  className={`font-medium ${
+                    analysis.blogReviewGrowth > 0
+                      ? "text-[#22c55e]"
+                      : "text-[#ef4444]"
+                  }`}
                 >
                   {analysis.blogReviewGrowth.toFixed(1)}%
                 </span>
@@ -485,7 +553,11 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
               <div className="flex justify-between">
                 <span className="text-gray-600">저장 수 성장률</span>
                 <span
-                  className={`font-medium ${analysis.saveCountGrowth > 0 ? "text-green-500" : "text-red-500"}`}
+                  className={`font-medium ${
+                    analysis.saveCountGrowth > 0
+                      ? "text-[#22c55e]"
+                      : "text-[#ef4444]"
+                  }`}
                 >
                   {analysis.saveCountGrowth.toFixed(1)}%
                 </span>
@@ -501,22 +573,34 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
         </div>
         {/* 차트 섹션 */}
         <div className="grid grid-cols-1 gap-6">
-          {/* 2. 순위 */}
-          <div className="">
+          {/* 순위 차트 */}
+          <div className="rank-chart">
             <h2 className="mb-4 text-lg font-semibold">순위 추이</h2>
-            <div className="h-64 w-full">
+            <div className="h-[300px] w-full sm:h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chartData}>
+                <LineChart
+                  data={[...chartData].reverse()}
+                  margin={{ top: 5, right: 1, left: 1, bottom: 5 }}
+                >
                   <CartesianGrid
                     strokeDasharray="3 3"
                     stroke="#e0e0e0"
                     vertical={false}
                   />
-                  <XAxis dataKey="date" />
+                  <XAxis
+                    dataKey="date"
+                    tick={{ fontSize: "11px", fill: "#6B7280" }}
+                    height={60}
+                    tickMargin={14}
+                    interval="preserveStartEnd"
+                  />
                   <YAxis
                     domain={["dataMin - 5", "dataMax + 5"]}
                     reversed
                     tickFormatter={(v) => `${v}위`}
+                    tick={{ fontSize: "11px", fill: "#6B7280" }}
+                    width={60}
+                    tickMargin={14}
                   />
                   <Tooltip
                     content={
@@ -532,18 +616,22 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                     name="순위"
                     stroke="#25E4FF"
                     strokeWidth={2}
-                    dot
+                    dot={{ r: 4, fill: "#25E4FF", strokeWidth: 2 }}
+                    activeDot={{ r: 6 }}
                   />
                 </LineChart>
               </ResponsiveContainer>
             </div>
           </div>
-          {/* 2. 방문자 리뷰 */}
-          <div>
+          {/* 방문자 리뷰 차트 */}
+          <div className="visitor-review-chart">
             <h2 className="mb-4 text-lg font-semibold">방문자 리뷰 추이</h2>
-            <div className="h-64 w-full">
+            <div className="h-[300px] w-full sm:h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={chartData}>
+                <AreaChart
+                  data={[...chartData].reverse()}
+                  margin={{ top: 5, right: 1, left: 1, bottom: 5 }}
+                >
                   <defs>
                     <linearGradient
                       id="colorVisitor"
@@ -565,8 +653,19 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                     stroke="#e0e0e0"
                     vertical={false}
                   />
-                  <XAxis dataKey="date" />
-                  <YAxis domain={["dataMin - 2", "dataMax + 2"]} />
+                  <XAxis
+                    dataKey="date"
+                    tick={{ fontSize: "11px", fill: "#6B7280" }}
+                    height={60}
+                    tickMargin={14}
+                    interval="preserveStartEnd"
+                  />
+                  <YAxis
+                    domain={["dataMin - 2", "dataMax + 2"]}
+                    tick={{ fontSize: "11px", fill: "#6B7280" }}
+                    width={60}
+                    tickMargin={14}
+                  />
                   <Tooltip
                     content={
                       <ChartTooltipContent
@@ -581,17 +680,22 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                     name="방문자 리뷰"
                     stroke="#25E4FF"
                     fill="url(#colorVisitor)"
+                    dot={{ r: 4, fill: "#25E4FF", strokeWidth: 2 }}
+                    activeDot={{ r: 6 }}
                   />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
           </div>
-          {/* 3. 블로그 리뷰 */}
-          <div className="">
+          {/* 블로그 리뷰 차트 */}
+          <div className="blog-review-chart">
             <h2 className="mb-4 text-lg font-semibold">블로그 리뷰 추이</h2>
-            <div className="h-64 w-full">
+            <div className="h-[300px] w-full sm:h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={chartData}>
+                <AreaChart
+                  data={[...chartData].reverse()}
+                  margin={{ top: 5, right: 1, left: 1, bottom: 5 }}
+                >
                   <defs>
                     <linearGradient id="colorBlog" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#282c34" stopOpacity={0.8} />
@@ -607,8 +711,19 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                     stroke="#e0e0e0"
                     vertical={false}
                   />
-                  <XAxis dataKey="date" />
-                  <YAxis domain={["dataMin - 5", "dataMax + 5"]} />
+                  <XAxis
+                    dataKey="date"
+                    tick={{ fontSize: "11px", fill: "#6B7280" }}
+                    height={60}
+                    tickMargin={14}
+                    interval="preserveStartEnd"
+                  />
+                  <YAxis
+                    domain={["dataMin - 5", "dataMax + 5"]}
+                    tick={{ fontSize: "11px", fill: "#6B7280" }}
+                    width={60}
+                    tickMargin={14}
+                  />
                   <Tooltip
                     content={
                       <ChartTooltipContent
@@ -623,24 +738,39 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                     name="블로그 리뷰"
                     stroke="#282c34"
                     fill="url(#colorBlog)"
+                    dot={{ r: 4, fill: "#282c34", strokeWidth: 2 }}
+                    activeDot={{ r: 6 }}
                   />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
           </div>
-          {/* 4. 저장 수 */}
-          <div className="">
+          {/* 저장 수 차트 */}
+          <div className="save-count-chart">
             <h2 className="mb-4 text-lg font-semibold">저장 수 추이</h2>
-            <div className="h-64 w-full">
+            <div className="h-[300px] w-full sm:h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chartData}>
+                <LineChart
+                  data={[...chartData].reverse()}
+                  margin={{ top: 5, right: 1, left: 1, bottom: 5 }}
+                >
                   <CartesianGrid
                     strokeDasharray="3 3"
-                    stroke="#fa5252"
+                    stroke="#e0e0e0"
                     vertical={false}
                   />
-                  <XAxis dataKey="date" />
-                  <YAxis />
+                  <XAxis
+                    dataKey="date"
+                    tick={{ fontSize: "11px", fill: "#6B7280" }}
+                    height={60}
+                    tickMargin={14}
+                    interval="preserveStartEnd"
+                  />
+                  <YAxis
+                    tick={{ fontSize: "11px", fill: "#6B7280" }}
+                    width={60}
+                    tickMargin={14}
+                  />
                   <Tooltip
                     content={
                       <ChartTooltipContent
@@ -655,7 +785,8 @@ export default function TrackReportView({ trackList, shopName, keyword }: TrackD
                     name="저장 수"
                     stroke="#fa5252"
                     strokeWidth={2}
-                    dot
+                    dot={{ r: 4, fill: "#fa5252", strokeWidth: 2 }}
+                    activeDot={{ r: 6 }}
                   />
                 </LineChart>
               </ResponsiveContainer>

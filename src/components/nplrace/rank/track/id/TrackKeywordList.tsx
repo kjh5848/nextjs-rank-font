@@ -1,56 +1,71 @@
-import { Badge } from "@/src/components/ui/badge";
+import { CheckSquare, Square } from "lucide-react";
+import AddKeywordButton from "./TrackAddKeywordButton";
 
-interface TrackKeywordListProps {
-  trackInfoMap: any;
-  selectedInfoEntryKey: string | null;
-  onKeywordClick: (entryKey: string) => void;
-  onContextMenu: (event: React.MouseEvent, infoId: string) => void;
+interface KeywordListProps {
+  keywords: { [key: string]: any };
+  selectedKeywords: Set<string>;
+  onSelectKeyword: (key: string) => void;
+  onSelectAll: () => void;
+  getRankString: (rank: number | null) => string;
+  onAddKeyword: () => void;
 }
 
-export default function TrackKeywordList({
-  trackInfoMap,
-  selectedInfoEntryKey,
-  onKeywordClick,
-  onContextMenu,
-}: TrackKeywordListProps) {
+export default function KeywordList({
+  keywords,
+  selectedKeywords,
+  onSelectKeyword,
+  onSelectAll,
+  getRankString,
+  onAddKeyword,
+}: KeywordListProps) {
+  const isAllSelected = Object.keys(keywords).length > 0 && 
+    Object.keys(keywords).every(key => selectedKeywords.has(key));
+
   return (
-    <div className="flex flex-wrap gap-2">
-      {Object.keys(trackInfoMap).length === 0 ? (
-        <Badge className="bg-gray-200 text-gray-700">
-          추적 중인 지역 및 키워드가 없습니다
-        </Badge>
-      ) : (
-        Object.keys(trackInfoMap).map((entryKey) => {
-          const info = trackInfoMap[entryKey];
+    <div className="overflow-y-auto p-4 sm:p-6">
+      <div className="mb-4 flex flex-col space-y-2 md:flex-row md:items-center md:justify-between md:space-y-0 lg:flex-col lg:items-start lg:space-y-3">
+        <div className="flex items-center space-x-2">
+          <h3 className="text-base font-semibold text-gray-900 sm:text-lg lg:text-xl word-break-keep">
+            키워드 목록
+          </h3>
+          <AddKeywordButton onClick={onAddKeyword} />
+        </div>
+        
+        <div className="flex items-center space-x-2 lg:self-end">
+          <button
+            onClick={onSelectAll}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            {isAllSelected ? <CheckSquare size={20} className="lg:size-6" /> : <Square size={20} className="lg:size-6" />}
+          </button>
+        </div>
+      </div>
+      <div className="grid gap-2 sm:space-y-2">
+        {Object.keys(keywords).map((key) => {
+          const trackInfo = keywords[key];
           return (
-            <Badge
-              key={entryKey}
-              variant={selectedInfoEntryKey === entryKey ? "destructive" : "secondary"}
-              className="cursor-pointer"
-              onClick={() => onKeywordClick(entryKey)}
-              onContextMenu={(e) => onContextMenu(e, info.id)}
+            <button
+              key={key}
+              onClick={() => onSelectKeyword(key)}
+              className={`w-full rounded-lg p-2 text-left transition-colors sm:p-3 ${
+                selectedKeywords.has(key)
+                  ? "bg-blue-50 text-blue-700"
+                  : "hover:bg-gray-50"
+              }`}
             >
-              {entryKey} / {getRankString(info.rank)}(
-              {info.rankChange === 0
-                ? "-"
-                : info.rankChange < 0
-                ? `▲${Math.abs(info.rankChange)}`
-                : `▽${Math.abs(info.rankChange)}`}
-              )
-            </Badge>
+              <div className="flex items-center justify-between">
+                <div className="text-sm font-medium sm:text-base">{key}</div>
+                {selectedKeywords.has(key) && (
+                  <CheckSquare size={16} className="text-blue-600" />
+                )}
+              </div>
+              <div className="mt-1 text-xs text-gray-500 sm:text-sm">
+                {trackInfo?.province} • {getRankString(trackInfo?.rank || null)}
+              </div>
+            </button>
           );
-        })
-      )}
+        })}
+      </div>
     </div>
   );
-}
-
-function getRankString(rank: number | null) {
-  if (rank == null) {
-    return "추적 대기";
-  } else if (rank === -1) {
-    return "순위권 이탈";
-  } else {
-    return `${rank}위`;
-  }
 } 

@@ -18,20 +18,20 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* ────────── 컨테이너 (lg 이상 고정) ────────── */}
-      <nav className="bg-rank-sidebar relative z-40 flex flex-wrap items-center justify-between px-6 py-4 shadow-xl lg:fixed lg:top-0 lg:bottom-0 lg:left-0 lg:block lg:w-56 lg:overflow-y-auto">
-        <div className="mx-auto flex w-full flex-wrap items-center justify-between px-0 lg:flex-col lg:items-stretch">
-          {/* 모바일 토글 버튼 */}
+      {/* ────────── 컨테이너 (xl 이상 고정) ────────── */}
+      <nav className="bg-rank-sidebar relative z-40 flex flex-wrap items-center justify-between px-4 py-3 shadow-xl md:px-6 md:py-4 xl:fixed xl:top-0 xl:bottom-0 xl:left-0 xl:block xl:w-56 xl:overflow-y-auto">
+        <div className="mx-auto flex w-full flex-wrap items-center justify-between px-0 xl:flex-col xl:items-stretch">
+          {/* 모바일/태블릿/데스크톱 토글 버튼 */}
           <button
             aria-label="Toggle sidebar"
             aria-expanded={isOpen}
             onClick={toggleSidebar}
-            className="from-rank-primary to-rank-secondary flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r text-white shadow-lg transition-all duration-200 hover:scale-105 lg:hidden"
+            className="from-rank-primary to-rank-secondary flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r text-white shadow-lg transition-all duration-200 hover:scale-105 md:h-10 md:w-10 xl:hidden"
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+            {isOpen ? <X size={20} className="md:size-6" /> : <Menu size={20} className="md:size-6" />}
           </button>
 
-          {/* 브랜드 (데스크톱만 노출) */}
+          {/* 브랜드 */}
           <Link href="/" className="flex items-center">
             <Image
               src="/img/brand/rank_rogo.png"
@@ -39,13 +39,13 @@ export default function Sidebar() {
               width={150}
               height={40}
               priority
-              sizes="(max-width: 1024px) 120px, 150px"
-              className="h-14 w-auto lg:h-20" /* h-8(32px) → lg:h-20(80px) */
+              sizes="(max-width: 768px) 100px, (max-width: 1024px) 120px, 150px"
+              className="h-10 w-auto md:h-14 xl:h-20"
             />
           </Link>
 
-          {/* 모바일 사용자 메뉴 */}
-          <ul className="flex items-center lg:hidden">
+          {/* 모바일/태블릿/데스크톱 사용자 메뉴 */}
+          <ul className="flex items-center xl:hidden">
             <li>
               <UserDropdown />
             </li>
@@ -53,18 +53,18 @@ export default function Sidebar() {
 
           {/* ────────── 드로어 ────────── */}
           <div
-            className={`bg-rank-sidebar fixed inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 lg:static lg:translate-x-0 lg:shadow-none ${
+            className={`bg-rank-sidebar fixed inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 xl:static xl:translate-x-0 xl:shadow-none ${
               isOpen ? "translate-x-0" : "-translate-x-full"
             }`}
           >
-            {/* 드로어 헤더 (모바일용) */}
-            <div className="flex items-center justify-between p-4 lg:hidden">
+            {/* 드로어 헤더 (모바일/태블릿/데스크톱용) */}
+            <div className="flex items-center justify-between p-3 md:p-4 xl:hidden">
               <Image
                 src="/img/brand/rank_rogo.png"
                 alt="내순위"
-                width={120}
+                width={100}
                 height={32}
-                className="h-14 w-auto object-contain"
+                className="h-10 w-auto md:h-14 object-contain"
               />
               <button
                 aria-label="Close menu"
@@ -75,20 +75,20 @@ export default function Sidebar() {
               </button>
             </div>
 
-            <hr className="my-4 border-blue-100" />
+            <hr className="my-3 border-blue-100 md:my-4" />
 
             {/* 타이틀 */}
-            <h6 className="text-rank-primary px-6 pb-3 text-xs font-semibold tracking-widest uppercase lg:px-4">
+            <h6 className="text-rank-primary px-4 pb-2 text-xs font-semibold tracking-widest uppercase md:px-6 md:pb-3">
               N-Place 도구
             </h6>
 
             {/* 네비게이션 */}
-            <ul className="flex flex-col gap-1 px-6 lg:px-4">
+            <ul className="flex flex-col gap-1 px-4 md:px-6">
               <li>
                 <Link
                   href="/realtime"
                   onClick={() => setIsOpen(false)}
-                  className={`block rounded px-2 py-2 text-sm font-semibold ${
+                  className={`block rounded px-2 py-1.5 text-sm font-semibold md:py-2 ${
                     pathname.startsWith("/realtime")
                       ? "from-rank-primary to-rank-secondary bg-gradient-to-r bg-clip-text text-transparent"
                       : "text-white/75 hover:text-white"
@@ -101,7 +101,7 @@ export default function Sidebar() {
                 <Link
                   href="/track"
                   onClick={() => setIsOpen(false)}
-                  className={`block rounded px-2 py-2 text-sm font-semibold ${
+                  className={`block rounded px-2 py-1.5 text-sm font-semibold md:py-2 ${
                     pathname.startsWith("/track")
                       ? "from-rank-primary to-rank-secondary bg-gradient-to-r bg-clip-text text-transparent"
                       : "text-white/75 hover:text-white"
@@ -115,10 +115,10 @@ export default function Sidebar() {
         </div>
       </nav>
 
-      {/* 오버레이 (모바일) */}
+      {/* 오버레이 (모바일/태블릿/데스크톱) */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-20 bg-black/50 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-20 bg-black/50 backdrop-blur-sm xl:hidden"
           onClick={toggleSidebar}
         />
       )}
