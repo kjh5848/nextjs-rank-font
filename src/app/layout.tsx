@@ -2,7 +2,7 @@ import { StoreProvider } from '@/src/store/provider/StoreProvider';
 import { Inter } from "next/font/google";
 import QueryProviders from "../store/provider/QueryProviders";
 import "@/styles/global.css";
-import { getUserFromSession } from '@/util/auth/Auth';
+import { getUserFromSession } from '@/src/util/auth/Auth';
 import { headers } from 'next/headers';
 const inter = Inter({ subsets: ["latin"], display: 'swap' });
 
