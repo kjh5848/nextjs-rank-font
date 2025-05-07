@@ -1,6 +1,6 @@
-import { ApiResponse } from '@/types/index';
 import TrackRepository, { Shop, TrackInfo, TrackData, RankCheckData } from '@/model/TrackRepository';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ApiResponse } from '@/types/api';
 
 interface NplaceRankTrackWithIdViewModelProps {
   id: string;
@@ -22,23 +22,14 @@ export const useNplaceRankTrackWithIdViewModel = ({ id, keyword, province }: Npl
     queryFn: async () => {
       const response = await TrackRepository.getShopDetail(id);
       console.log(`[NplaceRankTrackWithIdViewModel] ▶ 플레이스 정보 조회 결과: ${JSON.stringify(response)}`);
-      return {
-        code: response.code,
-        data: response.data,
-        message: response.message || ''
-      };
+      return response;
     }
   });
 
   // 플레이스 삭제
   const { mutate: deleteShop } = useMutation<ApiResponse<void>, Error>({
     mutationFn: async () => {
-      const response = await TrackRepository.deleteShop(id);
-      return {
-        code: response.code,
-        data: undefined,
-        message: response.message || ''
-      };
+      return await TrackRepository.deleteShop(id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['nplaceRankShop'] });
@@ -48,12 +39,7 @@ export const useNplaceRankTrackWithIdViewModel = ({ id, keyword, province }: Npl
   // 트랙 추가
   const { mutate: addTrack } = useMutation<ApiResponse<TrackInfo>, Error, { keyword: string; province: string; shopId: string; businessSector: string }>({
     mutationFn: async (trackData) => {
-      const response = await TrackRepository.addTrack(trackData);
-      return {
-        code: response.code,
-        data: response.data,
-        message: response.message || ''
-      };
+      return await TrackRepository.addTrack(trackData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['nplaceRankShop', id] });
@@ -63,12 +49,7 @@ export const useNplaceRankTrackWithIdViewModel = ({ id, keyword, province }: Npl
   // 트랙 삭제
   const { mutate: deleteTrack } = useMutation<ApiResponse<void>, Error, string>({
     mutationFn: async (trackId) => {
-      const response = await TrackRepository.deleteTrack(trackId);
-      return {
-        code: response.code,
-        data: undefined,
-        message: response.message || ''
-      };
+      return await TrackRepository.deleteTrack(trackId);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['nplaceRankShop', id] });
@@ -78,12 +59,7 @@ export const useNplaceRankTrackWithIdViewModel = ({ id, keyword, province }: Npl
   // 트랙 상태 업데이트
   const { mutate: updateTrackStatus } = useMutation<ApiResponse<void>, Error, { trackId: string, status: 'RUNNING' | 'STOP' }>({
     mutationFn: async ({ trackId, status }) => {
-      const response = await TrackRepository.updateTrackStatus(trackId, status);
-      return {
-        code: response.code,
-        data: undefined,
-        message: response.message || ''
-      };
+      return await TrackRepository.updateTrackStatus(trackId, status);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['nplaceRankShop', id] });
@@ -94,12 +70,7 @@ export const useNplaceRankTrackWithIdViewModel = ({ id, keyword, province }: Npl
   const { data: rankCheckResult } = useQuery<ApiResponse<RankCheckData>, Error>({
     queryKey: ['rankCheck', id],
     queryFn: async () => {
-      const response = await TrackRepository.getRankCheckData(id, 'NAVER', 'PLACE');
-      return {
-        code: response.code,
-        data: response.data,
-        message: response.message || ''
-      };
+      return await TrackRepository.getRankCheckData(id, 'NAVER', 'PLACE');
     }
   });
 
@@ -115,7 +86,7 @@ export const useNplaceRankTrackWithIdViewModel = ({ id, keyword, province }: Npl
 
   // 순위 트랙 목록 (정렬된)
   const getNplaceRankTrackList = (selectedInfoEntryKey: string | null) => {
-    if (!shopWithIdResult?.data || selectedInfoEntryKey === null) return [];
+    if (!shopWithIdResult?.data?.nplaceRankShop || selectedInfoEntryKey === null) return [];
     
     const trackList = shopWithIdResult.data.nplaceRankShop.nplaceRankTrackInfoMap?.[selectedInfoEntryKey]?.nplaceRankTrackList || [];
     return [...trackList].sort((a, b) => a.chartDate > b.chartDate ? -1 : 1);

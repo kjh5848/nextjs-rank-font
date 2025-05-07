@@ -1,4 +1,7 @@
 // 세션 기반 인증을 지원하는 AuthRepository
+
+import { ApiResponse } from "@/types/api";
+
 // "https://xn--220b334axrd.com"
 interface UserDto {
   username: string;
@@ -19,9 +22,19 @@ class AuthRepository {
   static url = "/v1/auth";
   static apiBaseUrl = process.env.NEXT_PUBLIC_API_URL
 
+  // API 응답을 ApiResponse 형식으로 변환하는 헬퍼 메서드
+  private static async processResponse<T>(response: Response): Promise<ApiResponse<T>> {
+    const data = await response.json();
+    return {
+      code: String(data.code),
+      data: data.data,
+      message: data.message || ''
+    };
+  }
+
   // 회원가입 요청
-  static async postJoin(reqDto: AuthRequestDto): Promise<Response> {
-    return await fetch(`${this.apiBaseUrl}${this.url}/join`, {
+  static async postJoin(reqDto: AuthRequestDto): Promise<ApiResponse<any>> {
+    const response = await fetch(`${this.apiBaseUrl}${this.url}/join`, {
       method: "POST",
       credentials: "include", // 세션 쿠키를 포함하기 위해 필요
       headers: {
@@ -29,10 +42,12 @@ class AuthRepository {
       },
       body: JSON.stringify(reqDto)
     });
+    
+    return this.processResponse(response);
   }
 
   // 로그인 요청 (세션 기반)
-  static async postLogin(reqDto: AuthRequestDto): Promise<Response> {
+  static async postLogin(reqDto: AuthRequestDto): Promise<ApiResponse<any>> {
     const response = await fetch(`${this.apiBaseUrl}${this.url}/login`, {
       method: "POST",
       credentials: "include",
@@ -44,11 +59,11 @@ class AuthRepository {
       body: JSON.stringify(reqDto)
     });
 
-    return response;
+    return this.processResponse(response);
   }
 
   // 인증 상태 확인 (세션 쿠키를 사용한 인증 확인)
-  static async checkAuth(): Promise<Response> {
+  static async checkAuth(): Promise<ApiResponse<any>> {
     try {
       const response = await fetch(`${this.apiBaseUrl}${this.url}/info`, {
         credentials: "include",
@@ -73,7 +88,7 @@ class AuthRepository {
         console.warn('서버가 새로운 세션 ID를 발급했습니다:', setCookie);
       }
 
-      return response;
+      return this.processResponse(response);
     } catch (error) {
       console.error('인증 확인 중 에러 발생:', error);
       throw error;
@@ -81,11 +96,13 @@ class AuthRepository {
   }
 
   // 로그아웃 요청 (세션 쿠키 제거)
-  static async logout(): Promise<Response> {
-    return await fetch(`${this.apiBaseUrl}${this.url}/logout`, {
+  static async logout(): Promise<ApiResponse<any>> {
+    const response = await fetch(`${this.apiBaseUrl}${this.url}/logout`, {
       method: "POST",
       credentials: "include", // 세션 쿠키를 포함하기 위해 필요
     });
+    
+    return this.processResponse(response);
   }
 }
 

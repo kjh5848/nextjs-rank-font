@@ -28,9 +28,7 @@
       "@/util/*": ["./src/util/*"],
       "@/viewModel/*": ["./src/viewModel/*"],
       "@/use/*": ["./src/use/*"],
-      "@/lib/*": ["./src/lib/*"],
       "@/types/*": ["./src/types/*"]
-
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "postcss.config.ts","tailwind.config.ts", "src/components/nplrace/rank/track/id/TrackGridView"],

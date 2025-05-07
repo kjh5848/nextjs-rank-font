@@ -17,28 +17,25 @@ export default function useAuthJoinViewModelLocal() {
       // AuthRepository를 사용하여 회원가입 API 호출 (localhost:8081/v1/auth/join)
       const response = await AuthRepository.postJoin(reqDto);
 
-      if (!response.ok) {
-        const error = await response.json();
+      if (response.code !== "0") {
         
         // 에러 코드에 따른 처리
-        if (error.code === -3) {
-          alert(Object.keys(error.data).map((key) => error.data[key]).join("\n"));
+        if (response.data.code === -3) {
+          alert(Object.keys(response.data).map((key) => response.data[key]).join("\n"));
           return;
         } else {
-          throw new Error(error.message || '회원가입 실패');
+          throw new Error(response.message || '회원가입 실패');
         }
       }
 
-      const data = await response.json();
-      
-      if (data.code === 0) {
-        alert(data.message || '회원가입이 완료되었습니다.'); // 성공 메시지 표시
+      if (response.code === "0") {
+        alert(response.message || '회원가입이 완료되었습니다.'); // 성공 메시지 표시
         
         // 로그인 페이지로 리다이렉트
         router.push('/login');
         router.refresh();
       } else {
-        throw new Error(data.message || '회원가입 실패');
+        throw new Error(response.message || '회원가입 실패');
       }
     } catch (error: any) {
       console.error('Join error:', error);

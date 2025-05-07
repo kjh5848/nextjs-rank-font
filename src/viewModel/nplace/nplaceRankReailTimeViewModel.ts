@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { ApiResponse } from "@/types/api";
 
 // 타입 정의
 export interface TrackInfo {
@@ -32,7 +33,7 @@ export interface SearchParams {
 }
 
 // 검색 API 호출 함수
-const fetchSearchResults = async (params: SearchParams): Promise<nplaceRankSearchShop[]> => {
+const fetchSearchResults = async (params: SearchParams): Promise<ApiResponse<{ nplaceRankSearchShopList: nplaceRankSearchShop[] }>> => {
   if (!params.filterValue.trim() || !params.keyword.trim()) {
     throw new Error("업체명/SHOP_ID와 키워드를 모두 입력해주세요.");
   }
@@ -45,7 +46,7 @@ const fetchSearchResults = async (params: SearchParams): Promise<nplaceRankSearc
   });
 
   const response = await fetch(
-    `http://localhost:8081/v1/nplace/rank/realtime?${query.toString()}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/v1/nplace/rank/realtime?${query.toString()}`,
     {
       method: "GET",
       credentials: "include"
@@ -53,17 +54,42 @@ const fetchSearchResults = async (params: SearchParams): Promise<nplaceRankSearc
   );
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({ message: "서버 오류" }));
+    const errorText = await response.text().catch(() => "서버 오류");
+    let errorData;
+    try {
+      errorData = JSON.parse(errorText);
+    } catch (e) {
+      errorData = { message: errorText || "서버 오류" };
+    }
     throw new Error(errorData.message || "서버 오류가 발생했습니다.");
   }
 
-  const dto = await response.json();
-
-  if (dto.code !== 0) {
-    throw new Error(dto.message || "검색 실패");
+  const text = await response.text();
+  console.log('검색 API 응답 텍스트:', text);
+  
+  if (!text) {
+    return {
+      code: response.ok ? "0" : String(response.status),
+      data: { nplaceRankSearchShopList: [] },
+      message: response.statusText || '서버에서 응답이 없습니다.'
+    };
   }
-
-  return dto.data.nplaceRankSearchShopList;
+  
+  try {
+    const data = JSON.parse(text);
+    return {
+      code: String(data.code),
+      data: data.data,
+      message: data.message || ''
+    };
+  } catch (error) {
+    console.error('응답 처리 중 에러 발생:', error);
+    return {
+      code: "-1",
+      data: { nplaceRankSearchShopList: [] },
+      message: '응답 형식이 올바르지 않습니다.'
+    };
+  }
 };
 
 // 검색어 상태를 저장하기 위한 로컬 캐시 키
@@ -106,7 +132,7 @@ export const getRecentSearches = (): SearchParams[] => {
 const RECENT_RESULTS_CACHE_KEY = "recentSearchResults";
 
 // 검색 결과 저장 (최대 3개)
-const saveSearchResults = (params: SearchParams, results: nplaceRankSearchShop[]) => {
+const saveSearchResults = (params: SearchParams, results: ApiResponse<{ nplaceRankSearchShopList: nplaceRankSearchShop[] }>) => {
   try {
     const recentResults = localStorage.getItem(RECENT_RESULTS_CACHE_KEY);
     const cachedResults = recentResults ? JSON.parse(recentResults) : [];
@@ -114,7 +140,7 @@ const saveSearchResults = (params: SearchParams, results: nplaceRankSearchShop[]
     // 새 결과 아이템 생성
     const newResultItem = {
       params,
-      results,
+      results: results.data.nplaceRankSearchShopList,
       timestamp: new Date().getTime(),
     };
     
@@ -156,7 +182,7 @@ const getSearchQueryKey = (params: SearchParams) => [
 
 // 커스텀 훅: 검색 결과 캐싱 및 조회
 export const useNplaceSearch = (params: SearchParams) => {
-  return useQuery({
+  return useQuery<ApiResponse<{ nplaceRankSearchShopList: nplaceRankSearchShop[] }>, Error>({
     queryKey: getSearchQueryKey(params),
     queryFn: () => fetchSearchResults(params),
     enabled: false, // 자동으로 쿼리를 실행하지 않음 (수동 트리거)
@@ -169,7 +195,11 @@ export const useNplaceSearch = (params: SearchParams) => {
 export const useExecuteSearch = () => {
   const queryClient = useQueryClient();
   
-  return useMutation({
+  return useMutation<
+    ApiResponse<{ nplaceRankSearchShopList: nplaceRankSearchShop[] }>,
+    Error,
+    SearchParams
+  >({
     mutationFn: (params: SearchParams) => {
       saveRecentSearch(params);
       return fetchSearchResults(params);

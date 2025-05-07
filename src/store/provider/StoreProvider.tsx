@@ -64,18 +64,15 @@ export function StoreProvider({ children, initialUser = null }: StoreProviderPro
     const checkSession = async () => {
       try {
         const response = await AuthRepository.checkAuth();
-        const responseText = await response.text();
         
-        if (!response.ok) {
+        if (response.code !== "0") {
           setUser(null);
           router.push("/login");
           return;
         }
 
-        const json = JSON.parse(responseText);
-
-        if (json.code === 0 && json.data?.user) {
-          setUser(json.data.user);
+        if (response.data?.user) {
+          setUser(response.data.user);
         } else {
           setUser(null);
           router.push("/login");

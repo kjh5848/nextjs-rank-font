@@ -21,10 +21,9 @@ function useAuthStoreLocal() {
     try {
       const response = await AuthRepository.checkAuth();
       
-      if (response.ok) {
-        const data = await response.json();
-        if (data.user) {
-          setLoginUser(data.user);
+      if (response.code === "0") {
+        if (response.data?.user) {
+          setLoginUser(response.data.user);
         } else {
           setLoginUser(null);
         }

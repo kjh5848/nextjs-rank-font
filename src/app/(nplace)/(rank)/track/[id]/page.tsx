@@ -127,7 +127,7 @@ export default function TrackDetailPage() {
                         {shop?.roadAddress || shop?.address}
                       </p>
                       <div className="mt-2 flex flex-wrap gap-2">
-                        {shop?.keywordList?.map((keyword, index) => (
+                        {shop?.keywordList?.map((keyword: string, index: number) => (
                           <span
                             key={index}
                             className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700"
@@ -247,7 +247,7 @@ export default function TrackDetailPage() {
                           {shop?.roadAddress || shop?.address}
                         </p>
                         <div className="mt-2 flex flex-wrap gap-2">
-                          {shop?.keywordList?.map((keyword, index) => (
+                          {shop?.keywordList?.map((keyword: string, index: number) => (
                             <span
                               key={index}
                               className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700"

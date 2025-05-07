@@ -427,13 +427,13 @@ export default function RealtimeForm() {
         )}
 
         {/* 검색 결과 */}
-        {searchResult && searchResult.length > 0 ? (
+        {searchResult && searchResult.data.nplaceRankSearchShopList.length > 0 ? (
           <div className="mt-6 space-y-4">
-            {searchResult.map((item, index) => (
+            {searchResult.data.nplaceRankSearchShopList.map((item, index) => (
               <RealtimeResultItem key={index} item={item} />
             ))}
           </div>
-        ) : searchResult && searchResult.length === 0 ? (
+        ) : searchResult && searchResult.data.nplaceRankSearchShopList.length === 0 ? (
           <div className="mt-6 rounded-lg border border-gray-200 bg-white p-4 text-center text-gray-500">
             검색 결과가 없습니다.
           </div>

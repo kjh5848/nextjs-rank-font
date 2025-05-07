@@ -1,7 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import TrackRepository, { Shop, Group } from '@/src/model/TrackRepository';
-
-
+import TrackRepository, { Shop, Group } from '@/model/TrackRepository';
+import { ApiResponse } from '@/types/api';
 
 export const useNplaceRankTrackViewModel = () => {
   const queryClient = useQueryClient();
@@ -12,7 +11,7 @@ export const useNplaceRankTrackViewModel = () => {
     error, 
     isLoading, 
     refetch: refetchShopList
-  } = useQuery({
+  } = useQuery<ApiResponse<{ nplaceRankShopList: Shop[] }>>({
     queryKey: ['nplaceRankShopList'],
     queryFn: () => TrackRepository.getShopList()
   });
@@ -23,18 +22,18 @@ export const useNplaceRankTrackViewModel = () => {
     data: groupListResult,
     error: groupListError,
     isLoading: isLoadingGroupList
-  } = useQuery({
+  } = useQuery<ApiResponse<{ groupList: Group[] }>>({
     queryKey: ['groupList'],
     queryFn: () => TrackRepository.getGroupList()
   });
 
   // 추적 가능한 플레이스 검색
-  const trackableMutation = useMutation({
+  const trackableMutation = useMutation<ApiResponse<any>, Error, string>({
     mutationFn: (url: string) => TrackRepository.searchTrackable(url)
   });
 
   // 상점 추가
-  const addShopMutation = useMutation({
+  const addShopMutation = useMutation<ApiResponse<any>, Error, any>({
     mutationFn: (shop: any) => TrackRepository.addShop(shop),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['nplaceRankShopList'] });
@@ -42,7 +41,7 @@ export const useNplaceRankTrackViewModel = () => {
   });
 
   // 그룹 변경
-  const updateGroupMutation = useMutation({
+  const updateGroupMutation = useMutation<ApiResponse<any>, Error, { shopIds: string[], group: any }>({
     mutationFn: (params: { shopIds: string[], group: any }) => 
       TrackRepository.updateGroup(params.shopIds, params.group),
     onSuccess: () => {

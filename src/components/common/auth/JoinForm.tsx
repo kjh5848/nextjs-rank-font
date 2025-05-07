@@ -62,10 +62,8 @@ export default function JoinForm() {
         },
       });
 
-      const result = await response.json();
-      
-      if (result.code !== 0) {
-        alert(result.message || "회원가입 실패");
+      if (response.code !== "0") {
+        alert(response.message || "회원가입 실패");
       } else {
         alert("등록되었습니다.");
         router.replace('/login');
