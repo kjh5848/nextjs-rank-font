@@ -8,7 +8,8 @@ interface KeywordListProps {
   onSelectKeyword: (key: string) => void;
   onSelectAll: () => void;
   getRankString: (rank: number | null) => string;
-  onAddKeyword: (keyword: string, province: string) => void;
+  shopId: string | undefined;
+  businessSector: string | undefined;
 }
 
 export default function KeywordList({
@@ -17,7 +18,8 @@ export default function KeywordList({
   onSelectKeyword,
   onSelectAll,
   getRankString,
-  onAddKeyword,
+  shopId,
+  businessSector,
 }: KeywordListProps) {
   const isAllSelected = Object.keys(keywords).length > 0 && 
     Object.keys(keywords).every(key => selectedKeywords.has(key));
@@ -48,7 +50,7 @@ export default function KeywordList({
             <h3 className="text-base font-semibold text-gray-900 sm:text-lg lg:text-xl word-break-keep">
               키워드 목록
             </h3>
-            <AddKeyword onAdd={onAddKeyword} />
+            <AddKeyword shopId={shopId} businessSector={businessSector} />
           </div>
           
           <div className="flex items-center space-x-2 lg:self-end">

@@ -36,10 +36,16 @@ export const useNplaceRankTrackWithIdViewModel = ({ id, keyword, province }: Npl
     }
   });
 
-  // 트랙 추가
-  const { mutate: addTrack } = useMutation<ApiResponse<TrackInfo>, Error, { keyword: string; province: string; shopId: string; businessSector: string }>({
-    mutationFn: async (trackData) => {
-      return await TrackRepository.addTrack(trackData);
+  // 트랙 추가 → addKeyword로 이름 변경 및 businessSector, shopId 활용
+  const { mutateAsync: addKeyword, isPending: isAddingKeyword } = useMutation<ApiResponse<TrackInfo>, Error, { keyword: string; province: string }>({
+    mutationFn: async ({ keyword, province }) => {
+      if (!shopWithIdResult?.data?.nplaceRankShop) throw new Error('상점 정보가 없습니다.');
+      return await TrackRepository.addTrack({
+        keyword,
+        province,
+        shopId: shopWithIdResult.data.nplaceRankShop.id,
+        businessSector: shopWithIdResult.data.nplaceRankShop.businessSector || '',
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['nplaceRankShop', id] });
@@ -66,13 +72,7 @@ export const useNplaceRankTrackWithIdViewModel = ({ id, keyword, province }: Npl
     }
   });
 
-  // 순위 체크 데이터 조회
-  const { data: rankCheckResult } = useQuery<ApiResponse<RankCheckData>, Error>({
-    queryKey: ['rankCheck', id],
-    queryFn: async () => {
-      return await TrackRepository.getRankCheckData(id, 'NAVER', 'PLACE');
-    }
-  });
+ 
 
   // 키워드 목록 갱신
   const updateKeywordsMutation = useMutation({
@@ -93,17 +93,19 @@ export const useNplaceRankTrackWithIdViewModel = ({ id, keyword, province }: Npl
   };
 
   return {
+    shopId: shopWithIdResult?.data?.nplaceRankShop?.id,
+    businessSector: shopWithIdResult?.data?.nplaceRankShop?.businessSector,
     shop: shopWithIdResult?.data?.nplaceRankShop,
-    rankCheckData: rankCheckResult?.data,
     isLoading,
     error,
     refetch,
     deleteShop,
-    addTrack,
+    addKeyword,
     deleteTrack,
     updateTrackStatus,
     updateKeywords: updateKeywordsMutation.mutateAsync,
     isUpdatingKeywords: updateKeywordsMutation.isPending,
+    isAddingKeyword,
     getNplaceRankTrackList,
     getRankString: (rank: number | null) => {
       if (rank == null) {

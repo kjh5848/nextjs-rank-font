@@ -1,22 +1,32 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
+import { useNplaceRankTrackAddKeywordViewModel } from "@/viewModel/nplace/nplaceRankTrackAddKeywordViewModel";
+import { useNplaceRankTrackWithIdViewModel } from "@/src/viewModel/nplace/NplaceRankTrackWithIdViewModel";
 
 interface AddKeywordProps {
-  onAdd: (keyword: string, province: string) => void;
+  shopId: string
+  businessSector: string
 }
 
-export default function AddKeyword({ onAdd }: AddKeywordProps) {
+export default function AddKeyword({ shopId, businessSector }: AddKeywordProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [province, setProvince] = useState("");
+  
+  const { addKeyword, isAddingKeyword } = useNplaceRankTrackWithIdViewModel({ id: shopId, keyword, province });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (keyword && province) {
-      onAdd(keyword, province);
-      setKeyword("");
-      setProvince("");
-      setIsModalOpen(false);
+      try {
+        await addKeyword({ keyword, province });
+        setKeyword("");
+        setProvince("");
+        setIsModalOpen(false);
+      } catch (error) {
+        console.error('키워드 추가 실패:', error);
+        alert('키워드 추가에 실패했습니다.');
+      }
     }
   };
 

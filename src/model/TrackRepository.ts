@@ -62,7 +62,7 @@ export type RankCheckData = {
 
 class TrackRepository {
   static url = "/v1/nplace/rank";
-  static apiBaseUrl = process.env.NEXT_PUBLIC_API_URL;
+  static apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.내순위.com";
 
   // API 응답을 ApiResponse 형식으로 변환하는 헬퍼 메서드
   private static async processResponse<T>(response: Response): Promise<ApiResponse<T>> {
@@ -72,12 +72,25 @@ class TrackRepository {
     if (!text) {
       return {
         code: response.ok ? "0" : String(response.status),
-        data: null as unknown as T,
-        message: response.statusText || '서버에서 응답이 없습니다.'
+        message: response.statusText || '서버에서 응답이 없습니다.',
+        data: null as unknown as T
       };
     }
     
     try {
+      // HTML 응답인지 확인 (<!DOCTYPE 또는 <html로 시작하는지)
+      if (text.trim().toLowerCase().startsWith('<!doctype') || text.trim().toLowerCase().startsWith('<html')) {
+        // 클라이언트 환경일 때만 동작
+        if (typeof window !== "undefined") {
+          window.location.href = "/login";
+        }
+        return {
+          code: "401",
+          data: null as unknown as T,
+          message: '세션이 만료되었거나 서버 오류가 발생했습니다. 다시 로그인해주세요.'
+        };
+      }
+      
       const data = JSON.parse(text);
       return {
         code: String(data.code),
@@ -89,7 +102,7 @@ class TrackRepository {
       return {
         code: "-1",
         data: null as unknown as T,
-        message: '응답 형식이 올바르지 않습니다.'
+        message: '응답 형식이 올바르지 않습니다. 서버 연결을 확인해주세요.'
       };
     }
   }
@@ -253,17 +266,17 @@ class TrackRepository {
     return this.processResponse(response);
   }
 
-  // 순위 체크 데이터 조회
-  static async getRankCheckData(shopId: string, searchType: string, searchKeyword: string): Promise<ApiResponse<RankCheckData>> {
-    // 확인: 파라미터 순서가 id, type, keyword 순서인지 확인 필요
-    const response = await fetch(`${this.apiBaseUrl}${this.url}/check?shopId=${shopId}&searchType=${searchType}&searchKeyword=${searchKeyword}`, {
-      credentials: "include",
-    });
-    if (!response.ok) {
-      throw new Error('순위 체크 데이터 조회에 실패했습니다.');
-    }
-    return this.processResponse(response);
-  }
+  // // 순위 체크 데이터 조회
+  // static async getRankCheckData(shopId: string, searchType: string, searchKeyword: string): Promise<ApiResponse<RankCheckData>> {
+  //   // 확인: 파라미터 순서가 id, type, keyword 순서인지 확인 필요
+  //   const response = await fetch(`${this.apiBaseUrl}${this.url}/check?shopId=${shopId}&searchType=${searchType}&searchKeyword=${searchKeyword}`, {
+  //     credentials: "include",
+  //   });
+  //   if (!response.ok) {
+  //     throw new Error('순위 체크 데이터 조회에 실패했습니다.');
+  //   }
+  //   return this.processResponse(response);
+  // }
 }
 
 export default TrackRepository; 

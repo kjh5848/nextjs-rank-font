@@ -1,4 +1,3 @@
-// 세션 기반 인증을 지원하는 AuthRepository
 
 import { ApiResponse } from "@/types/api";
 
@@ -20,7 +19,7 @@ interface AuthRequestDto {
 
 class AuthRepository {
   static url = "/v1/auth";
-  static apiBaseUrl = process.env.NEXT_PUBLIC_API_URL
+  static apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.내순위.com" // 기본값 제공
 
   // API 응답을 ApiResponse 형식으로 변환하는 헬퍼 메서드
   private static async processResponse<T>(response: Response): Promise<ApiResponse<T>> {
@@ -40,7 +39,8 @@ class AuthRepository {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(reqDto)
+      body: JSON.stringify(reqDto),
+      
     });
     
     return this.processResponse(response);

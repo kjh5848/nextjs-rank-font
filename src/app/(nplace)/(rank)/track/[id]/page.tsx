@@ -28,11 +28,12 @@ export default function TrackDetailPage() {
   const [viewMode, setViewMode] = useState<"list" | "grid" | "report">("grid");
   const [showAddKeywordModal, setShowAddKeywordModal] = useState(false);
   const {
+    shopId,
+    businessSector,
     shop,
     isLoading,
     error,
     deleteShop,
-    addTrack,
     updateKeywords,
     isUpdatingKeywords,
     getNplaceRankTrackList,
@@ -49,16 +50,6 @@ export default function TrackDetailPage() {
     }
   }, [shop]);
 
-  const handleAddTrack = async () => {
-    if (!selectedProvince || !keyword) return;
-    await addTrack({
-      keyword,
-      province: selectedProvince,
-      shopId: id,
-      businessSector: shop?.businessSector || "",
-    });
-    setKeyword("");
-  };
 
   const handleTrackInfoSelect = (key: string) => {
     setSelectedTrackInfos((prev) => {
@@ -207,7 +198,8 @@ export default function TrackDetailPage() {
               onSelectKeyword={handleTrackInfoSelect}
               onSelectAll={handleSelectAll}
               getRankString={getRankString}
-              onAddKeyword={() => setShowAddKeywordModal(true)}
+              shopId={shopId}
+              businessSector={businessSector}
             />
           </div>
 
@@ -219,7 +211,8 @@ export default function TrackDetailPage() {
               onSelectKeyword={handleTrackInfoSelect}
               onSelectAll={handleSelectAll}
               getRankString={getRankString}
-              onAddKeyword={() => setShowAddKeywordModal(true)}
+              shopId={shopId}
+              businessSector={businessSector}
             />
           </div>
 
