@@ -4,21 +4,15 @@ import { useState, useEffect } from "react";
 import { useNplaceRankTrackWithIdViewModel } from "@/viewModel/nplace/NplaceRankTrackWithIdViewModel";
 import { useParams } from "next/navigation";
 import {
-  Download,
   FileText,
   LayoutGrid,
-  List,
-  CheckSquare,
-  Square,
 } from "lucide-react";
 import Image from "next/image";
-import RankCheckModal from "./components/RankCheckModal";
 import TrackReportView from "@/src/components/nplrace/rank/track/id/TrackReportView";
 import TrackGridView from "@/src/components/nplrace/rank/track/id/TrackGridView";
-import TrackListView from "@/src/components/nplrace/rank/track/id/TrackListView";
 import AddKeywordModal from "@/src/components/nplrace/rank/track/id/TrackAddKeywordModal";
 import KeywordList from "@/src/components/nplrace/rank/track/id/TrackKeywordList";
-import AddKeywordButton from "@/src/components/nplrace/rank/track/id/TrackAddKeywordButton";
+import RankCheckModal from "@/src/components/nplrace/rank/track/id/RankCheckModal";
 
 export default function TrackDetailPage() {
   const params = useParams();
