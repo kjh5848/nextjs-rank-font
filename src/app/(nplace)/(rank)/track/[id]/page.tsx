@@ -13,6 +13,7 @@ import TrackGridView from "@/src/components/nplrace/rank/track/id/TrackGridView"
 import AddKeywordModal from "@/src/components/nplrace/rank/track/id/TrackAddKeywordModal";
 import KeywordList from "@/src/components/nplrace/rank/track/id/TrackKeywordList";
 import RankCheckModal from "@/src/components/nplrace/rank/track/id/RankCheckModal";
+import React from "react";
 
 export default function TrackDetailPage() {
   const params = useParams();
@@ -87,6 +88,15 @@ export default function TrackDetailPage() {
     }
   };
 
+  // 아코디언 상태 추가
+  const [openAccordions, setOpenAccordions] = React.useState<string[]>([]);
+
+  const toggleAccordion = (key: string) => {
+    setOpenAccordions((prev) =>
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+    );
+  };
+
   if (isLoading) return <div>로딩중...</div>;
   if (error) return <div className="text-red-500">{error.toString()}</div>;
   if (!shop) return <div>상점 정보가 없습니다.</div>;
@@ -99,7 +109,7 @@ export default function TrackDetailPage() {
           <div className="lg:hidden">
             <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg">
               <div className="p-6">
-                <div className="flex flex-col  space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+                <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                   <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
                     <div className="h-full w-full overflow-hidden rounded-lg sm:h-20 sm:w-20">
                       <Image
@@ -214,13 +224,13 @@ export default function TrackDetailPage() {
             />
           </div>
 
-          <div className="lg:col-span-3 ">
+          <div className="lg:col-span-3">
             {/* 데스크톱용 상점 정보 */}
-            <div className="hidden lg:block ">
+            <div className="hidden lg:block">
               <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg">
                 <div className="p-6">
                   <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-                    <div className="flex flex-col  space-y-4 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
+                    <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
                       <div className="h-full w-full overflow-hidden rounded-lg sm:h-20 sm:w-20">
                         <Image
                           src={shop?.shopImageUrl || "/img/nplace/shop.png"}
@@ -314,102 +324,74 @@ export default function TrackDetailPage() {
 
             {/* 선택된 키워드 정보 */}
             {selectedTrackInfos.size > 0 ? (
-              <div className="space-y-6 mt-5">
+              <div className="mt-5 space-y-6">
                 {Array.from(selectedTrackInfos).map((trackInfoKey) => (
-                  <div
-                    key={trackInfoKey}
-                    className="overflow-hidden md:rounded-xl md:border md:border-gray-200 md:bg-white md:p-6 md:shadow-lg"
-                  >
-                    <div className="mb-6 flex flex-col justify-between space-y-4 sm:flex-row sm:items-center sm:space-y-0">
+                  <div key={trackInfoKey} className="mb-2 rounded-lg border border-gray-200 bg-white">
+                    {/* 아코디언 헤더 */}
+                    <button
+                      className="w-full flex justify-between items-center px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors rounded-t-lg focus:outline-none"
+                      onClick={() => toggleAccordion(trackInfoKey)}
+                      aria-expanded={openAccordions.includes(trackInfoKey)}
+                      aria-controls={`accordion-content-${trackInfoKey}`}
+                    >
                       <div>
-                        <h4 className="text-xl font-bold text-gray-900">
-                          {trackInfoKey}
-                        </h4>
-                        <p className="mt-1 text-sm text-gray-500">
-                          {
-                            shop?.nplaceRankTrackInfoMap?.[trackInfoKey]
-                              ?.province
-                          }{" "}
-                          •{" "}
-                          {getRankString(
-                            shop?.nplaceRankTrackInfoMap?.[trackInfoKey]
-                              ?.rank ?? null,
-                          )}
-                        </p>
+                        <span className="font-semibold text-gray-900">{trackInfoKey}</span>
+                        <span className="ml-2 text-xs text-gray-500 block sm:inline">
+                          {shop?.nplaceRankTrackInfoMap?.[trackInfoKey]?.province}
+                          {shop?.nplaceRankTrackInfoMap?.[trackInfoKey]?.rank !== undefined &&
+                            ` • ${getRankString(shop?.nplaceRankTrackInfoMap?.[trackInfoKey]?.rank ?? null)}`}
+                        </span>
                       </div>
-
-                      <div className="flex gap-2">
-                        <button
-                          className={`flex items-center rounded-lg px-4 py-2 text-sm font-medium ${
-                            viewMode === "grid"
-                              ? "bg-blue-50 text-blue-700"
-                              : "bg-gray-50 text-gray-700 hover:bg-gray-100"
-                          }`}
-                          onClick={() => setViewMode("grid")}
-                        >
-                          <LayoutGrid size={16} className="mr-2" />
-                        </button>
-                        {/* <button
-                          className={`flex items-center rounded-lg px-4 py-2 text-sm font-medium ${
-                            viewMode === "list"
-                              ? "bg-blue-50 text-blue-700"
-                              : "bg-gray-50 text-gray-700 hover:bg-gray-100"
-                          }`}
-                          onClick={() => setViewMode("list")}
-                        >
-                          <List size={16} className="mr-2" />
-                        </button> */}
-                        <button
-                          className={`flex items-center rounded-lg px-4 py-2 text-sm font-medium ${
-                            viewMode === "report"
-                              ? "bg-blue-50 text-blue-700"
-                              : "bg-gray-50 text-gray-700 hover:bg-gray-100"
-                          }`}
-                          onClick={() => setViewMode("report")}
-                        >
-                          <FileText size={16} className="mr-2" />
-                        </button>
+                      <span className="ml-2 text-gray-400 text-lg">
+                        {openAccordions.includes(trackInfoKey) ? "▲" : "▼"}
+                      </span>
+                    </button>
+                    {/* 아코디언 내용 */}
+                    {openAccordions.includes(trackInfoKey) && (
+                      <div
+                        id={`accordion-content-${trackInfoKey}`}
+                        className="px-4 py-4 border-t bg-white"
+                      >
+                        <div className="flex gap-2 mb-4">
+                          <button
+                            className={`flex items-center rounded-lg px-4 py-2 text-sm font-medium ${viewMode === "grid" ? "bg-blue-50 text-blue-700" : "bg-gray-50 text-gray-700 hover:bg-gray-100"}`}
+                            onClick={() => setViewMode("grid")}
+                          >
+                            <LayoutGrid size={16} className="mr-2" />
+                            그리드
+                          </button>
+                          <button
+                            className={`flex items-center rounded-lg px-4 py-2 text-sm font-medium ${viewMode === "report" ? "bg-blue-50 text-blue-700" : "bg-gray-50 text-gray-700 hover:bg-gray-100"}`}
+                            onClick={() => setViewMode("report")}
+                          >
+                            <FileText size={16} className="mr-2" />
+                            리포트
+                          </button>
+                        </div>
+                        {viewMode === "report" ? (
+                          <TrackReportView
+                            trackList={getNplaceRankTrackList(trackInfoKey) || []}
+                            shopName={shop?.shopName || ""}
+                            keyword={trackInfoKey}
+                          />
+                        ) : (
+                          <TrackGridView
+                            trackList={getNplaceRankTrackList(trackInfoKey) || []}
+                          />
+                        )}
                       </div>
-                    </div>
-
-                    {
-                      viewMode === "report" ? (
-                        <TrackReportView
-                          trackList={getNplaceRankTrackList(trackInfoKey) || []}
-                          shopName={shop?.shopName || ""}
-                          keyword={trackInfoKey}
-                        />
-                      ) : (
-                        <TrackGridView
-                          trackList={getNplaceRankTrackList(trackInfoKey) || []}
-                        />
-                      )
-                      // : (
-                      //   <TrackListView
-                      //     trackList={getNplaceRankTrackList(trackInfoKey) || []}
-                      //     getRankString={getRankString}
-                      //     setSelectedTrack={setSelectedTrack}
-                      //     setShowRankCheckModal={setShowRankCheckModal}
-                      //   />
-                      // )
-                    }
+                    )}
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="flex h-64 items-center justify-center rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
+              <div className="mt-5 flex h-64 items-center justify-center rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
                 <p className="text-gray-500">선택된 키워드가 없습니다.</p>
               </div>
             )}
           </div>
         </div>
       </div>
-
-      <AddKeywordModal
-        isOpen={showAddKeywordModal}
-        onClose={() => setShowAddKeywordModal(false)}
-        onAdd={handleAddTrack}
-      />
 
       <RankCheckModal
         show={showRankCheckModal}

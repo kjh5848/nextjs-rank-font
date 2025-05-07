@@ -87,15 +87,12 @@ export default function CardBarChart() {
           x: {
             display: false,
             grid: {
-              borderDash: [2],
               color: "rgba(33, 37, 41, 0.3)",
             },
           },
           y: {
             display: true,
             grid: {
-              borderDash: [2],
-              drawBorder: false,
               color: "rgba(33, 37, 41, 0.2)",
             },
           },

@@ -25,7 +25,7 @@ interface ChartTooltipContentProps {
   indicator?: "dot" | "line";
 }
 
-// 툴팁 컴포넌트
+// 툴크 컴포넌트
 function ChartTooltipContent({
   active,
   payload,
@@ -349,14 +349,17 @@ style.textContent = `
     };
 
     const visitorReviewGrowth = calculateGrowth(
-      last.visitorReviewCount,
       first.visitorReviewCount,
+      last.visitorReviewCount,
     );
     const blogReviewGrowth = calculateGrowth(
-      last.blogReviewCount,
       first.blogReviewCount,
+      last.blogReviewCount,
     );
-    const saveCountGrowth = calculateGrowth(last.saveCount, first.saveCount);
+    const saveCountGrowth = calculateGrowth(
+      first.saveCount,
+      last.saveCount,
+    );
 
     const averageRank =
       ranks.length > 0 ? ranks.reduce((a, b) => a + b, 0) / ranks.length : 0;
