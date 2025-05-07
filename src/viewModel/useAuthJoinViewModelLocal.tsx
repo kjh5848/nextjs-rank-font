@@ -40,7 +40,7 @@ export default function useAuthJoinViewModelLocal() {
       } else {
         throw new Error(data.message || '회원가입 실패');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Join error:', error);
       alert(error.message || '회원가입 중 오류가 발생했습니다.');
     } finally {

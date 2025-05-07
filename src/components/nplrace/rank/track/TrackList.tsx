@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { TrackData } from "@/model/TrackRepository";
 import Image from "next/image";
 import { useState } from "react";
@@ -30,7 +30,9 @@ export default function TrackList({
   getRankString,
 }: TrackListProps) {
   const router = useRouter();
-  const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const searchParams = useSearchParams();
+  const initialViewMode = searchParams.get("view") === "list" ? "list" : "grid";
+  const [viewMode, setViewMode] = useState<"grid" | "list">(initialViewMode);
 
   if (!filteredShopList || filteredShopList.length === 0) {
     return (
@@ -45,6 +47,13 @@ export default function TrackList({
 
   const handleShopClick = (id: any): void => {
     router.push(`/track/${id}`);
+  };
+
+  const handleViewModeChange = (mode: "grid" | "list") => {
+    setViewMode(mode);
+    const params = new URLSearchParams(window.location.search);
+    params.set("view", mode);
+    router.replace(`?${params.toString()}`, { scroll: false });
   };
 
   const renderShopContent = (shop: any) => {
@@ -249,7 +258,7 @@ export default function TrackList({
 
         <div className="flex items-center space-x-2">
           <button
-            onClick={() => setViewMode('grid')}
+            onClick={() => handleViewModeChange('grid')}
             className={`p-2 rounded-md transition-colors ${
               viewMode === 'grid' 
                 ? 'bg-blue-50 text-blue-600' 
@@ -262,7 +271,7 @@ export default function TrackList({
             </svg>
           </button>
           <button
-            onClick={() => setViewMode('list')}
+            onClick={() => handleViewModeChange('list')}
             className={`p-2 rounded-md transition-colors ${
               viewMode === 'list' 
                 ? 'bg-blue-50 text-blue-600' 

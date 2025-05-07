@@ -1,5 +1,6 @@
 import { CheckSquare, Square } from "lucide-react";
 import AddKeyword from "./TrackAddKeyword";
+import { useState, useEffect } from "react";
 
 interface KeywordListProps {
   keywords: { [key: string]: any };
@@ -20,6 +21,24 @@ export default function KeywordList({
 }: KeywordListProps) {
   const isAllSelected = Object.keys(keywords).length > 0 && 
     Object.keys(keywords).every(key => selectedKeywords.has(key));
+
+  // 1. 상태 초기화 시 localStorage에서 불러오기
+  const [selectedTrackInfos, setSelectedTrackInfos] = useState<Set<string>>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("selectedTrackInfos");
+      if (saved) {
+        return new Set(JSON.parse(saved));
+      }
+    }
+    return new Set();
+  });
+
+  // 2. 상태 변경 시 localStorage에 저장
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("selectedTrackInfos", JSON.stringify(Array.from(selectedTrackInfos)));
+    }
+  }, [selectedTrackInfos]);
 
   return (
     <div className="rounded-lg border border-gray-200 bg-white shadow-lg">
