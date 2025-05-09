@@ -248,6 +248,7 @@ class TrackRepository {
         nplaceRankTrackInfo: trackInfo
       })
     });
+    console.log('트랙 추가 응답:', response);
     if (!response.ok) {
       throw new Error('트랙 추가에 실패했습니다.');
     }

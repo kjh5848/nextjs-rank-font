@@ -20,7 +20,8 @@ interface FormValues {
 }
 
 export default function JoinForm() {
-  const { user, isAuthLoading } = useAuthStore();
+    const { loginUser, isAuthPending } = useAuthStore();
+
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<FormValues>();
   const [isVerified, setIsVerified] = useState(false);
   const [isPendingSubmit, setIsPendingSubmit] = useState(false);
@@ -29,10 +30,10 @@ export default function JoinForm() {
   const password = watch("password");
 
   useEffect(() => {
-    if (!isAuthLoading && user) {
+    if (!isAuthPending && loginUser) {
       router.replace("/dashboard");
     }
-  }, [isAuthLoading, user, router]);
+  }, [isAuthPending, loginUser, router]);
 
 
   const onSubmit = async (data: FormValues) => {

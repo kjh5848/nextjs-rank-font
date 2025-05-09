@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import { useNplaceRankTrackAddKeywordViewModel } from "@/viewModel/nplace/nplaceRankTrackAddKeywordViewModel";
 import { useNplaceRankTrackWithIdViewModel } from "@/src/viewModel/nplace/NplaceRankTrackWithIdViewModel";
 
 interface AddKeywordProps {
-  shopId: string
+  shopId: string  
   businessSector: string
 }
 

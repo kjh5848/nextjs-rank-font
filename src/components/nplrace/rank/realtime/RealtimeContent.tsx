@@ -3,9 +3,9 @@ import RealtimeForm from "@/src/components/nplrace/rank/realtime/RealtimeForm";
 import { useAuthStore } from "@/src/store/provider/StoreProvider";
 
 export default function RealtimeContent() {
-  const { user } = useAuthStore();
+  const { loginUser } = useAuthStore();
 
-  if (!user) return null;
+  if (!loginUser) return null;
 
   return (
     <div>

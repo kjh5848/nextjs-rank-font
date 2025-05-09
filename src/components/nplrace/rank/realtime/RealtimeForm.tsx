@@ -16,7 +16,7 @@ import {
 import { useClickAway } from "react-use";
 
 export default function RealtimeForm() {
-  const { user } = useAuthStore();
+  const { loginUser } = useAuthStore();
 
   const [location, setLocation] = useState("서울시");
   const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
@@ -82,7 +82,7 @@ export default function RealtimeForm() {
 
   // 검색 실행 핸들러
   const handleSearch = async () => {
-    if (!user) {
+    if (!loginUser) {
       alert("로그인 후 이용 가능합니다.");
       return;
     }

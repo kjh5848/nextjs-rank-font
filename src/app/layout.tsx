@@ -24,8 +24,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className={inter.className}>
         <QueryProviders>
           <StoreProvider 
-            initialUser={initialUser}
-            initialSessionId={sessionId}  // 세션 ID 전달
           >
             <main className="">{children}</main>
           </StoreProvider>

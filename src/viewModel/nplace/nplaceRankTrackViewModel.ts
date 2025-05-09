@@ -71,4 +71,4 @@ export const useNplaceRankTrackViewModel = () => {
     updateGroup: (shopIds: string[], group: any) => updateGroupMutation.mutateAsync({ shopIds, group }),
     isUpdatingGroup: updateGroupMutation.isPending
   };
-}; 
+};

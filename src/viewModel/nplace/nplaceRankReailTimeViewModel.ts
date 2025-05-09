@@ -46,7 +46,7 @@ const fetchSearchResults = async (params: SearchParams): Promise<ApiResponse<{ n
   });
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL || "https://api.내순위.com"}/v1/nplace/rank/realtime?${query.toString()}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/v1/nplace/rank/realtime?${query.toString()}`,
     {
       method: "GET",
       credentials: "include"

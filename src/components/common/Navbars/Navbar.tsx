@@ -8,7 +8,7 @@ import { useAuthStore } from "@/src/store/provider/StoreProvider";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const { user, logout, setLoginUser } = useAuthStore(); // 로그인 상태 확인
+  const { loginUser, logout } = useAuthStore(); // 로그인 상태 확인
 
   // 클라이언트 사이드 렌더링 확인
   useEffect(() => {
@@ -18,9 +18,9 @@ export default function Navbar() {
   // 별도의 useEffect로 로그인 상태 로깅
   useEffect(() => {
     if (isClient) {
-      console.log("현재 로그인 상태:", user);
+      console.log("현재 로그인 상태:", loginUser);
     }
-  }, [user, isClient]);
+  }, [loginUser, isClient]);
 
   const handleLogout = async () => {
     try {
@@ -51,7 +51,7 @@ export default function Navbar() {
 
             {/* 데스크탑 메뉴 */}
             <div className="hidden md:flex items-center space-x-4">
-              {isClient && user ? (
+              {isClient && loginUser ? (
                 /* 로그인 상태: 대시보드와 로그아웃 버튼만 표시 */
                 <>
                   <Link href="/realtime">
@@ -85,7 +85,7 @@ export default function Navbar() {
 
             {/* 모바일 메뉴 버튼 */}
             <div className="md:hidden flex items-center">
-              {isClient && !user && (
+              {isClient && !loginUser && (
                 <Link href="/login" className="block">
                   <span className="block px-3 py-2 text-rank-dark hover:text-rank-primary text-sm font-medium transition-colors">
                     로그인
@@ -120,7 +120,7 @@ export default function Navbar() {
         {isOpen && (
           <div className="md:hidden bg-white rounded-3xl mt-2 shadow-lg absolute w-full">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              {isClient && user ? (
+              {isClient && loginUser ? (
                 /* 로그인 상태: 대시보드와 로그아웃 옵션 */
                 <>
                   <Link href="/realtime" onClick={() => setIsOpen(false)}>

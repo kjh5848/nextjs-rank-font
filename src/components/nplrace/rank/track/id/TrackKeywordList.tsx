@@ -21,6 +21,8 @@ export default function KeywordList({
   shopId,
   businessSector,
 }: KeywordListProps) {
+
+  console.log(`keywords: ${keywords}, shopId: ${shopId}, businessSector: ${businessSector}`);
   const isAllSelected = Object.keys(keywords).length > 0 && 
     Object.keys(keywords).every(key => selectedKeywords.has(key));
 
@@ -50,7 +52,9 @@ export default function KeywordList({
             <h3 className="text-base font-semibold text-gray-900 sm:text-lg lg:text-xl word-break-keep">
               키워드 목록
             </h3>
-            <AddKeyword shopId={shopId} businessSector={businessSector} />
+            {shopId && businessSector && (
+              <AddKeyword shopId={shopId} businessSector={businessSector} />
+            )}
           </div>
           
           <div className="flex items-center space-x-2 lg:self-end">

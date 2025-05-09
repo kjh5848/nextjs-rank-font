@@ -8,7 +8,7 @@ import { useAuthStore } from "@/src/store/provider/StoreProvider";
 
 export default function LoginForm() {
   const { login, isPendingLogin } = useAuthLoginViewModelLocal();
-  const { setLoginUser } = useAuthStore();
+  const { loginUser, setLoginUser } = useAuthStore();
   
   const refs = useRef({
     idElement: null as HTMLInputElement | null,
