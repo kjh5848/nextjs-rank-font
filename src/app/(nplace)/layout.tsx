@@ -9,7 +9,7 @@ export default async function AdminLayout({
 })  {
   return (
     <>
-      <div className="min-h-screen">
+      <div className="scrollbar-hide">
         <Sidebar />
         <div className="relative xl:ml-60">
           <div className="relative m-10 mx-auto w-full">

@@ -103,7 +103,7 @@ export default function TrackDetailPage() {
   if (!shop) return <div>상점 정보가 없습니다.</div>;
 
   return (
-    <div className="min-h-screen">
+    <div className="">
       <div className="mx-auto px-4 py-6 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
           {/* 모바일용 상점 정보 */}
@@ -327,6 +327,86 @@ export default function TrackDetailPage() {
                 </div>
               </div>
             </div>
+            {/* 선택된 키워드 정보 */}
+            {selectedTrackInfos.size > 0 ? (
+              <div className="mt-5 space-y-6">
+                {Array.from(selectedTrackInfos).map((trackInfoKey) => (
+                  <div
+                    key={trackInfoKey}
+                    className="mb-2 rounded-lg border border-gray-200 bg-white"
+                  >
+                    {/* 아코디언 헤더 */}
+                    <button
+                      className="flex w-full items-center justify-between rounded-t-lg bg-gray-50 px-4 py-3 transition-colors hover:bg-gray-100 focus:outline-none"
+                      onClick={() => toggleAccordion(trackInfoKey)}
+                      aria-expanded={openAccordions.includes(trackInfoKey)}
+                      aria-controls={`accordion-content-${trackInfoKey}`}
+                    >
+                      <div>
+                        <span className="font-semibold text-gray-900">
+                          {trackInfoKey}
+                        </span>
+                        <span className="ml-2 block text-xs text-gray-500 sm:inline">
+                          {
+                            shop?.nplaceRankTrackInfoMap?.[trackInfoKey]
+                              ?.province
+                          }
+                          {shop?.nplaceRankTrackInfoMap?.[trackInfoKey]
+                            ?.rank !== undefined &&
+                            ` • ${getRankString(shop?.nplaceRankTrackInfoMap?.[trackInfoKey]?.rank ?? null)}`}
+                        </span>
+                      </div>
+                      <span className="ml-2 text-lg text-gray-400">
+                        {openAccordions.includes(trackInfoKey) ? "▲" : "▼"}
+                      </span>
+                    </button>
+                    {/* 아코디언 내용 */}
+                    {openAccordions.includes(trackInfoKey) && (
+                      <div
+                        id={`accordion-content-${trackInfoKey}`}
+                        className="border-t bg-white px-4 py-4"
+                      >
+                        <div className="mb-4 flex gap-2">
+                          <button
+                            className={`flex items-center rounded-lg px-4 py-2 text-sm font-medium ${viewMode === "grid" ? "bg-blue-50 text-blue-700" : "bg-gray-50 text-gray-700 hover:bg-gray-100"}`}
+                            onClick={() => setViewMode("grid")}
+                          >
+                            <LayoutGrid size={16} className="mr-2" />
+                            그리드
+                          </button>
+                          <button
+                            className={`flex items-center rounded-lg px-4 py-2 text-sm font-medium ${viewMode === "report" ? "bg-blue-50 text-blue-700" : "bg-gray-50 text-gray-700 hover:bg-gray-100"}`}
+                            onClick={() => setViewMode("report")}
+                          >
+                            <FileText size={16} className="mr-2" />
+                            리포트
+                          </button>
+                        </div>
+                        {viewMode === "report" ? (
+                          <TrackReportView
+                            trackList={
+                              getNplaceRankTrackList(trackInfoKey) || []
+                            }
+                            shopName={shop?.shopName || ""}
+                            keyword={trackInfoKey}
+                          />
+                        ) : (
+                          <TrackGridView
+                            trackList={
+                              getNplaceRankTrackList(trackInfoKey) || []
+                            }
+                          />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="mt-5 flex h-64 items-center justify-center rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
+                <p className="text-gray-500">선택된 키워드가 없습니다.</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

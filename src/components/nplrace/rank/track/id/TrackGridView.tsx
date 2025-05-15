@@ -95,7 +95,7 @@ export default function TrackGridView(
   if (!trackList || trackList.length === 0) {
     return (
       <div className="flex h-32 items-center justify-center rounded-lg bg-gray-50">
-        <p className="text-gray-500">추적 중인 키워드가 없습니다.</p>
+        <p className="text-gray-500">추적 중...</p>
       </div>
     );
   }

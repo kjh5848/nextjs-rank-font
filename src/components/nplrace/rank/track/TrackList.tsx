@@ -20,8 +20,6 @@ interface TrackInfo {
   rankChange: number;
 }
 
-type ViewMode = 'grid' | 'list';
-
 export default function TrackList({
   filteredShopList,
   selectedShopList,

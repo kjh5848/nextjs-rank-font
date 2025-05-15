@@ -140,7 +140,6 @@ class TrackRepository {
   static async getShopDetail(id: string): Promise<ApiResponse<{ nplaceRankShop: Shop }>> {
     // URL에 직접 id 값을 삽입
     const url = `${this.apiBaseUrl}${this.url}/shop/${id}`;
-    console.log('[TrackRepository] 상점 상세 정보 조회 URL:', url);
     
     const response = await fetch(url, {
       credentials: "include",
@@ -155,7 +154,6 @@ class TrackRepository {
   static async deleteShop(id: string): Promise<ApiResponse<void>> {
     // URL에 직접 id 값을 삽입
     const url = `${this.apiBaseUrl}${this.url}/shop/${id}`;
-    console.log('[TrackRepository] 상점 삭제 URL:', url);
     
     const response = await fetch(url, {
       method: 'DELETE',
@@ -171,7 +169,6 @@ class TrackRepository {
   static async updateTrackStatus(keywordId: string, status: 'RUNNING' | 'STOP'): Promise<ApiResponse<void>> {
     // URL에 직접 keywordId 값을 삽입
     const url = `${this.apiBaseUrl}${this.url}/track/${keywordId}`;
-    console.log('[TrackRepository] 키워드 상태 변경 URL:', url);
     
     const response = await fetch(url, {
       method: 'PUT',
@@ -193,8 +190,6 @@ class TrackRepository {
   static async updateKeywords(id: string): Promise<ApiResponse<void>> {
     // URL에 직접 id 값을 삽입
     const url = `${this.apiBaseUrl}${this.url}/update/${id}`;
-    console.log('[TrackRepository] 키워드 목록 갱신 URL:', url);
-    
     const response = await fetch(url, {
       method: 'PUT',
       credentials: "include",
@@ -223,7 +218,6 @@ class TrackRepository {
       }
     };
     
-    console.log('요청 본문:', JSON.stringify(requestBody));
     
     const response = await fetch(`${this.apiBaseUrl}${this.url}/track`, {
       method: 'POST',
@@ -234,7 +228,6 @@ class TrackRepository {
       body: JSON.stringify(requestBody)
     });
 
-    // 응답을 한 번만 처리
     return processApiResponse(response);
   }
 
@@ -242,7 +235,6 @@ class TrackRepository {
   static async deleteTrack(id: string): Promise<ApiResponse<void>> {
     // URL에 직접 id 값을 삽입
     const url = `${this.apiBaseUrl}${this.url}/track/${id}`;
-    console.log('[TrackRepository] 키워드 삭제 URL:', url);
     
     const response = await fetch(url, {
       method: 'DELETE',

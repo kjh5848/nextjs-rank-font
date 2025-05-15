@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import QueryProviders from "../store/provider/QueryProviders";
 import "@/styles/global.css";
 import { headers } from 'next/headers';
-const inter = Inter({ subsets: ["latin"], display: 'swap' });
 
 export const metadata = {
   title: "내 순위 랭킹",
@@ -14,7 +13,7 @@ export const metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
-      <body className={inter.className}>
+      <body >
         <QueryProviders>
           <StoreProvider 
           >

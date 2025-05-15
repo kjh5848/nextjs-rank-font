@@ -68,9 +68,6 @@ export const useNplaceRankTrackWithIdViewModel = ({ id, keyword, province }: Npl
     },
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({ queryKey: ['nplaceRankShop', id] });
-     
-      // 이전 페이지로 이동
-      if (typeof window !== 'undefined') window.history.back();
     }
   });
 
