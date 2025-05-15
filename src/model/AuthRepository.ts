@@ -1,5 +1,5 @@
-
 import { ApiResponse } from "@/types/api";
+import { processApiResponse } from "@/utils/responseHandler";
 
 // "https://xn--220b334axrd.com"
 interface UserDto {
@@ -22,14 +22,6 @@ class AuthRepository {
   static apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.내순위.com" // 기본값 제공
 
   // API 응답을 ApiResponse 형식으로 변환하는 헬퍼 메서드
-  private static async processResponse<T>(response: Response): Promise<ApiResponse<T>> {
-    const data = await response.json();
-    return {
-      code: String(data.code),
-      data: data.data,
-      message: data.message || ''
-    };
-  }
 
   // 회원가입 요청
   static async postJoin(reqDto: AuthRequestDto): Promise<ApiResponse<any>> {
@@ -40,10 +32,9 @@ class AuthRepository {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(reqDto),
-      
     });
     
-    return this.processResponse(response);
+    return processApiResponse(response);
   }
 
   // 로그인 요청 (세션 기반)
@@ -59,7 +50,7 @@ class AuthRepository {
       body: JSON.stringify(reqDto)
     });
 
-    return this.processResponse(response);
+    return processApiResponse(response);
   }
 
   // 인증 상태 확인 (세션 쿠키를 사용한 인증 확인)
@@ -71,7 +62,6 @@ class AuthRepository {
           "Accept": "application/json",
           "Content-Type": "application/json",
           "Cache-Control": "no-cache",
-          // 기존 세션 ID를 쿠키에서 가져와서 명시적으로 전송
         }
       });
       
@@ -88,7 +78,7 @@ class AuthRepository {
         console.warn('서버가 새로운 세션 ID를 발급했습니다:', setCookie);
       }
 
-      return this.processResponse(response);
+      return processApiResponse(response, true);
     } catch (error) {
       console.error('인증 확인 중 에러 발생:', error);
       throw error;
@@ -102,7 +92,7 @@ class AuthRepository {
       credentials: "include", // 세션 쿠키를 포함하기 위해 필요
     });
     
-    return this.processResponse(response);
+    return processApiResponse(response);
   }
 }
 

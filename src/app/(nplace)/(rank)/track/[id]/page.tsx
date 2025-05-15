@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useNplaceRankTrackWithIdViewModel } from "@/viewModel/nplace/NplaceRankTrackWithIdViewModel";
-import { useParams } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
 import {
   FileText,
   LayoutGrid,
@@ -13,11 +13,15 @@ import TrackGridView from "@/src/components/nplrace/rank/track/id/TrackGridView"
 import KeywordList from "@/src/components/nplrace/rank/track/id/TrackKeywordList";
 import RankCheckModal from "@/src/components/nplrace/rank/track/id/RankCheckModal";
 import React from "react";
+import { useAuthStore } from "@/src/store/provider/StoreProvider";
+import router from "next/router";
 
 export default function TrackDetailPage() {
   const params = useParams();
   const id = params.id as string;
-
+  
+  const { loginUser, setLoginUser } = useAuthStore();
+  console.log('[TrackDetailPage] loginUser:', loginUser);
   const [selectedProvince, setSelectedProvince] = useState("");
   const [keyword, setKeyword] = useState("");
   const [showRankCheckModal, setShowRankCheckModal] = useState(false);
@@ -39,6 +43,13 @@ export default function TrackDetailPage() {
     getNplaceRankTrackList,
     getRankString,
   } = useNplaceRankTrackWithIdViewModel({ id, keyword: "", province: "" });
+
+  // 로그인 체크
+  useEffect(() => {
+    if (loginUser === null) {
+      redirect("/login");
+    }
+  }, [loginUser]);
 
   // 첫 번째 트랙 정보 키를 선택 (있다면)
   useEffect(() => {
@@ -118,14 +129,16 @@ export default function TrackDetailPage() {
                         {shop?.roadAddress || shop?.address}
                       </p>
                       <div className="mt-2 flex flex-wrap gap-2">
-                        {shop?.keywordList?.map((keyword: string, index: number) => (
-                          <span
-                            key={index}
-                            className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700"
-                          >
-                            {keyword}
-                          </span>
-                        ))}
+                        {shop?.keywordList?.map(
+                          (keyword: string, index: number) => (
+                            <span
+                              key={index}
+                              className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700"
+                            >
+                              {keyword}
+                            </span>
+                          ),
+                        )}
                       </div>
                     </div>
                   </div>
@@ -240,14 +253,16 @@ export default function TrackDetailPage() {
                           {shop?.roadAddress || shop?.address}
                         </p>
                         <div className="mt-2 flex flex-wrap gap-2">
-                          {shop?.keywordList?.map((keyword: string, index: number) => (
-                            <span
-                              key={index}
-                              className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700"
-                            >
-                              {keyword}
-                            </span>
-                          ))}
+                          {shop?.keywordList?.map(
+                            (keyword: string, index: number) => (
+                              <span
+                                key={index}
+                                className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700"
+                              >
+                                {keyword}
+                              </span>
+                            ),
+                          )}
                         </div>
                       </div>
                     </div>
@@ -275,7 +290,6 @@ export default function TrackDetailPage() {
                       </button>
                     </div>
                   </div>
-
                   <div className="mt-6 flex flex-wrap gap-3">
                     <button
                       onClick={async () => {
@@ -313,84 +327,9 @@ export default function TrackDetailPage() {
                 </div>
               </div>
             </div>
-
-            {/* 선택된 키워드 정보 */}
-            {selectedTrackInfos.size > 0 ? (
-              <div className="mt-5 space-y-6">
-                {Array.from(selectedTrackInfos).map((trackInfoKey) => (
-                  <div key={trackInfoKey} className="mb-2 rounded-lg border border-gray-200 bg-white">
-                    {/* 아코디언 헤더 */}
-                    <button
-                      className="w-full flex justify-between items-center px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors rounded-t-lg focus:outline-none"
-                      onClick={() => toggleAccordion(trackInfoKey)}
-                      aria-expanded={openAccordions.includes(trackInfoKey)}
-                      aria-controls={`accordion-content-${trackInfoKey}`}
-                    >
-                      <div>
-                        <span className="font-semibold text-gray-900">{trackInfoKey}</span>
-                        <span className="ml-2 text-xs text-gray-500 block sm:inline">
-                          {shop?.nplaceRankTrackInfoMap?.[trackInfoKey]?.province}
-                          {shop?.nplaceRankTrackInfoMap?.[trackInfoKey]?.rank !== undefined &&
-                            ` • ${getRankString(shop?.nplaceRankTrackInfoMap?.[trackInfoKey]?.rank ?? null)}`}
-                        </span>
-                      </div>
-                      <span className="ml-2 text-gray-400 text-lg">
-                        {openAccordions.includes(trackInfoKey) ? "▲" : "▼"}
-                      </span>
-                    </button>
-                    {/* 아코디언 내용 */}
-                    {openAccordions.includes(trackInfoKey) && (
-                      <div
-                        id={`accordion-content-${trackInfoKey}`}
-                        className="px-4 py-4 border-t bg-white"
-                      >
-                        <div className="flex gap-2 mb-4">
-                          <button
-                            className={`flex items-center rounded-lg px-4 py-2 text-sm font-medium ${viewMode === "grid" ? "bg-blue-50 text-blue-700" : "bg-gray-50 text-gray-700 hover:bg-gray-100"}`}
-                            onClick={() => setViewMode("grid")}
-                          >
-                            <LayoutGrid size={16} className="mr-2" />
-                            그리드
-                          </button>
-                          <button
-                            className={`flex items-center rounded-lg px-4 py-2 text-sm font-medium ${viewMode === "report" ? "bg-blue-50 text-blue-700" : "bg-gray-50 text-gray-700 hover:bg-gray-100"}`}
-                            onClick={() => setViewMode("report")}
-                          >
-                            <FileText size={16} className="mr-2" />
-                            리포트
-                          </button>
-                        </div>
-                        {viewMode === "report" ? (
-                          <TrackReportView
-                            trackList={getNplaceRankTrackList(trackInfoKey) || []}
-                            shopName={shop?.shopName || ""}
-                            keyword={trackInfoKey}
-                          />
-                        ) : (
-                          <TrackGridView
-                            trackList={getNplaceRankTrackList(trackInfoKey) || []}
-                          />
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="mt-5 flex h-64 items-center justify-center rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
-                <p className="text-gray-500">선택된 키워드가 없습니다.</p>
-              </div>
-            )}
           </div>
         </div>
       </div>
-
-      <RankCheckModal
-        show={showRankCheckModal}
-        onClose={() => setShowRankCheckModal(false)}
-        selectedPlace={selectedTrack}
-        rankCheckData={[]}
-      />
     </div>
   );
 }

@@ -21,7 +21,6 @@ export const useNplaceRankTrackWithIdViewModel = ({ id, keyword, province }: Npl
     queryKey: ['nplaceRankShop', id],
     queryFn: async () => {
       const response = await TrackRepository.getShopDetail(id);
-      console.log(`[NplaceRankTrackWithIdViewModel] ▶ 플레이스 정보 조회 결과: ${JSON.stringify(response)}`);
       return response;
     }
   });
@@ -31,8 +30,14 @@ export const useNplaceRankTrackWithIdViewModel = ({ id, keyword, province }: Npl
     mutationFn: async () => {
       return await TrackRepository.deleteShop(id);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['nplaceRankShop'] });
+    onSuccess: async () => {
+      // 쿼리 무효화 후 이전 페이지로 이동
+      await queryClient.invalidateQueries({ queryKey: ['nplaceRankShop'] });
+      // 데이터가 업데이트될 때까지 잠시 대기
+      await new Promise(resolve => setTimeout(resolve, 100));
+      if (typeof window !== 'undefined') {
+        window.history.back();
+      }
     }
   });
 
@@ -40,18 +45,36 @@ export const useNplaceRankTrackWithIdViewModel = ({ id, keyword, province }: Npl
   const { mutateAsync: addKeyword, isPending: isAddingKeyword } = useMutation<ApiResponse<TrackInfo>, Error, { keyword: string; province: string }>({
     mutationFn: async ({ keyword, province }) => {
       if (!shopWithIdResult?.data?.nplaceRankShop) throw new Error('상점 정보가 없습니다.');
-      return await TrackRepository.addTrack({
-        keyword,
-        province,
-        shopId: shopWithIdResult.data.nplaceRankShop.id,
-        businessSector: shopWithIdResult.data.nplaceRankShop.businessSector || '',
-      });
+      
+      try {
+        // 필수 필드 검증
+        if (!keyword.trim()) throw new Error('키워드를 입력해주세요.');
+        if (!province.trim()) throw new Error('지역을 선택해주세요.');
+        if (!shopWithIdResult.data.nplaceRankShop.id) throw new Error('상점 ID가 없습니다.');
+        console.log('shopWithIdResult.data.nplaceRankShop.id:', shopWithIdResult.data.nplaceRankShop.id);
+        console.log('shopWithIdResult.data.nplaceRankShop.businessSector:', shopWithIdResult.data.nplaceRankShop.businessSector);
+        const result = await TrackRepository.addTrack({
+          keyword: keyword.trim(),
+          province: province.trim(),
+          shopId: shopWithIdResult.data.nplaceRankShop.shopId,
+          businessSector: shopWithIdResult.data.nplaceRankShop.businessSector || '',
+        });
+        
+        return result;
+      } catch (error) {
+        console.error('키워드 추가 중 오류:', error);
+        throw error;
+      }
     },
-    onSuccess: () => {
+    onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({ queryKey: ['nplaceRankShop', id] });
+     
+      // 이전 페이지로 이동
+      if (typeof window !== 'undefined') window.history.back();
     }
   });
 
+  
   // 트랙 삭제
   const { mutate: deleteTrack } = useMutation<ApiResponse<void>, Error, string>({
     mutationFn: async (trackId) => {
@@ -61,6 +84,7 @@ export const useNplaceRankTrackWithIdViewModel = ({ id, keyword, province }: Npl
       queryClient.invalidateQueries({ queryKey: ['nplaceRankShop', id] });
     }
   });
+
 
   // 트랙 상태 업데이트
   const { mutate: updateTrackStatus } = useMutation<ApiResponse<void>, Error, { trackId: string, status: 'RUNNING' | 'STOP' }>({
@@ -73,7 +97,6 @@ export const useNplaceRankTrackWithIdViewModel = ({ id, keyword, province }: Npl
   });
 
  
-
   // 키워드 목록 갱신
   const updateKeywordsMutation = useMutation({
     mutationFn: async () => {
@@ -117,4 +140,4 @@ export const useNplaceRankTrackWithIdViewModel = ({ id, keyword, province }: Npl
       }
     }
   };
-}; 
+};

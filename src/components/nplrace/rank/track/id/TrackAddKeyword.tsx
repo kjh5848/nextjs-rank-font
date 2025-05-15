@@ -18,13 +18,21 @@ export default function AddKeyword({ shopId, businessSector }: AddKeywordProps) 
     e.preventDefault();
     if (keyword && province) {
       try {
-        await addKeyword({ keyword, province });
-        setKeyword("");
-        setProvince("");
-        setIsModalOpen(false);
+        const result = await addKeyword({ keyword, province });
+        if (result.code === "0") {
+          alert("키워드가 성공적으로 추가되었습니다.");
+          setKeyword("");
+          setProvince("");
+          setIsModalOpen(false);
+        } else {
+          alert(result.message);
+        }
       } catch (error) {
-        console.error('키워드 추가 실패:', error);
-        alert('키워드 추가에 실패했습니다.');
+        if (error instanceof Error) {
+          alert(error.message);
+        } else {
+          alert("키워드 추가 중 오류가 발생했습니다.");
+        }
       }
     }
   };

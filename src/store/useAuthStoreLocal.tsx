@@ -3,6 +3,8 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import usePendingFunction from "@/src/use/usePendingFunction";
 import AuthRepository from "@/model/AuthRepository";
+import { redirect } from "next/navigation";
+import router from "next/router";
 
 interface LoginUser {
   username: string;

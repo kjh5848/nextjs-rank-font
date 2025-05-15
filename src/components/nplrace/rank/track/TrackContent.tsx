@@ -79,11 +79,7 @@ export default function TrackContent() {
       <TrackNplaceSearch
         isOpen={isTrackableModalShow}
         onClose={handleTrackableModalClose}
-        onSearch={handleTrackableSearch}
         onAdd={handleAddTrackable}
-        trackableResult={trackableResult}
-        isFetchingTrackable={isFetchingTrackable}
-        isAddingShop={isAddingShop}
       />
 
       <TrackGroup

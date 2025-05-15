@@ -1,29 +1,34 @@
 'use client';
 
-import React, { createContext, useContext, useMemo } from 'react';
-import useAuthStoreLocal from "@/src/store/useAuthStoreLocal";
-import useSearchStoreLocal from "@/src/store/useSearchStoreLocal";
+import React, { createContext, useContext } from 'react';
+import useAuthStoreLocal from "../useAuthStoreLocal";
+import useSearchStoreLocal from "../useSearchStoreLocal";
 
-// StoreContext 생성
-const StoreContext = createContext<any>(undefined);
+interface StoreContextType {
+  authStore: ReturnType<typeof useAuthStoreLocal>;
+  searchStore: ReturnType<typeof useSearchStoreLocal>;
+}
 
-// StoreProvider Props
+const StoreContext = createContext<StoreContextType | null>(null);
+
+export function useStore() {
+  const context = useContext(StoreContext);
+  if (!context) {
+    throw new Error('useStore must be used within a StoreProvider');
+  }
+  return context;
+}
+
 interface StoreProviderProps {
   children: React.ReactNode;
 }
 
 export function StoreProvider({ children }: StoreProviderProps) {
-  // useMemo로 스토어 객체 메모이제이션
   const authStore = useAuthStoreLocal();
   const searchStore = useSearchStoreLocal();
-  
-  const value = useMemo(() => ({
-    authStore,
-    searchStore
-  }), [authStore, searchStore]);
 
   return (
-    <StoreContext.Provider value={value}>
+    <StoreContext.Provider value={{ authStore, searchStore }}>
       {children}
     </StoreContext.Provider>
   );

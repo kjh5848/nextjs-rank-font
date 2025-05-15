@@ -20,7 +20,7 @@ interface FormValues {
 }
 
 export default function JoinForm() {
-    const { loginUser, isAuthPending } = useAuthStore();
+  const { loginUser, isAuthPending } = useAuthStore();
 
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<FormValues>();
   const [isVerified, setIsVerified] = useState(false);

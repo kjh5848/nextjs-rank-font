@@ -2,7 +2,6 @@ import { StoreProvider } from '@/src/store/provider/StoreProvider';
 import { Inter } from "next/font/google";
 import QueryProviders from "../store/provider/QueryProviders";
 import "@/styles/global.css";
-import { getUserFromSession } from '@/src/util/auth/Auth';
 import { headers } from 'next/headers';
 const inter = Inter({ subsets: ["latin"], display: 'swap' });
 
@@ -13,12 +12,6 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const headersList = headers();
-  const sessionId = (await headersList).get('cookie')?.match(/JSESSIONID=([^;]+)/)?.[1];
-  
-  // 서버에서 사용자 정보 가져오기 시도
-  const initialUser = await getUserFromSession();
-  
   return (
     <html lang="ko">
       <body className={inter.className}>

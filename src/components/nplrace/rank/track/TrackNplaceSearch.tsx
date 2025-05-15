@@ -1,26 +1,65 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { useNplaceRankTrackViewModel } from "@/src/viewModel/nplace/nplaceRankTrackViewModel";
 
 interface TrackNplaceSearchProps {
   isOpen: boolean;
   onClose: () => void;
-  onSearch: (url: string) => void;
   onAdd: () => void;
-  trackableResult: any;
-  isFetchingTrackable: boolean;
-  isAddingShop: boolean;
 }
 
 export default function TrackNplaceSearch({
   isOpen,
   onClose,
-  onSearch,
   onAdd,
-  trackableResult,
-  isFetchingTrackable,
-  isAddingShop,
 }: TrackNplaceSearchProps) {
   const trackableModalUrlInputRef = useRef<HTMLInputElement>(null);
   const trackableModalSearchButtonRef = useRef<HTMLButtonElement>(null);
+  const { fetchTrackable, isFetchingTrackable, addShop, isAddingShop } = useNplaceRankTrackViewModel();
+  const [trackableResult, setTrackableResult] = useState<any>(null);
+
+  const handleSearch = async (url: string) => {
+    if (!url) {
+      alert('URL을 입력해주세요.');
+      return;
+    }
+
+    try {
+      const result = await fetchTrackable(url);
+      if (result.code === '0') {
+        setTrackableResult(result.data);
+      } else {
+        alert(result.message || '검색에 실패했습니다.');
+        setTrackableResult(null);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('검색 중 오류가 발생했습니다.');
+      }
+      setTrackableResult(null);
+    }
+  };
+
+  const handleAdd = async () => {
+    if (!trackableResult?.nplaceRankShop) return;
+    
+    try {
+      const result = await addShop(trackableResult.nplaceRankShop);
+      if (result.code === '0') {
+        onClose();
+        onAdd();
+      } else {
+        alert(result.message || '상점 추가에 실패했습니다.');
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('상점 추가 중 오류가 발생했습니다.');
+      }
+    }
+  };
 
   const handleTrackableModalUrlInputKeyUp = (event: React.KeyboardEvent) => {
     if (event.key === "Enter") {
@@ -72,7 +111,7 @@ export default function TrackNplaceSearch({
             </div>
             <button
               ref={trackableModalSearchButtonRef}
-              onClick={() => onSearch(trackableModalUrlInputRef.current?.value || '')}
+              onClick={() => handleSearch(trackableModalUrlInputRef.current?.value || '')}
               disabled={isFetchingTrackable}
               className="rounded-lg bg-blue-500 px-4 py-2 text-white shadow-md hover:bg-blue-600 disabled:opacity-50"
             >
@@ -109,7 +148,7 @@ export default function TrackNplaceSearch({
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-right">
                       <button
-                        onClick={onAdd}
+                        onClick={handleAdd}
                         disabled={isAddingShop}
                         className="rounded-lg border border-blue-500 px-3 py-1 text-sm text-blue-500 hover:bg-blue-50 disabled:opacity-50"
                       >
