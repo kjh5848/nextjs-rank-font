@@ -19,7 +19,6 @@ export default function TrackContent() {
 
    const searchParams = useSearchParams();
    const viewParam = searchParams.get("view");
-
    const setViewMode = useViewModeStore((state) => state.setViewMode);
 
    useEffect(() => {
@@ -31,6 +30,7 @@ export default function TrackContent() {
        setViewMode(viewParam);
      }
    }, [viewParam, setViewMode]);
+
   const {
     // States
     selectedGroup,
@@ -39,33 +39,21 @@ export default function TrackContent() {
     isTrackableModalShow,
     setIsTrackableModalShow,
     isGroupChangeModalShow,
-    trackableResult,
-    isLoading,
-    error,
     groupList,
-    isAddingShop,
-    isFetchingTrackable,
     filteredShopList,
 
     // Refs
-    trackableModalUrlInputRef,
-    trackableModalSearchButtonRef,
 
     // Handlers
     handleShopSelect,
-    handleTrackableSearch,
     handleAddTrackable,
     handleTrackableModalClose,
-    handleTrackableModalUrlInputKeyUp,
     handleGroupChangeModalShow,
     handleChangeGroupModalClose,
     onChangeGroupModalSubmit,
     getRankString,
     handleSelectAll,
   } = useTrackContent();
-
-
-
 
   return (
     <div>

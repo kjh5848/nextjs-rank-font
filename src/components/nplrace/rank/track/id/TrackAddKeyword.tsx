@@ -26,7 +26,7 @@ export default function AddKeyword({ shopId, businessSector }: AddKeywordProps) 
           setKeyword("");
           setProvince("");
           setIsModalOpen(false);
-          window.location.reload();
+          // window.location.reload();
         } else {
           alert(result.message);
         }

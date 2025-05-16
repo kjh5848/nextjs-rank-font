@@ -10,58 +10,68 @@ import { useNplaceRankTrackWithIdViewModel } from "@/viewModel/nplace/NplaceRank
 import { useAuthStore } from "@/src/store/provider/StoreProvider";
 import { useViewModeStore } from "@/src/store/useViewModeStore";
 
-import KeywordList from "@/src/components/nplrace/rank/track/id/TrackKeywordList";
+import TrackKeywordList from "@/src/components/nplrace/rank/track/id/TrackKeywordList";
 import TrackReportView from "@/src/components/nplrace/rank/track/id/TrackReportView";
 import TrackGridView from "@/src/components/nplrace/rank/track/id/TrackGridView";
 import LoadingFallback from "@/src/components/common/LoadingFallback";
 
 export default function TrackDetailPage() {
-const { id } = useParams<{ id: string }>();
-const searchParams = useSearchParams();
-const viewParam = searchParams.get("view");
+  const { id } = useParams<{ id: string }>();
+  const searchParams = useSearchParams();
+  const viewParam = searchParams.get("view");
 
-const { loginUser, isAuthPending } = useAuthStore();
-const setViewMode = useViewModeStore((state) => state.setViewMode);
-const [selectedTrackInfos, setSelectedTrackInfos] = useState<Set<string>>(
-  new Set(),
-);
-const [openAccordions, setOpenAccordions] = useState<string[]>([]);
+  const { loginUser, isAuthPending } = useAuthStore();
+  const viewMode = useViewModeStore((state) => state.viewMode);
+  const setViewMode = useViewModeStore((state) => state.setViewMode);
+  const [selectedTrackInfos, setSelectedTrackInfos] = useState<Set<string>>(
+    new Set(),
+  );
+  const [openAccordions, setOpenAccordions] = useState<string[]>([]);
+    
 
-// 👉 로그인 상태 확인
-if (loginUser === undefined || isAuthPending) {
-  return <LoadingFallback message="로딩 중..." />;
-}
-if (loginUser === null) {
-  redirect("/login");
-}
+  // 👉 쿼리 파라미터에서 viewMode 설정
+  useEffect(() => {
+    if (
+      viewParam === "grid" ||
+      viewParam === "list" ||
+      viewParam === "report"
+    ) {
+      setViewMode(viewParam);
+    }
+  }, [viewParam, setViewMode]);
 
-// 👉 쿼리 파라미터에서 viewMode 설정
-useEffect(() => {
-  if (viewParam === "grid" || viewParam === "list" || viewParam === "report") {
-    setViewMode(viewParam);
+  const {
+    shopId,
+    businessSector,
+    shop,
+    isLoading,
+    error,
+    isUpdatingKeywords,
+    getNplaceRankTrackList,
+    getRankString,
+    deleteTrack,
+    updateTrackStatus,
+    updateKeywords,
+  } = useNplaceRankTrackWithIdViewModel({ id, keyword: "", province: "" });
+
+  const isGuest = loginUser === null;
+  const handleUpdateTrackStatus = (
+    trackId: string,
+    status: "RUNNING" | "STOP",
+  ) => {
+    updateTrackStatus({ trackId, status });
+  };
+
+  if (isGuest) {
+    redirect("/login");
   }
-}, [viewParam, setViewMode]);
-
-// 👉 ViewModel 로직 불러오기
-const {
-  shopId,
-  businessSector,
-  shop,
-  isLoading,
-  error,
-  updateKeywords,
-  isUpdatingKeywords,
-  getNplaceRankTrackList,
-  getRankString,
-} = useNplaceRankTrackWithIdViewModel({ id, keyword: "", province: "" });
-
-// 👉 키워드 자동 선택
-useEffect(() => {
-  if (shop?.nplaceRankTrackInfoMap) {
-    const keys = Object.keys(shop.nplaceRankTrackInfoMap);
-    if (keys.length) setSelectedTrackInfos(new Set(keys));
-  }
-}, [shop]);
+  // 👉 키워드 자동 선택
+  useEffect(() => {
+    if (shop?.nplaceRankTrackInfoMap) {
+      const keys = Object.keys(shop.nplaceRankTrackInfoMap);
+      if (keys.length) setSelectedTrackInfos(new Set(keys));
+    }
+  }, [shop]);
 
   const handleTrackInfoSelect = (key: string) => {
     setSelectedTrackInfos((prev) => {
@@ -89,6 +99,7 @@ useEffect(() => {
   if (error) return <div className="text-red-500">{error.toString()}</div>;
   if (!shop) return <div>상점 정보가 없습니다.</div>;
 
+  // 👉 상점 헤더
   const ShopHeader = (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
       <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between">
@@ -201,8 +212,9 @@ useEffect(() => {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
         <div className="lg:hidden">{ShopHeader}</div>
 
+        {/** 모바일 키워드 목록 */}
         <div className="lg:hidden">
-          <KeywordList
+          <TrackKeywordList
             keywords={shop.nplaceRankTrackInfoMap || {}}
             selectedKeywords={selectedTrackInfos}
             onSelectKeyword={handleTrackInfoSelect}
@@ -210,11 +222,14 @@ useEffect(() => {
             getRankString={getRankString}
             shopId={shopId}
             businessSector={businessSector}
+            onDeleteTrack={deleteTrack}
+            onUpdateTrackStatus={handleUpdateTrackStatus}
           />
         </div>
 
+        {/** 데스크탑 키워드 목록 */}
         <div className="hidden lg:col-span-1 lg:block">
-          <KeywordList
+          <TrackKeywordList
             keywords={shop.nplaceRankTrackInfoMap || {}}
             selectedKeywords={selectedTrackInfos}
             onSelectKeyword={handleTrackInfoSelect}
@@ -222,6 +237,8 @@ useEffect(() => {
             getRankString={getRankString}
             shopId={shopId}
             businessSector={businessSector}
+            onDeleteTrack={deleteTrack}
+            onUpdateTrackStatus={handleUpdateTrackStatus}
           />
         </div>
 

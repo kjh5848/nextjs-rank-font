@@ -30,6 +30,7 @@ export type TrackInfo = {
   rank: number | null;
   rankChange: number;
   nplaceRankTrackList?: TrackData[];
+  nomadscrapNplaceRankTrackInfoId: string;
 };
 
 export type TrackData = {
@@ -165,13 +166,13 @@ class TrackRepository {
     return processApiResponse(response);
   }
 
-  // 키워드 추적 상태 변경
+  // 키워드 추적 상태 없데이트
   static async updateTrackStatus(keywordId: string, status: 'RUNNING' | 'STOP'): Promise<ApiResponse<void>> {
     // URL에 직접 keywordId 값을 삽입
     const url = `${this.apiBaseUrl}${this.url}/track/${keywordId}`;
     
     const response = await fetch(url, {
-      method: 'PUT',
+      method: 'PATCH',
       credentials: "include",
       headers: {
         'Content-Type': 'application/json'
