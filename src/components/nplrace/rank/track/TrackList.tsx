@@ -211,7 +211,6 @@ export default function TrackList({
               <>
                 <div className="flex flex-wrap gap-2">
                   {visibleTrackList.map((track: TrackInfo) => (
-                    console.log(track),
                     <div
                       key={`${shop.id}-${track.nomadscrapNplaceRankTrackInfoId}`}
                       className="flex w-full items-center sm:w-auto"

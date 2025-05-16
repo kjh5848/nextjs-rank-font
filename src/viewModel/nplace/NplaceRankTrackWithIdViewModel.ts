@@ -51,8 +51,6 @@ export const useNplaceRankTrackWithIdViewModel = ({ id, keyword, province }: Npl
         if (!keyword.trim()) throw new Error('키워드를 입력해주세요.');
         if (!province.trim()) throw new Error('지역을 선택해주세요.');
         if (!shopWithIdResult.data.nplaceRankShop.id) throw new Error('상점 ID가 없습니다.');
-        console.log('shopWithIdResult.data.nplaceRankShop.id:', shopWithIdResult.data.nplaceRankShop.id);
-        console.log('shopWithIdResult.data.nplaceRankShop.businessSector:', shopWithIdResult.data.nplaceRankShop.businessSector);
         const result = await TrackRepository.addTrack({
           keyword: keyword.trim(),
           province: province.trim(),

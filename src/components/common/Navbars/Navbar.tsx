@@ -15,17 +15,16 @@ export default function Navbar() {
     setIsClient(true);
   }, []);
 
-  // 별도의 useEffect로 로그인 상태 로깅
-  useEffect(() => {
-    if (isClient) {
-      console.log("현재 로그인 상태:", loginUser);
-    }
-  }, [loginUser, isClient]);
+  // // 별도의 useEffect로 로그인 상태 로깅
+  // useEffect(() => {
+  //   if (isClient) {
+  //     console.log("현재 로그인 상태:", loginUser);
+  //   }
+  // }, [loginUser, isClient]);
 
   const handleLogout = async () => {
     try {
       await logout();
-      console.log("로그아웃 완료");
     } catch (error) {
       console.error("로그아웃 오류:", error);
     }

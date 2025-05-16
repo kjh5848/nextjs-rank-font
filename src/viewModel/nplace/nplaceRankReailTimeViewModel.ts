@@ -65,7 +65,6 @@ const fetchSearchResults = async (params: SearchParams): Promise<ApiResponse<{ n
   }
 
   const text = await response.text();
-  console.log('검색 API 응답 텍스트:', text);
   
   if (!text) {
     return {

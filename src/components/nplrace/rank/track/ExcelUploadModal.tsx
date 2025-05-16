@@ -24,12 +24,8 @@ const ExcelUploadModal = ({ show, handleClose }: ExcelUploadModalProps) => {
       const workbook = XLSX.read(binaryData, { type: "array" });
       const sheetName = workbook.SheetNames[0]; // 첫 번째 시트
       const sheet = workbook.Sheets[sheetName];
-
       const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 }); // 배열로 변환
-      console.log("전체 데이터:", jsonData);
-
       const filteredData = jsonData.slice(1).map((row: any) => row[0]); // A2부터 읽기
-      console.log("A2부터의 데이터:", filteredData);
      
       setUrlData(filteredData);
     };

@@ -27,7 +27,6 @@ export default function TrackDetailPage() {
     new Set(),
   );
   const [openAccordions, setOpenAccordions] = useState<string[]>([]);
-    
 
   // 👉 쿼리 파라미터에서 viewMode 설정
   useEffect(() => {
@@ -95,7 +94,7 @@ export default function TrackDetailPage() {
     );
   };
 
-  if (isLoading) return <div>로딩중...</div>;
+  if (isLoading) return <LoadingFallback message="로딩중..." />;
   if (error) return <div className="text-red-500">{error.toString()}</div>;
   if (!shop) return <div>상점 정보가 없습니다.</div>;
 

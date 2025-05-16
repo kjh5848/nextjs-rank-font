@@ -34,26 +34,62 @@ export default function TrackKeywordList({
   const [openModalId, setOpenModalId] = useState<string | null>(null);
   const [confirmInput, setConfirmInput] = useState("");
   const [modalKeyword, setModalKeyword] = useState("");
+  const [modalType, setModalType] = useState<"delete" | "stop" | "resume" | null>(null);
+  const [actionMessage, setActionMessage] = useState<string | null>(null);
 
   // 삭제 버튼 클릭 시
   const handleDeleteClick = (trackId: string, keyword: string) => {
     setOpenModalId(trackId);
     setModalKeyword(keyword);
+    setModalType("delete");
+    setConfirmInput("");
+  };
+
+  // 추적중단 버튼 클릭 시
+  const handleStopClick = (trackId: string, keyword: string) => {
+    setOpenModalId(trackId);
+    setModalKeyword(keyword);
+    setModalType("stop");
+    setConfirmInput("");
+  };
+
+  // 재추적 버튼 클릭 시
+  const handleResumeClick = (trackId: string, keyword: string) => {
+    setOpenModalId(trackId);
+    setModalKeyword(keyword);
+    setModalType("resume");
     setConfirmInput("");
   };
 
   // 팝업 내 확인 버튼
-  const handleConfirmDelete = (trackId: string, keyword: string) => {
-    if (confirmInput === keyword) {
-      onDeleteTrack(trackId);
-      setOpenModalId(null);
+  const handleConfirmModal = async (trackId: string, keyword: string) => {
+    if (confirmInput !== keyword) return;
+    try {
+      if (modalType === "delete") {
+        await onDeleteTrack(trackId);
+        setActionMessage("삭제가 완료되었습니다.");
+      } else if (modalType === "stop") {
+        await onUpdateTrackStatus(trackId, "STOP");
+        setActionMessage("추적이 중단되었습니다.");
+      } else if (modalType === "resume") {
+        await onUpdateTrackStatus(trackId, "RUNNING");
+        setActionMessage("재추적이 시작되었습니다.");
+      }
+    } catch (e: any) {
+     if(e.code === "-1"){
+      console.log(e);
+       setActionMessage(e?.message);
+     }
     }
+    setTimeout(() => setActionMessage(null), 2500);
+    setOpenModalId(null);
   };
 
   // 팝업 닫기
   const handleCloseModal = () => {
     setOpenModalId(null);
     setConfirmInput("");
+    setModalType(null);
   };
 
   return (
@@ -87,7 +123,6 @@ export default function TrackKeywordList({
       <div className="h-[calc(50vh-12rem)] overflow-y-auto">
         {Object.keys(keywords).map((key) => {
           const trackInfo = keywords[key];
-          console.log(trackInfo.id);
           return (
             <div key={key} className="relative">
               <div
@@ -124,7 +159,7 @@ export default function TrackKeywordList({
                     className="rounded bg-blue-50 px-2 py-1 text-xs text-gray-600 hover:bg-blue-100"
                     onClick={(e) => {
                       e.stopPropagation();
-                      onUpdateTrackStatus(trackInfo.id, "RUNNING");
+                      handleResumeClick(trackInfo.id, key);
                     }}
                   >
                     재추적
@@ -133,7 +168,7 @@ export default function TrackKeywordList({
                     className="rounded bg-blue-50 px-2 py-1 text-xs text-blue-600 hover:bg-blue-100"
                     onClick={(e) => {
                       e.stopPropagation();
-                      onUpdateTrackStatus(trackInfo.id, "STOP");
+                      handleStopClick(trackInfo.id, key);
                     }}
                   >
                     중단
@@ -148,14 +183,24 @@ export default function TrackKeywordList({
                       내순위.com 내용:
                     </div>
                     <div className="mb-2 text-sm text-gray-700">
-                      추적을 삭제 하시려면 키워드(
-                      <span className="font-bold">{modalKeyword}</span>)를
-                      입력해주세요.
-                      <br />
-                      <span className="text-xs text-gray-500">
-                        삭제 후 다시 추적할 경우 과거 차트 데이터는 복구되지
-                        않습니다.
-                      </span>
+                      {modalType === "delete" && (
+                        <>
+                          추적을 삭제 하시려면 키워드(<span className="font-bold">{modalKeyword}</span>)를 입력해주세요.<br />
+                          <span className="text-xs text-gray-500">삭제 후 다시 추적할 경우 과거 차트 데이터는 복구되지 않습니다.</span>
+                        </>
+                      )}
+                      {modalType === "stop" && (
+                        <>
+                          추적을 <span className="font-bold">중단</span> 하시려면 키워드(<span className="font-bold">{modalKeyword}</span>)를 입력해주세요.<br />
+                          <span className="text-xs text-gray-500">중단 후 추적이 불가능합니다.</span>
+                        </>
+                      )}
+                      {modalType === "resume" && (
+                        <>
+                          추적을 <span className="font-bold">재추적</span> 하시려면 키워드(<span className="font-bold">{modalKeyword}</span>)를 입력해주세요.<br />
+                          <span className="text-xs text-gray-500">재추적 시 순위 추적이 다시 시작됩니다.</span>
+                        </>
+                      )}
                     </div>
                     <input
                       className="mt-2 mb-4 w-full rounded border px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
@@ -173,9 +218,7 @@ export default function TrackKeywordList({
                       <button
                         className={`rounded bg-yellow-700 px-4 py-2 text-sm font-semibold text-white hover:bg-yellow-800 ${confirmInput !== modalKeyword ? "cursor-not-allowed opacity-50" : ""}`}
                         disabled={confirmInput !== modalKeyword}
-                        onClick={() =>
-                          handleConfirmDelete(trackInfo.id, modalKeyword)
-                        }
+                        onClick={() => handleConfirmModal(trackInfo.id, modalKeyword)}
                       >
                         확인
                       </button>
@@ -187,6 +230,12 @@ export default function TrackKeywordList({
           );
         })}
       </div>
+      {/* 토스트 메시지 */}
+      {actionMessage && (
+        <div className="fixed bottom-8 left-1/2 z-50 -translate-x-1/2 rounded bg-black/80 px-6 py-3 text-sm text-white shadow-lg animate-fade-in">
+          {actionMessage}
+        </div>
+      )}
     </div>
   );
 }

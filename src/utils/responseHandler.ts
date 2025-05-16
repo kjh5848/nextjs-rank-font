@@ -31,7 +31,7 @@ export async function processApiResponse<T>(response: Response, skipRedirect: bo
     
     // 세션 만료 또는 로그인 필요 응답 처리
     if ((data.code === "-99" || data.code === "401" || data.code === "-9") && !skipRedirect) {
-      console.log('[API 응답] 세션 만료 감지:', data);
+      // console.log('[API 응답] 세션 만료 감지:', data);
       if (typeof window !== "undefined") {
         // 세션 쿠키 삭제
         document.cookie = "JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";

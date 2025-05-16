@@ -13,8 +13,6 @@ export default function Sidebar() {
   const pathname = usePathname();
   const viewMode = useViewModeStore((state) => state.viewMode);
   const setViewMode = useViewModeStore((state) => state.setViewMode);
-  console.log('[Sidebar] viewMode:', viewMode);
-  console.log('[Sidebar] setViewMode:', setViewMode);
   /* 라우트가 바뀌면 자동으로 드로어 닫기 */
   useEffect(() => setIsOpen(false), [pathname]);
 

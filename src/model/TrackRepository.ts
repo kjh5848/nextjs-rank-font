@@ -167,19 +167,22 @@ class TrackRepository {
   }
 
   // 키워드 추적 상태 없데이트
-  static async updateTrackStatus(keywordId: string, status: 'RUNNING' | 'STOP'): Promise<ApiResponse<void>> {
+  static async updateTrackStatus(trackId: string, status: 'RUNNING' | 'STOP'): Promise<ApiResponse<void>> {
     // URL에 직접 keywordId 값을 삽입
-    const url = `${this.apiBaseUrl}${this.url}/track/${keywordId}`;
+    const url = `${this.apiBaseUrl}${this.url}/track/${trackId}`;
     
     const response = await fetch(url, {
-      method: 'PATCH',
+      method: "PATCH",
       credentials: "include",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        status
-      })
+        nplaceRankTrackInfoStatus: {
+          status,
+          id: trackId,
+        },
+      }),
     });
     if (!response.ok) {
       throw new Error('상태 변경에 실패했습니다.');

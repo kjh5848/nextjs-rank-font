@@ -66,11 +66,11 @@ class AuthRepository {
       });
       
       // 응답 헤더 로깅
-      console.log('서버 응답 헤더:', {
-        status: response.status,
-        statusText: response.statusText,
-        headers: Object.fromEntries(response.headers.entries())
-      });
+      // console.log('서버 응답 헤더:', {
+      //   status: response.status,
+      //   statusText: response.statusText,
+      //   headers: Object.fromEntries(response.headers.entries())
+      // });
 
       // 새로운 세션 ID가 발급되면 경고
       const setCookie = response.headers.get('set-cookie');
