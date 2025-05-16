@@ -54,7 +54,8 @@
     "tailwind-merge": "^3.2.0",
     "toggle-group": "^1.0.5",
     "tw-animate-css": "^1.2.8",
-    "typography": "^0.16.24"
+    "typography": "^0.16.24",
+    "zustand": "^5.0.4"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.4",

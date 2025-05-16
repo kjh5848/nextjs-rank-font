@@ -6,11 +6,15 @@ import { usePathname } from "next/navigation";
 import UserDropdown from "@/src/components/common/Dropdowns/UserDropdown";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { useViewModeStore } from "@/src/store/useViewModeStore";
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-
+  const viewMode = useViewModeStore((state) => state.viewMode);
+  const setViewMode = useViewModeStore((state) => state.setViewMode);
+  console.log('[Sidebar] viewMode:', viewMode);
+  console.log('[Sidebar] setViewMode:', setViewMode);
   /* 라우트가 바뀌면 자동으로 드로어 닫기 */
   useEffect(() => setIsOpen(false), [pathname]);
 
@@ -28,7 +32,11 @@ export default function Sidebar() {
             onClick={toggleSidebar}
             className="from-rank-primary to-rank-secondary flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r text-white shadow-lg transition-all duration-200 hover:scale-105 md:h-10 md:w-10 xl:hidden"
           >
-            {isOpen ? <X size={20} className="md:size-6" /> : <Menu size={20} className="md:size-6" />}
+            {isOpen ? (
+              <X size={20} className="md:size-6" />
+            ) : (
+              <Menu size={20} className="md:size-6" />
+            )}
           </button>
 
           {/* 브랜드 */}
@@ -64,7 +72,7 @@ export default function Sidebar() {
                 alt="내순위"
                 width={100}
                 height={32}
-                className="h-10 w-auto md:h-14 object-contain"
+                className="h-10 w-auto object-contain md:h-14"
               />
               <button
                 aria-label="Close menu"
@@ -99,7 +107,7 @@ export default function Sidebar() {
               </li>
               <li>
                 <Link
-                  href="/track"
+                  href={{ pathname: "/track", query: { view: viewMode } }}
                   onClick={() => setIsOpen(false)}
                   className={`block rounded px-2 py-1.5 text-sm font-semibold md:py-2 ${
                     pathname.startsWith("/track")

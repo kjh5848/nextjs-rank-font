@@ -10,9 +10,27 @@ import TrackNplaceSearch from "./TrackNplaceSearch";
 import TrackGridView from "./id/TrackGridView";
 import { useTrackContent } from "@/use/useTrackContent";
 import { TrackData } from "@/model/TrackRepository";
+import { useSearchParams } from "next/navigation";
+import { useViewModeStore } from "@/src/store/useViewModeStore";
+import { useEffect } from "react";
 
 
 export default function TrackContent() {
+
+   const searchParams = useSearchParams();
+   const viewParam = searchParams.get("view");
+
+   const setViewMode = useViewModeStore((state) => state.setViewMode);
+
+   useEffect(() => {
+     if (
+       viewParam === "grid" ||
+       viewParam === "list" ||
+       viewParam === "report"
+     ) {
+       setViewMode(viewParam);
+     }
+   }, [viewParam, setViewMode]);
   const {
     // States
     selectedGroup,
@@ -45,6 +63,8 @@ export default function TrackContent() {
     getRankString,
     handleSelectAll,
   } = useTrackContent();
+
+
 
 
   return (

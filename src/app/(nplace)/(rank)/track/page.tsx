@@ -16,6 +16,9 @@ export default function TrackPage() {
   if (loginUser === null) {
     redirect("/login");
   }
+
+  
+
   return (
     <main className="container">
       <Suspense fallback={<LoadingFallback message="로딩 중..." />}>
