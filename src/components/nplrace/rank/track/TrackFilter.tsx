@@ -40,6 +40,12 @@ export default function TrackFilter({
         >
           그룹 변경
         </button>
+        <button
+          onClick={handleGroupChangeModalShow}
+          className="w-full rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-2 text-white shadow-md hover:shadow-lg sm:w-auto"
+        >
+          그룹 추가
+        </button>
       </div>
       <div className="flex flex-col gap-2 sm:flex-row">
         <button
@@ -48,7 +54,6 @@ export default function TrackFilter({
         >
           추적가능 플레이스 검색
         </button>
-      
       </div>
     </div>
   );

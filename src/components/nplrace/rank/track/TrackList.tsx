@@ -3,7 +3,7 @@ import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { Shop, TrackData, TrackInfo } from "@/model/TrackRepository";
 import Image from "next/image";
 import { useState } from "react";
-import TrackRenderShopContent from "./id/TrackRenderShopContent";
+import TrackRenderShopContent from "./TrackRenderShopContent";
 
 interface TrackListProps {
   filteredShopList: Shop[];

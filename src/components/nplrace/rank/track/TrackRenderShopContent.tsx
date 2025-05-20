@@ -21,6 +21,7 @@ export default function TrackRenderShopContent({
 }: TrackRenderShopContentProps) {
   // 내부에서 확장 상태 관리
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   // 상점 상세보기 이동 (예시: /track/{shop.id}로 이동)
   const handleShopClick = (shopId: string) => {
@@ -36,6 +37,19 @@ export default function TrackRenderShopContent({
     ? shop.nplaceRankTrackInfoList
     : shop.nplaceRankTrackInfoList.slice(0, 3); // 기본 3개만 보여줌
   
+  const onDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteShop(shop.id);
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false);
+  };
     
   if (viewMode === "grid") {
     return (
@@ -57,10 +71,7 @@ export default function TrackRenderShopContent({
               <div className="absolute top-2 right-2 z-10">
                 <button
                   className="mt-4 rounded bg-red-50 px-2 py-1 text-xs text-red-600 hover:bg-red-100 sm:mt-0 sm:ml-4 sm:w-auto"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    deleteShop(shop.id);
-                  }}
+                  onClick={onDelete}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -162,6 +173,27 @@ export default function TrackRenderShopContent({
             </div>
           </div>
         </div>
+        {isDeleteModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+            <div className="w-full max-w-xs rounded-lg bg-white p-6 shadow-xl">
+              <div className="mb-4 text-lg font-semibold text-gray-800">정말 삭제하시겠습니까?</div>
+              <div className="flex justify-end gap-2">
+                <button
+                  className="rounded bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-300"
+                  onClick={handleCancelDelete}
+                >
+                  취소
+                </button>
+                <button
+                  className="rounded bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700"
+                  onClick={handleConfirmDelete}
+                >
+                  삭제
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </>
     );
   }
@@ -273,10 +305,7 @@ export default function TrackRenderShopContent({
         <div className="">
           <button
             className="mt-4 rounded bg-red-50 px-2 py-1 text-xs text-red-600 hover:bg-red-100 sm:mt-0 sm:ml-4 sm:w-auto"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleShopClick(shop.id);
-            }}
+            onClick={onDelete}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
