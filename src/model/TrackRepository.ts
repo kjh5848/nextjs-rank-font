@@ -89,6 +89,8 @@ class TrackRepository {
     return processApiResponse(response);
   }
 
+
+
   // 추적 가능한 플레이스 검색
   static async searchTrackable(url: string): Promise<ApiResponse<any>> {
     const response = await fetch(`${this.apiBaseUrl}${this.url}/trackable?url=${encodeURIComponent(url)}`, {
