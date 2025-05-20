@@ -1,6 +1,5 @@
 'use clent'
 
-import UserDropdown from "@/src/components/common/Dropdowns/UserDropdown";
 
 export default function AdminNavbar() {
   return (
@@ -8,7 +7,7 @@ export default function AdminNavbar() {
       <div className="w-full mx-auto items-center justify-end md:flex-nowrap flex-wrap md:px-10 px-4 flex">
         
         <ul className="flex-col md:flex-row list-none items-center flex">
-          <UserDropdown />
+          {/* <UserDropdown /> */}
 
         </ul>
       </div>

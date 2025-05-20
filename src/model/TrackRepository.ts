@@ -101,7 +101,7 @@ class TrackRepository {
   }
 
   // 상점 추가
-  static async addShop(shop: any): Promise<ApiResponse<any>> {
+  static async addShop(shop: Shop): Promise<ApiResponse<any>> {
     const response = await fetch(`${this.apiBaseUrl}${this.url}/shop`, {
       method: 'POST',
       credentials: "include",
@@ -153,13 +153,13 @@ class TrackRepository {
 
   // 상점 삭제
   static async deleteShop(id: string): Promise<ApiResponse<void>> {
-    // URL에 직접 id 값을 삽입
     const url = `${this.apiBaseUrl}${this.url}/shop/${id}`;
     
     const response = await fetch(url, {
       method: 'DELETE',
       credentials: "include",
     });
+          
     if (!response.ok) {
       throw new Error('상점 삭제에 실패했습니다.');
     }
@@ -170,7 +170,7 @@ class TrackRepository {
   static async updateTrackStatus(trackId: string, status: 'RUNNING' | 'STOP'): Promise<ApiResponse<void>> {
     // URL에 직접 keywordId 값을 삽입
     const url = `${this.apiBaseUrl}${this.url}/track/${trackId}`;
-    
+
     const response = await fetch(url, {
       method: "PATCH",
       credentials: "include",
@@ -184,8 +184,10 @@ class TrackRepository {
         },
       }),
     });
+
     if (!response.ok) {
-      throw new Error('상태 변경에 실패했습니다.');
+      
+      throw new Error("상태 변경에 실패했습니다.");
     }
     return processApiResponse(response);
   }
@@ -198,6 +200,7 @@ class TrackRepository {
       method: 'PUT',
       credentials: "include",
     });
+
     if (!response.ok) {
       throw new Error('키워드 목록 갱신에 실패했습니다.');
     }
@@ -221,7 +224,6 @@ class TrackRepository {
         businessSector: trackInfo.businessSector || ''
       }
     };
-    
     
     const response = await fetch(`${this.apiBaseUrl}${this.url}/track`, {
       method: 'POST',

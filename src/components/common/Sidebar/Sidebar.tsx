@@ -53,7 +53,7 @@ export default function Sidebar() {
           {/* 모바일/태블릿/데스크톱 사용자 메뉴 */}
           <ul className="flex items-center xl:hidden">
             <li>
-              <UserDropdown />
+              {/* <UserDropdown /> */}
             </li>
           </ul>
 

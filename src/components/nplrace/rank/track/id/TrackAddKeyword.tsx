@@ -1,7 +1,8 @@
+"use client";
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { useNplaceRankTrackWithIdViewModel } from "@/src/viewModel/nplace/NplaceRankTrackWithIdViewModel";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 
 interface AddKeywordProps {
   shopId: string  
@@ -13,7 +14,7 @@ export default function AddKeyword({ shopId, businessSector }: AddKeywordProps) 
   const [keyword, setKeyword] = useState("");
   const [province, setProvince] = useState("");
   
-  const { addKeyword, isAddingKeyword } = useNplaceRankTrackWithIdViewModel({ id: shopId, keyword, province });
+  const { addKeyword, isAddingKeyword } = useNplaceRankTrackWithIdViewModel({ id: shopId });
 
   
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,7 +27,6 @@ export default function AddKeyword({ shopId, businessSector }: AddKeywordProps) 
           setKeyword("");
           setProvince("");
           setIsModalOpen(false);
-          // window.location.reload();
         } else {
           alert(result.message);
         }

@@ -41,7 +41,7 @@ export default function useAuthLoginViewModelLocal() {
       setLoginUser(response.data.user);
 
       // 대시보드로 이동
-      router.replace('/');
+      router.replace('/realtime');
       return { ok: true, user: response.data.user };
     } catch (err: any) {
       console.error('Login error:', err);

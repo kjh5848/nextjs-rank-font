@@ -41,7 +41,7 @@ export default function TrackContent() {
     isGroupChangeModalShow,
     groupList,
     filteredShopList,
-
+    deleteShop,
     // Refs
 
     // Handlers
@@ -58,10 +58,9 @@ export default function TrackContent() {
   return (
     <div>
       <div className="">
-          <TrackHeader />
+        <TrackHeader />
         <div className="mb-6 overflow-hidden rounded-xl border border-blue-100 bg-gradient-to-r from-white to-blue-50 shadow-lg">
           <div className="mt-2 p-4 sm:p-6">
-
             <TrackFilter
               selectedGroup={selectedGroup}
               setSelectedGroup={setSelectedGroup}
@@ -73,6 +72,7 @@ export default function TrackContent() {
             <hr className="my-4 border-gray-200" />
 
             <TrackList
+              deleteShop={deleteShop}
               handleSelectAll={handleSelectAll}
               filteredShopList={filteredShopList}
               selectedShopList={selectedShopList}
@@ -82,20 +82,20 @@ export default function TrackContent() {
           </div>
         </div>
 
-      <TrackKeywordTable />
+        <TrackKeywordTable />
 
-      <TrackNplaceSearch
-        isOpen={isTrackableModalShow}
-        onClose={handleTrackableModalClose}
-        onAdd={handleAddTrackable}
-      />
+        <TrackNplaceSearch
+          isOpen={isTrackableModalShow}
+          onClose={handleTrackableModalClose}
+          onAdd={handleAddTrackable}
+        />
 
-      <TrackGroup
-        isOpen={isGroupChangeModalShow}
-        onClose={handleChangeGroupModalClose}
-        onSubmit={onChangeGroupModalSubmit}
-        groupList={groupList}
-      />
+        <TrackGroup
+          isOpen={isGroupChangeModalShow}
+          onClose={handleChangeGroupModalClose}
+          onSubmit={onChangeGroupModalSubmit}
+          groupList={groupList}
+        />
       </div>
     </div>
   );

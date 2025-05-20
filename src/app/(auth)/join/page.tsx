@@ -16,7 +16,7 @@ export default function JoinPage() {
 
           <div className="flex flex-wrap mt-6 relative">
             <div className="w-1/2">
-              <Link href="/login">
+              <Link href="/">
                 <span className="text-blueGray-500 text-sm hover:underline">
                   이미 계정이 있으신가요?
                 </span>

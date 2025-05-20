@@ -1,11 +1,9 @@
 import { useState, useRef } from "react";
-import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
 import { useNplaceRankTrackViewModel } from "@/src/viewModel/nplace/nplaceRankTrackViewModel";
 import { TrackInfo, TrackData } from "@/model/TrackRepository";
-import TrackRepository from "@/model/TrackRepository";
 
 export function useTrackContent() {
+
   const {
     shopList: nplaceRankShopList,
     isLoading,
@@ -18,7 +16,9 @@ export function useTrackContent() {
     groupListError,
     updateGroup,
     isUpdatingGroup,
+    deleteShop,
   } = useNplaceRankTrackViewModel();
+  
 
   // 선택된 상점의 상세 정보를 관리하는 상태
   const [selectedShopDetail, setSelectedShopDetail] = useState<{
@@ -184,7 +184,7 @@ export function useTrackContent() {
     groupListError,
     isUpdatingGroup,
     filteredShopList,
-    selectedShopDetail,
+    deleteShop,
 
     // Refs
     trackableModalUrlInputRef,
@@ -202,5 +202,6 @@ export function useTrackContent() {
     getRankString,
     handleSelectAll,
     fetchSelectedShopDetail,
+    
   };
 } 

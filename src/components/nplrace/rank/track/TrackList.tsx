@@ -3,6 +3,7 @@ import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { Shop, TrackData, TrackInfo } from "@/model/TrackRepository";
 import Image from "next/image";
 import { useState } from "react";
+import TrackRenderShopContent from "./id/TrackRenderShopContent";
 
 interface TrackListProps {
   filteredShopList: Shop[];
@@ -10,8 +11,8 @@ interface TrackListProps {
   handleShopSelect: (shopId: string) => void;
   handleSelectAll: (checked: boolean) => void;
   getRankString: (rank: number | null) => string;
+  deleteShop: (shopId: string) => void;
 }
-
 
 export default function TrackList({
   filteredShopList,
@@ -19,6 +20,7 @@ export default function TrackList({
   handleShopSelect,
   handleSelectAll,
   getRankString,
+  deleteShop,
 }: TrackListProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -38,10 +40,6 @@ export default function TrackList({
     filteredShopList.length > 0 &&
     filteredShopList.every((shop) => selectedShopList.has(shop.id));
 
-  const handleShopClick = (id: any): void => {
-    router.push(`/track/${id}`);
-  };
-
   const handleViewModeChange = (mode: "grid" | "list") => {
     setViewMode(mode);
     const params = new URLSearchParams(window.location.search);
@@ -49,228 +47,7 @@ export default function TrackList({
     router.replace(`?${params.toString()}`, { scroll: false });
   };
 
-  // 상점 키워드 접기/열기
-  const toggleExpanded = (shopId: string) => {
-    setExpandedShops((prev) => {
-      const newSet = new Set(prev);
-      newSet.has(shopId) ? newSet.delete(shopId) : newSet.add(shopId);
-      return newSet;
-    });
-  };
-
-  // 상점 리스트 보기
-  const renderShopContent = (shop: Shop) => {
-    const isExpanded = expandedShops.has(shop.id);
-    const visibleTrackList = isExpanded
-      ? shop.nplaceRankTrackInfoList
-      : shop.nplaceRankTrackInfoList.slice(0, 3); // 기본 3개만 보여줌
-    if (viewMode === "grid") {
-      return (
-        <>
-          <div className="absolute top-2 left-2 z-10">
-            <div className="flex h-8 w-8 items-center justify-center sm:h-4 sm:w-4">
-              <input
-                type="checkbox"
-                className="h-6 w-6 cursor-pointer rounded border-gray-300 text-blue-500 focus:ring-blue-500 sm:h-4 sm:w-4"
-                checked={selectedShopList.has(shop.id)}
-                onChange={() => handleShopSelect(shop.id)}
-                onClick={(e) => e.stopPropagation()}
-              />
-            </div>
-          </div>
-
-          <div className="aspect-[4/3] w-full overflow-hidden">
-            <Image
-              src={shop.shopImageUrl || "/placeholder.jpg"}
-              alt={shop.shopName}
-              width={400}
-              height={300}
-              className="h-full w-full object-cover transition-transform group-hover:scale-105"
-              style={{
-                objectFit: "cover",
-                objectPosition: "center",
-              }}
-              priority
-            />
-          </div>
-
-          <div className="p-4">
-            <div className="mb-2">
-              <div className="flex items-center gap-2">
-                <h3 className="truncate text-lg font-semibold text-gray-900">
-                  {shop.shopName}
-                </h3>
-                <span className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700">
-                  {shop.groupName}
-                </span>
-              </div>
-              <p className="mt-1 truncate text-sm text-gray-500">
-                {shop.roadAddress}
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              {shop.nplaceRankTrackInfoList &&
-              shop.nplaceRankTrackInfoList.length > 0 ? (
-                <>
-                  <div className="flex flex-wrap gap-2">
-                    {visibleTrackList.map((track: TrackInfo) => (
-                      <div
-                        key={`${shop.id}-${track.nomadscrapNplaceRankTrackInfoId}`}
-                        className="flex w-full items-center sm:w-auto"
-                      >
-                        <span className="inline-flex w-full items-center justify-between rounded-md bg-gradient-to-r from-blue-50 to-blue-100 px-2 py-1 text-xs font-medium text-blue-800 shadow-xs sm:w-auto">
-                          <span className="max-w-[200px] truncate">
-                            {`[${track.province}]${track.keyword}`}
-                          </span>
-                          <span className="ml-2 inline-flex shrink-0 items-center gap-1 rounded-md bg-gradient-to-r from-green-50 to-green-100 px-2 py-1 text-xs font-medium text-green-800 shadow-xs">
-                            {getRankString(track.rank)}
-                            {track.rankChange !== 0 && (
-                              <span
-                                className={
-                                  track.rankChange < 0
-                                    ? "text-red-500"
-                                    : "text-blue-500"
-                                }
-                              >
-                                {track.rankChange < 0 ? "▲" : "▼"}
-                                {Math.abs(track.rankChange)}
-                              </span>
-                            )}
-                          </span>
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {shop.nplaceRankTrackInfoList.length > 3 && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleExpanded(shop.id);
-                      }}
-                      className="mt-2 text-xs text-blue-500 hover:underline"
-                    >
-                      {isExpanded ? "접기 ▲" : "더보기 ▼"}
-                    </button>
-                  )}
-                </>
-              ) : (
-                <div className="text-sm text-gray-500">
-                  추적 중인 키워드가 없습니다.
-                </div>
-              )}
-            </div>
-          </div>
-        </>
-      );
-    }
-    return (
-      <div className="flex flex-col items-start p-4 sm:flex-row">
-        <div className="flex h-8 w-8 items-center justify-center sm:h-4 sm:w-4">
-          <input
-            type="checkbox"
-            className="h-6 w-6 cursor-pointer rounded border-gray-300 text-blue-500 focus:ring-blue-500 sm:h-4 sm:w-4"
-            checked={selectedShopList.has(shop.id)}
-            onChange={() => handleShopSelect(shop.id)}
-            onClick={(e) => e.stopPropagation()}
-          />
-        </div>
-
-        <div className="mt-4 ml-0 hidden w-full flex-shrink-0 sm:mt-4 sm:ml-4 sm:block sm:w-auto">
-          <Image
-            src={shop.shopImageUrl || "/placeholder.jpg"}
-            alt={shop.shopName}
-            width={80}
-            height={80}
-            className="h-20 w-full rounded-lg object-cover sm:w-20"
-            style={{
-              objectFit: "cover",
-              objectPosition: "center",
-            }}
-            priority
-          />
-        </div>
-
-        <div className="mt-2 ml-0 min-w-0 flex-1 sm:mt-0 sm:ml-4">
-          <div className="flex flex-wrap items-center gap-2">
-            <h3 className="truncate text-lg font-semibold text-gray-900">
-              {shop.shopName}
-            </h3>
-            <span className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700">
-              {shop.groupName}
-            </span>
-          </div>
-          <p className="mt-1 truncate text-sm text-gray-500">
-            {shop.roadAddress}
-          </p>
-
-          <div className="mt-3">
-            {shop.nplaceRankTrackInfoList &&
-            shop.nplaceRankTrackInfoList.length > 0 ? (
-              <>
-                <div className="flex flex-wrap gap-2">
-                  {visibleTrackList.map((track: TrackInfo) => (
-                    <div
-                      key={`${shop.id}-${track.nomadscrapNplaceRankTrackInfoId}`}
-                      className="flex w-full items-center sm:w-auto"
-                    >
-                      <span className="inline-flex w-full items-center justify-between rounded-md bg-gradient-to-r from-blue-50 to-blue-100 px-2 py-1 text-xs font-medium text-blue-800 shadow-xs sm:w-auto">
-                        <span className="max-w-[200px] truncate">
-                          {`[${track.province}]${track.keyword}`}
-                        </span>
-                        <span className="ml-2 inline-flex shrink-0 items-center gap-1 rounded-md bg-gradient-to-r from-green-50 to-green-100 px-2 py-1 text-xs font-medium text-green-800 shadow-xs">
-                          {getRankString(track.rank)}
-                          {track.rankChange !== 0 && (
-                            <span
-                              className={
-                                track.rankChange < 0
-                                  ? "text-red-500"
-                                  : "text-blue-500"
-                              }
-                            >
-                              {track.rankChange < 0 ? "▲" : "▼"}
-                              {Math.abs(track.rankChange)}
-                            </span>
-                          )}
-                        </span>
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {shop.nplaceRankTrackInfoList.length > 3 && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleExpanded(shop.id);
-                    }}
-                    className="mt-2 text-xs text-blue-500 hover:underline"
-                  >
-                    {isExpanded ? "접기 ▲" : "더보기 ▼"}
-                  </button>
-                )}
-              </>
-            ) : (
-              <div className="text-sm text-gray-500">
-                추적 중인 키워드가 없습니다.
-              </div>
-            )}
-          </div>
-        </div>
-
-        <button
-          className="mt-4 ml-0 w-full px-3 py-1 text-blue-500 hover:text-blue-600 sm:mt-0 sm:ml-4 sm:w-auto"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleShopClick(shop.id);
-          }}
-        >
-          상세보기
-        </button>
-      </div>
-    );
-  };
+  
 
   return (
     <div className="space-y-4">
@@ -363,9 +140,16 @@ export default function TrackList({
                     selectedShopList.has(shop.id) ? "bg-blue-50" : ""
                   }`
             }
-            onClick={() => handleShopClick(shop.id)}
           >
-            {renderShopContent(shop)}
+            {/* 상점 컨텐츠 */}
+            <TrackRenderShopContent
+              deleteShop={deleteShop}
+              shop={shop}
+              viewMode={viewMode}
+              selectedShopList={selectedShopList}
+              handleShopSelect={handleShopSelect}
+              getRankString={getRankString}
+            />
           </div>
         ))}
       </div>

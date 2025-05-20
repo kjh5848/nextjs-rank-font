@@ -68,7 +68,7 @@ export default function Navbar() {
               ) : (
                 /* 비로그인 상태: 로그인과 회원가입 버튼 표시 */
                 <>
-                  <Link href="/login">
+                  <Link href="/">
                     <span className="text-rank-dark px-4 py-2 rounded-full text-sm font-medium hover:text-rank-primary transition-colors">
                       로그인
                     </span>
@@ -85,7 +85,7 @@ export default function Navbar() {
             {/* 모바일 메뉴 버튼 */}
             <div className="md:hidden flex items-center">
               {isClient && !loginUser && (
-                <Link href="/login" className="block">
+                <Link href="/" className="block">
                   <span className="block px-3 py-2 text-rank-dark hover:text-rank-primary text-sm font-medium transition-colors">
                     로그인
                   </span>
@@ -140,7 +140,7 @@ export default function Navbar() {
               ) : (
                 /* 비로그인 상태: 회원가입 옵션 */
                 <>
-                  <Link href="/login" onClick={() => setIsOpen(false)}>
+                  <Link href="/" onClick={() => setIsOpen(false)}>
                     <span className="block px-3 py-2 text-gray-900 hover:bg-rank-secondary text-sm font-medium rounded-md transition-colors">
                       로그인
                     </span>

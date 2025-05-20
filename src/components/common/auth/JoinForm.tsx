@@ -31,7 +31,7 @@ export default function JoinForm() {
 
   useEffect(() => {
     if (!isAuthPending && loginUser) {
-      router.replace("/dashboard");
+      router.replace("/");
     }
   }, [isAuthPending, loginUser, router]);
 
@@ -67,7 +67,7 @@ export default function JoinForm() {
         alert(response.message || "회원가입 실패");
       } else {
         alert("등록되었습니다.");
-        router.replace('/login');
+        router.replace('/');
       }
     } catch (error) {
       console.error("Join error:", error);

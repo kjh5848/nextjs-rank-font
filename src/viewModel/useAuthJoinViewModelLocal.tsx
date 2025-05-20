@@ -32,7 +32,7 @@ export default function useAuthJoinViewModelLocal() {
         alert(response.message || '회원가입이 완료되었습니다.'); // 성공 메시지 표시
         
         // 로그인 페이지로 리다이렉트
-        router.push('/login');
+        router.push('/');
         router.refresh();
       } else {
         throw new Error(response.message || '회원가입 실패');

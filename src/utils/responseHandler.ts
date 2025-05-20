@@ -18,7 +18,7 @@ export async function processApiResponse<T>(response: Response, skipRedirect: bo
         // 세션 쿠키 삭제
         document.cookie = "JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         // 로그인 페이지로 직접 이동
-        window.location.href = "/login";
+        window.location.href = "/";
       }
       return {
         code: "401",
@@ -36,7 +36,7 @@ export async function processApiResponse<T>(response: Response, skipRedirect: bo
         // 세션 쿠키 삭제
         document.cookie = "JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         // 로그인 페이지로 직접 이동
-        window.location.href = "/login";
+        window.location.href = "/";
       }
       return {
         code: "401",

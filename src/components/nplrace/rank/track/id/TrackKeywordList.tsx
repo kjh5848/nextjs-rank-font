@@ -1,6 +1,7 @@
 import { CheckSquare, Square } from "lucide-react";
 import AddKeyword from "./TrackAddKeyword";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
+import { ApiResponse } from "@/src/types/api";
 
 interface KeywordListProps {
   keywords: { [key: string]: any };
@@ -11,7 +12,7 @@ interface KeywordListProps {
   shopId: string | undefined;
   businessSector: string | undefined;
   onDeleteTrack: (trackId: string) => void;
-  onUpdateTrackStatus: (trackId: string, status: "RUNNING" | "STOP") => void;
+  onUpdateTrackStatus: (params: { trackId: string, status: "RUNNING" | "STOP" }) => Promise<ApiResponse<void>>;
 }
 
 export default function TrackKeywordList({
@@ -31,65 +32,87 @@ export default function TrackKeywordList({
     Object.keys(keywords).every((key) => selectedKeywords.has(key));
 
   // 모달 상태
-  const [openModalId, setOpenModalId] = useState<string | null>(null);
-  const [confirmInput, setConfirmInput] = useState("");
-  const [modalKeyword, setModalKeyword] = useState("");
-  const [modalType, setModalType] = useState<"delete" | "stop" | "resume" | null>(null);
-  const [actionMessage, setActionMessage] = useState<string | null>(null);
+  const [modalState, setModalState] = useState<{
+    openModalId: string | null;
+    confirmInput: string;
+    modalKeyword: string;
+    modalType: "delete" | "stop" | "resume" | null;
+    actionMessage: string | null;
+  }>({
+    openModalId: null,
+    confirmInput: "",
+    modalKeyword: "",
+    modalType: null,
+    actionMessage: null
+  });
 
   // 삭제 버튼 클릭 시
   const handleDeleteClick = (trackId: string, keyword: string) => {
-    setOpenModalId(trackId);
-    setModalKeyword(keyword);
-    setModalType("delete");
-    setConfirmInput("");
+    setModalState(prev => ({
+      ...prev,
+      openModalId: trackId,
+      modalKeyword: keyword,
+      modalType: "delete",
+      confirmInput: ""
+    }));
   };
 
   // 추적중단 버튼 클릭 시
   const handleStopClick = (trackId: string, keyword: string) => {
-    setOpenModalId(trackId);
-    setModalKeyword(keyword);
-    setModalType("stop");
-    setConfirmInput("");
+    setModalState(prev => ({
+      ...prev,
+      openModalId: trackId,
+      modalKeyword: keyword,
+      modalType: "stop",
+      confirmInput: ""
+    }));
   };
 
   // 재추적 버튼 클릭 시
   const handleResumeClick = (trackId: string, keyword: string) => {
-    setOpenModalId(trackId);
-    setModalKeyword(keyword);
-    setModalType("resume");
-    setConfirmInput("");
+    setModalState(prev => ({
+      ...prev,
+      openModalId: trackId,
+      modalKeyword: keyword,
+      modalType: "resume",
+      confirmInput: ""
+    }));
   };
 
   // 팝업 내 확인 버튼
   const handleConfirmModal = async (trackId: string, keyword: string) => {
-    if (confirmInput !== keyword) return;
+    if (modalState.confirmInput !== keyword) return;
     try {
-      if (modalType === "delete") {
+      if (modalState.modalType === "delete") {
         await onDeleteTrack(trackId);
-        setActionMessage("삭제가 완료되었습니다.");
-      } else if (modalType === "stop") {
-        await onUpdateTrackStatus(trackId, "STOP");
-        setActionMessage("추적이 중단되었습니다.");
-      } else if (modalType === "resume") {
-        await onUpdateTrackStatus(trackId, "RUNNING");
-        setActionMessage("재추적이 시작되었습니다.");
+        setModalState(prev => ({ ...prev, actionMessage: "삭제가 완료되었습니다." }));
+      } else if (modalState.modalType === "stop") {
+        await onUpdateTrackStatus({ trackId, status: "STOP" });
+        setModalState(prev => ({ ...prev, actionMessage: "추적이 중단되었습니다." }));
+      } else if (modalState.modalType === "resume") {
+        await onUpdateTrackStatus({ trackId, status: "RUNNING" });
+        setModalState(prev => ({ ...prev, actionMessage: "재추적이 시작되었습니다." }));
       }
-    } catch (e: any) {
-     if(e.code === "-1"){
-      console.log(e);
-       setActionMessage(e?.message);
-     }
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        setModalState(prev => ({ ...prev, actionMessage: e.message || "알 수 없는 오류가 발생했습니다." }));
+      } else {
+        setModalState(prev => ({ ...prev, actionMessage: "알 수 없는 오류가 발생했습니다." }));
+      }
+    } finally {
+      setTimeout(() => setModalState(prev => ({ ...prev, actionMessage: null })), 2500);
+      setModalState(prev => ({ ...prev, openModalId: null }));
     }
-    setTimeout(() => setActionMessage(null), 2500);
-    setOpenModalId(null);
   };
 
   // 팝업 닫기
   const handleCloseModal = () => {
-    setOpenModalId(null);
-    setConfirmInput("");
-    setModalType(null);
+    setModalState(prev => ({
+      ...prev,
+      openModalId: null,
+      confirmInput: "",
+      modalType: null
+    }));
   };
 
   return (
@@ -153,9 +176,24 @@ export default function TrackKeywordList({
                       handleDeleteClick(trackInfo.id, key);
                     }}
                   >
-                    삭제
+                    <div className="">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                        />
+                      </svg>
+                    </div>
                   </button>
-                  <button
+                  {/* <button
                     className="rounded bg-blue-50 px-2 py-1 text-xs text-gray-600 hover:bg-blue-100"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -172,41 +210,59 @@ export default function TrackKeywordList({
                     }}
                   >
                     중단
-                  </button>
+                  </button> */}
                 </div>
               </div>
               {/* 커스텀 팝업 */}
-              {openModalId === trackInfo.id && (
+              {modalState.openModalId === trackInfo.id && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
                   <div className="w-[350px] rounded-lg border bg-white p-6 shadow-xl">
                     <div className="mb-3 text-lg font-semibold text-gray-800">
                       내순위.com 내용:
                     </div>
                     <div className="mb-2 text-sm text-gray-700">
-                      {modalType === "delete" && (
+                      {modalState.modalType === "delete" && (
                         <>
-                          추적을 삭제 하시려면 키워드(<span className="font-bold">{modalKeyword}</span>)를 입력해주세요.<br />
-                          <span className="text-xs text-gray-500">삭제 후 다시 추적할 경우 과거 차트 데이터는 복구되지 않습니다.</span>
+                          추적을 삭제 하시려면 키워드(
+                          <span className="font-bold">{modalState.modalKeyword}</span>)를
+                          입력해주세요.
+                          <br />
+                          <span className="text-xs text-gray-500">
+                            삭제 후 다시 추적할 경우 과거 차트 데이터는 복구되지
+                            않습니다.
+                          </span>
                         </>
                       )}
-                      {modalType === "stop" && (
+                      {modalState.modalType === "stop" && (
                         <>
-                          추적을 <span className="font-bold">중단</span> 하시려면 키워드(<span className="font-bold">{modalKeyword}</span>)를 입력해주세요.<br />
-                          <span className="text-xs text-gray-500">중단 후 추적이 불가능합니다.</span>
+                          추적을 <span className="font-bold">중단</span>{" "}
+                          하시려면 키워드(
+                          <span className="font-bold">{modalState.modalKeyword}</span>)를
+                          입력해주세요.
+                          <br />
+                          <span className="text-xs text-gray-500">
+                            중단 후 추적이 불가능합니다.
+                          </span>
                         </>
                       )}
-                      {modalType === "resume" && (
+                      {modalState.modalType === "resume" && (
                         <>
-                          추적을 <span className="font-bold">재추적</span> 하시려면 키워드(<span className="font-bold">{modalKeyword}</span>)를 입력해주세요.<br />
-                          <span className="text-xs text-gray-500">재추적 시 순위 추적이 다시 시작됩니다.</span>
+                          추적을 <span className="font-bold">재추적</span>{" "}
+                          하시려면 키워드(
+                          <span className="font-bold">{modalState.modalKeyword}</span>)를
+                          입력해주세요.
+                          <br />
+                          <span className="text-xs text-gray-500">
+                            재추적 시 순위 추적이 다시 시작됩니다.
+                          </span>
                         </>
                       )}
                     </div>
                     <input
                       className="mt-2 mb-4 w-full rounded border px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                      value={confirmInput}
-                      onChange={(e) => setConfirmInput(e.target.value)}
-                      placeholder={modalKeyword}
+                      value={modalState.confirmInput}
+                      onChange={(e) => setModalState(prev => ({ ...prev, confirmInput: e.target.value }))}
+                      placeholder={modalState.modalKeyword}
                     />
                     <div className="flex justify-end gap-2">
                       <button
@@ -216,9 +272,11 @@ export default function TrackKeywordList({
                         취소
                       </button>
                       <button
-                        className={`rounded bg-yellow-700 px-4 py-2 text-sm font-semibold text-white hover:bg-yellow-800 ${confirmInput !== modalKeyword ? "cursor-not-allowed opacity-50" : ""}`}
-                        disabled={confirmInput !== modalKeyword}
-                        onClick={() => handleConfirmModal(trackInfo.id, modalKeyword)}
+                        className={`rounded bg-yellow-700 px-4 py-2 text-sm font-semibold text-white hover:bg-yellow-800 ${modalState.confirmInput !== modalState.modalKeyword ? "cursor-not-allowed opacity-50" : ""}`}
+                        disabled={modalState.confirmInput !== modalState.modalKeyword}
+                        onClick={() =>
+                          handleConfirmModal(trackInfo.id, modalState.modalKeyword)
+                        }
                       >
                         확인
                       </button>
@@ -231,9 +289,9 @@ export default function TrackKeywordList({
         })}
       </div>
       {/* 토스트 메시지 */}
-      {actionMessage && (
+      {modalState.actionMessage && (
         <div className="fixed bottom-8 left-1/2 z-50 -translate-x-1/2 rounded bg-black/80 px-6 py-3 text-sm text-white shadow-lg animate-fade-in">
-          {actionMessage}
+          {modalState.actionMessage}
         </div>
       )}
     </div>

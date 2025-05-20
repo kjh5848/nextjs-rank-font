@@ -12,7 +12,7 @@ export default function useRequireAuth() {
   const router = useRouter();
 
   if (!user) {
-    router.push("/login"); // 인증 안됐으면 리디렉션
+    router.push("/"); // 인증 안됐으면 리디렉션
     return null;
   }
 

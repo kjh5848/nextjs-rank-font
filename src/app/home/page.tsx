@@ -509,12 +509,12 @@ export default function Home() {
                   <h5 className="pb-4 text-center text-xl font-semibold">
                     Login Page
                   </h5>
-                  <Link href="/login">
+                  <Link href="/">
                     <div className="relative mb-6 flex w-full min-w-0 flex-col rounded-lg bg-white break-words shadow-lg transition-all duration-150 ease-linear hover:-mt-4">
                       <img
                         alt="..."
                         className="h-auto max-w-full rounded-lg border-none align-middle"
-                        src="/img/login.jpg"
+                        src="/img/.jpg"
                       />
                     </div>
                   </Link>
