@@ -1,4 +1,4 @@
-import TrackRepository, { Shop, TrackInfo, TrackData, RankCheckData } from '@/model/TrackRepository';
+import TrackRepository, { Shop, TrackInfo, TrackData, RankCheckData } from '@/src/model/TrackRepository';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiResponse } from '@/types/api';
 

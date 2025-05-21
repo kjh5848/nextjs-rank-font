@@ -12,7 +12,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { TrackData } from "@/model/TrackRepository";
+import { TrackData } from "@/src/model/TrackRepository";
 import TrackGridView from "./TrackGridView";
 import html2canvas from "html2canvas";
 import { Download } from "lucide-react";

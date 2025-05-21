@@ -3,7 +3,7 @@
 import { useAuthStore } from '@/src/store/provider/StoreProvider';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import AuthRepository from '@/model/AuthRepository';
+import AuthRepository from '@/src/model/AuthRepository';
 
 export default function useAuthLoginViewModelLocal() {
   const { setLoginUser } = useAuthStore();

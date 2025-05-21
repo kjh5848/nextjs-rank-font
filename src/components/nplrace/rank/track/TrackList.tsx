@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
-import { Shop, TrackData, TrackInfo } from "@/model/TrackRepository";
+import { Shop, TrackData, TrackInfo } from "@/src/model/TrackRepository";
 import Image from "next/image";
 import { useState } from "react";
 import TrackRenderShopContent from "./TrackRenderShopContent";

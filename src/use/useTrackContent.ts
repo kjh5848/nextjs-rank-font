@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useNplaceRankTrackViewModel } from "@/src/viewModel/nplace/nplaceRankTrackViewModel";
-import { TrackInfo, TrackData } from "@/model/TrackRepository";
+import { TrackInfo, TrackData } from "@/src/model/TrackRepository";
 
 export function useTrackContent() {
 

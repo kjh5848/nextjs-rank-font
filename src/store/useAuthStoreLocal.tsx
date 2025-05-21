@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import usePendingFunction from "@/src/use/usePendingFunction";
-import AuthRepository from "@/model/AuthRepository";
+import AuthRepository from "@/src/model/AuthRepository";
 
 interface LoginUser {
   username: string;

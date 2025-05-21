@@ -9,7 +9,7 @@ import TrackGroup from "./TrackGroup";
 import TrackNplaceSearch from "./TrackNplaceSearch";
 import TrackGridView from "./id/TrackGridView";
 import { useTrackContent } from "@/use/useTrackContent";
-import { TrackData } from "@/model/TrackRepository";
+import { TrackData } from "@/src/model/TrackRepository";
 import { useSearchParams } from "next/navigation";
 import { useViewModeStore } from "@/src/store/useViewModeStore";
 import { useEffect } from "react";

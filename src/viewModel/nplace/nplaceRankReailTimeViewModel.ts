@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiResponse } from "@/types/api";
 import { TrackInfo } from "@/src/model/TrackRepository";
-import TrackRepository, { Shop, Group } from '@/model/TrackRepository';
+import TrackRepository, { Shop, Group } from '@/src/model/TrackRepository';
 
 // 타입 정의
 

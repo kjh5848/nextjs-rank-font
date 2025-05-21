@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Shop, TrackInfo } from "@/model/TrackRepository";
+import { Shop, TrackInfo } from "@/src/model/TrackRepository";
 import React, { useState } from "react";
 
 interface TrackRenderShopContentProps {

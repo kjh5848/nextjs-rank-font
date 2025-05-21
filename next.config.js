@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['ldb-phinf.pstatic.net'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'ldb-phinf.pstatic.net',
+      },
+    ],
   },
 };
 

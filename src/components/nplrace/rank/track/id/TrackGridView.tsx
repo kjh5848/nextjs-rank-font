@@ -1,4 +1,4 @@
-import { TrackData } from "@/model/TrackRepository";
+import { TrackData } from "@/src/model/TrackRepository";
 import { useState, useMemo } from "react";
 import { useIsMobile } from "@/src/use/useMobile";
 import DatePicker from "react-datepicker";

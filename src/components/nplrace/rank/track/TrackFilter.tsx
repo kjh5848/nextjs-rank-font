@@ -1,13 +1,12 @@
-
 "use client"
 
 import { useState } from "react";
+import GroupAddModal from "@/components/group/GroupAddModal";
 
 interface TrackFilterProps {
   selectedGroup: string;
   setSelectedGroup: (group: string) => void;
   groupList: any[];
-  handleGroupChangeModalShow: () => void;
   setIsTrackableModalShow: (show: boolean) => void;
 }
 
@@ -15,9 +14,13 @@ export default function TrackFilter({
   selectedGroup,
   setSelectedGroup,
   groupList,
-  handleGroupChangeModalShow,
   setIsTrackableModalShow,
 }: TrackFilterProps) {
+  const [isGroupModalOpen, setGroupModalOpen] = useState(false);
+
+  const handleGroupChangeModalShow = () => setGroupModalOpen(true);
+  const handleGroupChangeModalClose = () => setGroupModalOpen(false);
+
   return (
     <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -55,6 +58,15 @@ export default function TrackFilter({
           추적가능 플레이스 검색
         </button>
       </div>
+      <GroupAddModal
+        open={isGroupModalOpen}
+        onClose={handleGroupChangeModalClose}
+        onSave={(groupName: string, memo: string) => {
+          // 그룹 저장 API 호출
+          // 예: await GroupRepository.saveGroup({ group: { serviceSort: "NPLACE_RANK", groupName, memo } })
+          // 저장 후 목록 갱신 등 추가 작업
+        }}
+      />
     </div>
   );
 } 

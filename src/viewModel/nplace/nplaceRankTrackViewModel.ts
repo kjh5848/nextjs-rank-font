@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import TrackRepository, { Shop, Group } from '@/model/TrackRepository';
+import TrackRepository, { Shop, Group } from '@/src/model/TrackRepository';
 import { ApiResponse } from '@/types/api';
 
 export const useNplaceRankTrackViewModel = () => {
