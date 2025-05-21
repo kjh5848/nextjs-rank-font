@@ -4,13 +4,16 @@ interface GroupAddModalProps {
   open: boolean;
   onClose: () => void;
   onSave: (groupName: string, memo: string) => void;
+  isLoading?: boolean;
+  error?: Error | null;
 }
-
 
 export default function GroupAddModal({
   open,
   onClose,
   onSave,
+  isLoading = false,
+  error = null,
 }: GroupAddModalProps) {
   const [groupName, setGroupName] = useState("");
   const [memo, setMemo] = useState("");
@@ -48,8 +51,11 @@ export default function GroupAddModal({
             onChange={(e) => setMemo(e.target.value)}
           />
         </div>
+        {error && (
+          <div className="mb-2 text-sm text-red-500">{error.message}</div>
+        )}
         <div className="flex justify-end gap-2">
-          <button className="rounded bg-gray-200 px-4 py-2" onClick={onClose}>
+          <button className="rounded bg-gray-200 px-4 py-2" onClick={onClose} disabled={isLoading}>
             취소
           </button>
           <button
@@ -58,9 +64,9 @@ export default function GroupAddModal({
               onSave(groupName, memo);
               onClose();
             }}
-            disabled={!groupName}
+            disabled={!groupName || isLoading}
           >
-            저장
+            {isLoading ? "저장 중..." : "저장"}
           </button>
         </div>
       </div>

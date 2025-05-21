@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import GroupAddModal from "@/components/group/GroupAddModal";
+import { useNplaceGroupViewModel } from "@/viewModel/group/nplaceGroupViewMode";
 
 interface TrackFilterProps {
   selectedGroup: string;
@@ -20,6 +21,31 @@ export default function TrackFilter({
 
   const handleGroupChangeModalShow = () => setGroupModalOpen(true);
   const handleGroupChangeModalClose = () => setGroupModalOpen(false);
+
+  // 그룹 추가 관련 뷰모델
+  const {
+    addGroup,
+    isAddingGroup,
+    addGroupError,
+    refetchGroupList,
+  } = useNplaceGroupViewModel();
+
+  // 그룹 추가 함수 분리
+  const handleAddGroup = async (groupName: string, memo: string) => {
+    try {
+      const res = await addGroup({
+        group: {
+          serviceSort: "NPLACE_RANK_TRACK",
+          groupName,
+          memo,
+        },
+      });
+      await refetchGroupList();
+      handleGroupChangeModalClose();
+    } catch (e: any) {
+      alert(e?.message || "그룹 추가에 실패했습니다.");
+    }
+  };
 
   return (
     <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
@@ -61,11 +87,9 @@ export default function TrackFilter({
       <GroupAddModal
         open={isGroupModalOpen}
         onClose={handleGroupChangeModalClose}
-        onSave={(groupName: string, memo: string) => {
-          // 그룹 저장 API 호출
-          // 예: await GroupRepository.saveGroup({ group: { serviceSort: "NPLACE_RANK", groupName, memo } })
-          // 저장 후 목록 갱신 등 추가 작업
-        }}
+        onSave={handleAddGroup}
+        isLoading={isAddingGroup}
+        error={addGroupError}
       />
     </div>
   );

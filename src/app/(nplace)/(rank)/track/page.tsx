@@ -17,7 +17,7 @@ export default function TrackPage() {
   }
 
   if (isGuest) {
-    router.push("/dashboard");
+    router.push("/");
   }
 
   return (
