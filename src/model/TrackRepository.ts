@@ -29,6 +29,15 @@ export type TrackInfo = {
   province: string;
   rank: number | null;
   rankChange: number;
+  shopName: string;
+  shopId: string;
+  shopImageUrl: string;
+  roadAddress: string;
+  address: string;
+  category: string;
+  scoreInfo:string;
+  visitorReviewCount: string;
+  blogReviewCount: string;
   nplaceRankTrackList?: TrackData[];
   nomadscrapNplaceRankTrackInfoId: string;
 };

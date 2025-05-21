@@ -14,7 +14,7 @@ export default function RealtimeContent() {
       <RealtimeForm />
 
       {/* 대시보드 내용 */}
-      <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+      {/* <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
         <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-md">
           <h2 className="mb-4 text-lg font-semibold text-gray-800">
             최근 활동
@@ -48,7 +48,7 @@ export default function RealtimeContent() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
      
     </div>
   );
